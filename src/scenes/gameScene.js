@@ -10,8 +10,8 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const player = this.scene.get("PlayerScene");
-    console.log(player);
+    const player = this.scene.get("PlayerScene").player;
+
     this.collectedObjects = 0;
 
     this.objects = this.physics.add.group({
