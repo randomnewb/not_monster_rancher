@@ -19,7 +19,7 @@ export default class BackgroundScene extends Phaser.Scene {
     this.tileWidth = 16;
     this.tileHeight = 16;
     // this.drawMap(this.automata_126(this.generateMap(5254967991)));
-    this.drawMap(this.generateMap(5254967991));
+    this.drawMap(this.generateMap("5254967991"));
 
     // this.camera = this.cameras.main;
 

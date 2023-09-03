@@ -8,28 +8,52 @@ export default class PlayerScene extends Phaser.Scene {
   }
 
   create() {
-    this.player = this.physics.add.sprite(75, 75, "player");
+    this.TILE_SIZE = 16;
+    this.OFFSET = 8;
+    this.tilePos = { x: 5, y: 5 };
+    this.player = this.physics.add.sprite(0, 0, "player");
 
-    this.velocity = 100;
+    this.player.setPosition(
+      this.tilePos.x * this.TILE_SIZE + this.OFFSET,
+      this.tilePos.y * this.TILE_SIZE + this.OFFSET
+    );
+    // this.velocity = 100;
   }
 
   update() {
     const cursors = this.input.keyboard.createCursorKeys();
 
-    if (cursors.left.isDown) {
-      this.player.setVelocityX(-this.velocity);
-    } else if (cursors.right.isDown) {
-      this.player.setVelocityX(this.velocity);
-    } else {
-      this.player.setVelocityX(0);
+    if (cursors.left.isDown && !this.leftKeyDown) {
+      this.leftKeyDown = true;
+      this.tilePos.x -= 1;
+      this.player.x = this.tilePos.x * this.TILE_SIZE + this.OFFSET;
+    } else if (cursors.right.isDown && !this.rightKeyDown) {
+      this.rightKeyDown = true;
+      this.tilePos.x += 1;
+      this.player.x = this.tilePos.x * this.TILE_SIZE + this.OFFSET;
+    } else if (cursors.up.isDown && !this.upKeyDown) {
+      this.upKeyDown = true;
+      this.tilePos.y -= 1;
+      this.player.y = this.tilePos.y * this.TILE_SIZE + this.OFFSET;
+    } else if (cursors.down.isDown && !this.downKeyDown) {
+      this.downKeyDown = true;
+      this.tilePos.y += 1;
+      this.player.y = this.tilePos.y * this.TILE_SIZE + this.OFFSET;
     }
 
-    if (cursors.up.isDown) {
-      this.player.setVelocityY(-this.velocity);
-    } else if (cursors.down.isDown) {
-      this.player.setVelocityY(this.velocity);
-    } else {
-      this.player.setVelocityY(0);
+    if (cursors.left.isUp) {
+      this.leftKeyDown = false;
     }
+    if (cursors.right.isUp) {
+      this.rightKeyDown = false;
+    }
+    if (cursors.up.isUp) {
+      this.upKeyDown = false;
+    }
+    if (cursors.down.isUp) {
+      this.downKeyDown = false;
+    }
+
+    // implement a click to move system
   }
 }
