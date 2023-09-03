@@ -1,7 +1,8 @@
 import Phaser from "phaser";
 import GameScene from "./scenes/gameScene.js";
-import UIScene from "./scenes/uiScene.js";
+import PlayerScene from "./scenes/playerScene.js";
 import BackgroundScene from "./scenes/backgroundScene.js";
+import UIScene from "./scenes/uiScene.js";
 
 const config = {
   type: Phaser.AUTO,
@@ -13,7 +14,7 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [BackgroundScene, GameScene, UIScene],
+  scene: [GameScene, PlayerScene, BackgroundScene, UIScene],
   physics: {
     default: "arcade",
     arcade: {
