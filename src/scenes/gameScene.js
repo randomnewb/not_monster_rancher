@@ -5,28 +5,13 @@ export default class GameScene extends Phaser.Scene {
     super({ key: "GameScene", active: true });
   }
 
-  preload() {
-    this.load.image("object", "../assets/object.png");
-  }
-
   create() {
-    const player = this.scene.get("PlayerScene").player;
+    const player = this.scene.get("PlayerScene");
+    const objects = this.scene.get("ObjectScene");
 
     this.collectedObjects = 0;
 
-    this.objects = this.physics.add.group({
-      key: "object",
-      repeat: 9,
-      setXY: { x: 136, y: 136, stepX: 16 },
-    });
-
-    this.physics.add.collider(
-      player,
-      this.objects,
-      this.collectObject,
-      null,
-      this
-    );
+    this.physics.add.collider(player, objects, this.collectObject, null, this);
   }
 
   collectObject(player, object) {

@@ -9,7 +9,7 @@ export default class BackgroundScene extends Phaser.Scene {
     const tileWidth = 16;
     const tileHeight = 16;
 
-    this.load.spritesheet("foliageTiles", "../assets/foliage.png", {
+    this.load.spritesheet("foliageTiles", "./assets/foliage.png", {
       frameWidth: tileWidth,
       frameHeight: tileHeight,
     });
@@ -18,8 +18,9 @@ export default class BackgroundScene extends Phaser.Scene {
   create() {
     this.tileWidth = 16;
     this.tileHeight = 16;
+    this.userSeed = null;
     // this.drawMap(this.automata_126(this.generateMap(5254967991)));
-    this.drawMap(this.generateMap("5254967991"));
+    // this.drawMap(this.generateMap("5254967992"));
 
     // this.camera = this.cameras.main;
 
@@ -27,9 +28,37 @@ export default class BackgroundScene extends Phaser.Scene {
     // this.camera.setBounds(0, 0, 640, 480);
 
     // this.camera.startFollow(this.player);
+
+    this.input = document.createElement("input");
+    this.input.type = "text";
+    this.input.placeholder = "Enter seed";
+    document.body.appendChild(this.input);
+
+    const canvas = document.querySelector("canvas");
+    const canvasPosition = canvas.getBoundingClientRect();
+    this.input.style.position = "absolute";
+    this.input.style.top = `${canvasPosition.top + 10}px`;
+    this.input.style.left = `${canvasPosition.left + 10}px`;
+    this.input.style.width = "100px";
+    this.input.style.height = "25px";
+
+    this.input.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        this.drawMap(this.generateMap(this.input.value));
+        this.userSeed = this.input.value;
+
+        this.events.emit("emitSeed", { bgSeed: this.userSeed });
+
+        this.input.value = "";
+      }
+    });
   }
 
+  update() {}
+
   drawMap = map => {
+    this.children.removeAll();
+
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
         const tile = this.add.sprite(

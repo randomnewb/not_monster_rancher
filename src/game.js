@@ -1,6 +1,8 @@
 import Phaser from "phaser";
+import style from "../main.css";
 import GameScene from "./scenes/gameScene.js";
 import PlayerScene from "./scenes/playerScene.js";
+import ObjectScene from "./scenes/objectsScene.js";
 import BackgroundScene from "./scenes/backgroundScene.js";
 import UIScene from "./scenes/uiScene.js";
 
@@ -14,7 +16,7 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [PlayerScene, GameScene, BackgroundScene, UIScene],
+  scene: [PlayerScene, GameScene, ObjectScene, BackgroundScene, UIScene],
   physics: {
     default: "arcade",
     arcade: {

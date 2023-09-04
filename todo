@@ -1,0 +1,11 @@
+- [ ] Create GameObject Classes, referencing GameObjectFactory, so that the player can be instantiated easier in a main game scene and same with objects, then added to a collider simultaneously
+
+  - Resources:
+    - https://blog.ourcade.co/posts/2020/organize-phaser-3-code-game-object-factory-methods/
+    - https://braelynnn.medium.com/extending-a-phaser-class-to-make-reusable-game-objects-93c11326787e
+    - https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObjectFactory.html
+    - https://phaser.io/phaser3/devlog/130
+
+- [ ] Separate out helper scripts into their own files because they can be called by getting a reference to a scene
+  - Example:
+    - `this.scene.get('SceneName').helperFunction()`

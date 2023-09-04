@@ -5,8 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open index.html --mode development",
-    "build": "webpack --mode production"
+    "start": "webpack serve --mode development --entry ./src/game.js",
+    "build": "webpack --mode production --entry ./src/game.js --output-path ./dist",
+    "dev": "webpack --mode development --entry ./src/game.js --output-path ./dist"
   },
   "author": "",
   "license": "ISC",
@@ -19,7 +20,11 @@
     "@babel/core": "^7.22.11",
     "@babel/preset-env": "^7.22.14",
     "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.8.1",
+    "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
+    "mini-css-extract-plugin": "^2.7.6",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
