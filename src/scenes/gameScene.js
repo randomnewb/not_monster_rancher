@@ -1,5 +1,6 @@
 import data from "../data/data.js";
 import Jewel from "../scenes/jewelScene.js";
+import Generate from "../scripts/generate.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -15,19 +16,24 @@ export default class GameScene extends Phaser.Scene {
     const player = playerScene.player;
     const jewels = this.physics.add.group({ classType: Jewel });
 
-    for (let i = 0; i < 10; i++) {
-      const jewel = jewels.create(
-        Phaser.Math.Clamp(Math.floor(Math.random() * 40) * 16 + 8, 16, 624),
-        Phaser.Math.Clamp(Math.floor(Math.random() * 30) * 16 + 8, 16, 464),
-        "jewel"
+    this.generateFunction = () => {
+      Generate.create_objects(
+        Generate.placement_array(data.gameSeed, 40, 30, 0, 1),
+        data.gameSeed,
+        this,
+        jewels,
+        "jewel",
+        {
+          color1: 0x7e8bfe,
+          color2: 0x7efeb8,
+          color3: 0xfe7e7e,
+        }
       );
+    };
 
-      if (Math.random() > 0.5) {
-        jewel.changeColor(0x7e8bfe);
-      } else {
-        jewel.changeColor(0x7efeb8);
-      }
-    }
+    this.scene
+      .get("UIScene")
+      .events.on("generate", this.generateFunction, this);
 
     this.collectedJewels = 0;
 
@@ -47,6 +53,7 @@ export default class GameScene extends Phaser.Scene {
 
   gameOver() {
     data.gameActive = false;
+    this.collectedJewels = 0;
     this.scene.get("UIScene").showGameOver();
   }
 }

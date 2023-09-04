@@ -6,8 +6,9 @@
     - https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObjectFactory.html
     - https://phaser.io/phaser3/devlog/130
 
-- [ ] Separate out helper scripts into their own files because they can be called by getting a reference to a scene
+- [x] Separate out helper scripts into their own files because they can be called by getting a reference to a scene
   - Example:
     - `this.scene.get('SceneName').helperFunction()`
 
 - [ ] Procedural generation for jewels
+  - Implement better generation for jewels (only allow certain quantity to spawn and make spawn more "random" )

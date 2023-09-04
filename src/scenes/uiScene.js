@@ -20,6 +20,18 @@ export default class UIScene extends Phaser.Scene {
     this.gameOverText.setVisible(false);
 
     this.input.keyboard.on("keydown-R", this.restartGame, this);
+
+    this.create_input_field();
+
+    this.input.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        data.gameSeed = this.input.value;
+
+        this.events.emit("generate");
+
+        this.input.value = "";
+      }
+    });
   }
 
   showGameOver() {
@@ -33,8 +45,34 @@ export default class UIScene extends Phaser.Scene {
   restartGame() {
     if (!data.gameActive) {
       data.gameActive = true;
-      this.scene.get("GameScene").scene.restart();
+
+      const gameScene = this.scene.get("GameScene");
+      const terrainScene = this.scene.get("TerrainScene");
+
+      // Remove the event listeners
+      this.events.off("generate", gameScene.generateFunction, gameScene);
+      this.events.off("generate", terrainScene.generateFunction, terrainScene);
+
+      // Restart the scenes
+      gameScene.scene.restart();
+      terrainScene.scene.restart();
+
       this.hideGameOver();
     }
+  }
+
+  create_input_field() {
+    this.input = document.createElement("input");
+    this.input.type = "text";
+    this.input.placeholder = "Enter seed";
+    document.body.appendChild(this.input);
+
+    const canvas = document.querySelector("canvas");
+    const canvasPosition = canvas.getBoundingClientRect();
+    this.input.style.position = "absolute";
+    this.input.style.top = `${canvasPosition.top + 10}px`;
+    this.input.style.left = `${canvasPosition.left + 10}px`;
+    this.input.style.width = "100px";
+    this.input.style.height = "25px";
   }
 }

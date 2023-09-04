@@ -1,6 +1,34 @@
+import data from "../data/data.js";
 import seedrandom from "seedrandom";
 
-export default class GenerateMap {
+export default class Generate {
+  static create_objects(map, seed, scene, objects, objectName, colorOptions) {
+    console.log(data.gameSeed);
+    const randomNumber = seedrandom(seed);
+
+    scene.children.removeAll();
+
+    for (let row = 0; row < map.length; row++) {
+      for (let column = 0; column < map[row].length; column++) {
+        if (map[row][column] === 1) {
+          const object = objects.create(
+            column * 16 + 8,
+            row * 16 + 8,
+            objectName
+          );
+
+          if (randomNumber() > 0.5) {
+            object.changeColor(colorOptions.color1);
+          } else if (randomNumber() <= 0.5) {
+            object.changeColor(colorOptions.color2);
+          } else {
+            object.changeColor(colorOptions.color3);
+          }
+        }
+      }
+    }
+  }
+
   /**
    *
    * Draws the map of tiles to the scene
@@ -57,7 +85,7 @@ export default class GenerateMap {
    * @returns {array} - 2D array of integers representing a map
    */
 
-  static terrain_array(
+  static placement_array(
     seed,
     width,
     height,
