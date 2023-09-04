@@ -1,4 +1,4 @@
-- [ ] Create GameObject Classes, referencing GameObjectFactory, so that the player can be instantiated easier in a main game scene and same with objects, then added to a collider simultaneously
+- [x] Create GameObject Classes, referencing GameObjectFactory, so that the player can be instantiated easier in a main game scene and same with objects, then added to a collider simultaneously
 
   - Resources:
     - https://blog.ourcade.co/posts/2020/organize-phaser-3-code-game-object-factory-methods/
@@ -9,3 +9,5 @@
 - [ ] Separate out helper scripts into their own files because they can be called by getting a reference to a scene
   - Example:
     - `this.scene.get('SceneName').helperFunction()`
+
+- [ ] Procedural generation for jewels

@@ -19,9 +19,7 @@ export default class UIScene extends Phaser.Scene {
     this.gameOverText.setOrigin(0.5);
     this.gameOverText.setVisible(false);
 
-    if (!data.gameActive) {
-      this.input.keyboard.on("keydown-R", this.restartGame, this);
-    }
+    this.input.keyboard.on("keydown-R", this.restartGame, this);
   }
 
   showGameOver() {
@@ -33,8 +31,10 @@ export default class UIScene extends Phaser.Scene {
   }
 
   restartGame() {
-    this.scene.get("GameScene").scene.restart();
-    this.hideGameOver();
-    data.gameActive = false;
+    if (!data.gameActive) {
+      data.gameActive = true;
+      this.scene.get("GameScene").scene.restart();
+      this.hideGameOver();
+    }
   }
 }

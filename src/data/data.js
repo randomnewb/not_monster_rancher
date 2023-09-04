@@ -1,3 +1,4 @@
 export default {
-  gameActive: false,
+  gameActive: true,
+  gameSeed: null,
 };

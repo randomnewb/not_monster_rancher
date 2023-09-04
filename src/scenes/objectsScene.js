@@ -10,22 +10,24 @@ export default class ObjectScene extends Phaser.Scene {
   }
 
   create() {
-    const background = this.scene.get("BackgroundScene");
+    const terrain = this.scene.get("TerrainScene");
 
     this.tileWidth = 16;
     this.tileHeight = 16;
 
     this.objects;
 
-    background.events.on(
+    terrain.events.on(
       "emitSeed",
       function (data) {
-        this.objects = this.drawObjectMap(this.generateObjectMap(data.bgSeed));
+        this.objects = this.drawObjectMap(
+          this.generateObjectMap(data.bgSeed, 40, 30)
+        );
       },
       this
     );
 
-    this.objects = this.physics.add.sprite(8 + 64, 8 + 64, "object");
+    // this.objects = this.physics.add.sprite(8 + 64, 8 + 64, "object");
   }
 
   // generate a map of objects based on the seed
@@ -33,14 +35,16 @@ export default class ObjectScene extends Phaser.Scene {
   // the max number of objects is 10
   // after the max number of objects is reached, fill the remaining empty space with 0s
   // increase the object count by 1 every time a 1 is added
-  generateObjectMap = seed => {
+
+  generateObjectMap = (seed, width, height) => {
+    // For an area, 640x480, with a tile size of 16x16, there are 40 tiles wide and 30 tiles high
     const randomNumber = seedrandom(seed);
     let objectCount = 0;
     let map = [];
 
-    for (let row = 0; row < 32; row++) {
+    for (let row = 0; row < height + 1; row++) {
       let newRow = [];
-      for (let column = 0; column < 40; column++) {
+      for (let column = 0; column < width; column++) {
         if (randomNumber() > 0.5 && objectCount < 10) {
           newRow.push(1);
           if (objectCount < 10) {

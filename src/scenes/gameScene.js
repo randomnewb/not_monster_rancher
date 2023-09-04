@@ -1,38 +1,52 @@
 import data from "../data/data.js";
+import Jewel from "../scenes/jewelScene.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene", active: true });
   }
 
-  create() {
-    const player = this.scene.get("PlayerScene");
-    const objects = this.scene.get("ObjectScene");
-
-    this.collectedObjects = 0;
-
-    this.physics.add.collider(player, objects, this.collectObject, null, this);
+  preload() {
+    this.load.image("jewel", "./assets/jewel.png");
   }
 
-  collectObject(player, object) {
-    if (!data.gameActive) {
-      object.destroy();
-      this.collectedObjects++;
+  create() {
+    const playerScene = this.scene.get("PlayerScene");
+    const player = playerScene.player;
+    const jewels = this.physics.add.group({ classType: Jewel });
 
-      if (this.collectedObjects >= 10) {
+    for (let i = 0; i < 10; i++) {
+      const jewel = jewels.create(
+        Phaser.Math.Clamp(Math.floor(Math.random() * 40) * 16 + 8, 16, 624),
+        Phaser.Math.Clamp(Math.floor(Math.random() * 30) * 16 + 8, 16, 464),
+        "jewel"
+      );
+
+      if (Math.random() > 0.5) {
+        jewel.changeColor(0x7e8bfe);
+      } else {
+        jewel.changeColor(0x7efeb8);
+      }
+    }
+
+    this.collectedJewels = 0;
+
+    this.physics.add.collider(player, jewels, this.collectObject, null, this);
+  }
+
+  collectObject(player, jewels) {
+    if (data.gameActive) {
+      jewels.destroy();
+      this.collectedJewels++;
+
+      if (this.collectedJewels >= 10) {
         this.gameOver();
       }
     }
   }
 
   gameOver() {
-    this.scene.get("UIScene").showGameOver();
-    data.gameActive = true;
-  }
-
-  restartGame() {
-    this.scene.get("GameScene").scene.restart();
-    this.scene.get("UIScene").hideGameOver();
     data.gameActive = false;
+    this.scene.get("UIScene").showGameOver();
   }
 }

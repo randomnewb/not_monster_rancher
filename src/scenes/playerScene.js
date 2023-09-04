@@ -17,7 +17,6 @@ export default class PlayerScene extends Phaser.Scene {
       this.tilePos.x * this.TILE_SIZE + this.OFFSET,
       this.tilePos.y * this.TILE_SIZE + this.OFFSET
     );
-    // this.velocity = 100;
   }
 
   update() {
