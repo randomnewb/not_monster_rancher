@@ -1,5 +1,6 @@
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
+import PlayerCamera from "../scripts/playerCamera.js";
 
 export default class TerrainScene extends Phaser.Scene {
   constructor() {
@@ -32,5 +33,13 @@ export default class TerrainScene extends Phaser.Scene {
     this.scene
       .get("UIScene")
       .events.on("generate", this.generateFunction, this);
+
+    const playerScene = this.scene.get("PlayerScene");
+    const player = playerScene.player;
+
+    const uiScene = this.scene.get("UIScene");
+
+    const playerCamera = new PlayerCamera(this, player, uiScene);
+    playerCamera.setupCamera();
   }
 }

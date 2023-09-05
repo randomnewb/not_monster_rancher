@@ -1,6 +1,7 @@
 import data from "../data/data.js";
 import Jewel from "../scenes/jewelScene.js";
 import Generate from "../scripts/generate.js";
+import PlayerCamera from "../scripts/playerCamera.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -14,6 +15,7 @@ export default class GameScene extends Phaser.Scene {
   create() {
     const playerScene = this.scene.get("PlayerScene");
     const player = playerScene.player;
+    const uiScene = this.scene.get("UIScene");
     const jewels = this.physics.add.group({ classType: Jewel });
 
     this.generateFunction = () => {
@@ -38,6 +40,9 @@ export default class GameScene extends Phaser.Scene {
     this.collectedJewels = 0;
 
     this.physics.add.collider(player, jewels, this.collectObject, null, this);
+
+    const playerCamera = new PlayerCamera(this, player, uiScene);
+    playerCamera.setupCamera();
   }
 
   collectObject(player, jewels) {
