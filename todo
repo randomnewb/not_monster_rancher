@@ -1,7 +1,9 @@
 - [x] Camera follows player and zooms in properly with other scenes, but UI does not scale which is intended
-
-- [ ] Procedural generation for jewels
+- [x] Procedural generation for jewels
 
   - Implement better generation for jewels (only allow certain quantity to spawn and make spawn more "random" )
 
-- [ ] Implement players being unable to generate new map if one already has been generated
+- [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field
+- [ ] On game over, disable player movement and show game over screen message like before
+- [ ] Implement collisions with certain tiles in the terrain
+  - Since movement is implemented by changing the player's position, we can just check if the player's position is inside a tile that is not a floor tile

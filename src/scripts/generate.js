@@ -3,14 +3,13 @@ import seedrandom from "seedrandom";
 
 export default class Generate {
   static create_objects(map, seed, scene, objects, objectName, colorOptions) {
-    console.log(data.gameSeed);
     const randomNumber = seedrandom(seed);
 
     scene.children.removeAll();
 
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
-        if (map[row][column] === 1) {
+        if (map[row][column] === 0 && randomNumber() < 0.05) {
           const object = objects.create(
             column * 16 + 8,
             row * 16 + 8,
