@@ -1,3 +1,5 @@
+- [ ] Continue implementing remaining scenes as their own classes/scripts
+
 - [ ] Recreate terrain system using Phaser's built-in tilemaps
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field

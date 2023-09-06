@@ -1,11 +1,11 @@
 import Phaser from "phaser";
 import style from "../main.css";
 import GameScene from "./scenes/gameScene.js";
-import PlayerScene from "./scenes/playerScene.js";
+// import PlayerScene from "./scenes/playerScene.js";
 import ObjectScene from "./scenes/objectsScene.js";
-import TerrainScene from "./scenes/terrainScene.js";
+// import TerrainScene from "./scenes/terrainScene.js";
 import UIScene from "./scenes/uiScene.js";
-import Generate from "./scripts/generate.js";
+// import Generate from "./scripts/generate.js";
 
 const config = {
   type: Phaser.AUTO,
@@ -17,7 +17,14 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [PlayerScene, TerrainScene, GameScene, ObjectScene, UIScene, Generate],
+  scene: [
+    // PlayerScene,
+    // TerrainScene,
+    GameScene,
+    // ObjectScene,
+    UIScene,
+    // Generate,
+  ],
   physics: {
     default: "arcade",
     arcade: {

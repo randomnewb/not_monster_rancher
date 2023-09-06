@@ -2,6 +2,8 @@ import data from "../data/data.js";
 import Jewel from "../scenes/jewelScene.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
+import Terrain from "../scripts/terrain.js";
+import Player from "../scenes/playerScene.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -9,13 +11,26 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
+    const tileWidth = 16;
+    const tileHeight = 16;
+
+    this.load.spritesheet("foliageTiles", "./assets/foliage.png", {
+      frameWidth: tileWidth,
+      frameHeight: tileHeight,
+    });
+
+    this.load.image("player", "./assets/player.png");
+
     this.load.image("jewel", "./assets/jewel.png");
   }
 
   create() {
+    this.terrain = new Terrain(this);
+    this.physics.world.enable(this.terrain);
+
+    this.player = new Player(this);
+
     const uiScene = this.scene.get("UIScene");
-    const playerScene = this.scene.get("PlayerScene");
-    const player = playerScene.player;
 
     const jewels = this.physics.add.group({ classType: Jewel });
 
@@ -34,7 +49,13 @@ export default class GameScene extends Phaser.Scene {
       );
     };
 
-    this.physics.add.collider(player, jewels, this.collectObject, null, this);
+    this.physics.add.collider(
+      this.player,
+      jewels,
+      this.collectObject,
+      null,
+      this
+    );
 
     this.collectedJewels = 0;
 
@@ -42,24 +63,18 @@ export default class GameScene extends Phaser.Scene {
       .get("UIScene")
       .events.on("generate", this.generateFunction, this);
 
-    const playerCamera = new PlayerCamera(this, player, uiScene);
+    const playerCamera = new PlayerCamera(this, this.player.sprite, uiScene);
     playerCamera.setupCamera();
+
+    const debugGraphics = this.add.graphics();
+    this.terrain.layer.renderDebug(debugGraphics);
+
+    this.physics.add.collider(this.player.sprite, this.terrain.layer, () => {
+      console.log("Collision with tile detected!");
+    });
   }
 
-  collectObject(player, jewels) {
-    if (data.gameActive) {
-      jewels.destroy();
-      this.collectedJewels++;
-
-      if (this.collectedJewels >= 10) {
-        this.gameOver();
-      }
-    }
-  }
-
-  gameOver() {
-    data.gameActive = false;
-    this.collectedJewels = 0;
-    this.scene.get("UIScene").showGameOver();
+  update() {
+    this.player.update();
   }
 }
