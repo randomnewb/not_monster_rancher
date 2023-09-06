@@ -1,9 +1,46 @@
-- [x] Camera follows player and zooms in properly with other scenes, but UI does not scale which is intended
-- [x] Procedural generation for jewels
-
-  - Implement better generation for jewels (only allow certain quantity to spawn and make spawn more "random" )
-
+- [ ] Recreate terrain system using Phaser's built-in tilemaps
+- [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field
 - [ ] On game over, disable player movement and show game over screen message like before
 - [ ] Implement collisions with certain tiles in the terrain
+- [ ] Implement mobile controls - easiest way would be on screen buttons
+- [ ] Implement click to move
+
   - Since movement is implemented by changing the player's position, we can just check if the player's position is inside a tile that is not a floor tile
+
+- [ ] Implement Entity Class
+  - Requirements
+    - [ ] Stats (health, attack, level, experience, etc.)
+    - [ ] Sprite
+    - [ ] Physics/collisions/movement
+- [ ] Implement NPC class
+  - Requirements
+    - [ ] Inherits Entity Class
+    - [ ] AI Behavior via states (idle, wander, chase/follow, attacking/fighting)
+    - [ ] Droppable items
+- [ ] Setters/getter for health
+  - Health bar, health text, etc.
+- Inventory system via an array or grid inventory (stretch) system
+  - [ ] Inventory UI
+  - [ ] Inventory slots
+  - [ ] Inventory items
+  - [ ] Inventory item stats
+  - [ ] Inventory item descriptions
+  - [ ] Inventory item tooltips
+  - [ ] Inventory item drag and drop
+  - [ ] Inventory item equip
+  - [ ] Inventory item unequip
+  - [ ] Inventory item drop
+  - [ ] Inventory item use
+  - [ ] Inventory item stack
+  - [ ] Inventory item split
+  - [ ] Inventory item merge
+  - [ ] Inventory item sort
+  - [ ] Inventory item search
+  - [ ] Inventory item filter
+  - [ ] Inventory item highlight
+- Game world/map also made of a 2d array
+  - Broken into zones made of 32x32 tiles
+  - Zones have properties like biomes/types, levels, etc. which also contain certain entities
+- HUD
+  - [ ] Display some basic information like health or jewels collected
