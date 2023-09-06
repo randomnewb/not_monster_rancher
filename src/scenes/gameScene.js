@@ -13,9 +13,10 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    const uiScene = this.scene.get("UIScene");
     const playerScene = this.scene.get("PlayerScene");
     const player = playerScene.player;
-    const uiScene = this.scene.get("UIScene");
+
     const jewels = this.physics.add.group({ classType: Jewel });
 
     this.generateFunction = () => {
@@ -33,13 +34,13 @@ export default class GameScene extends Phaser.Scene {
       );
     };
 
-    this.scene
-      .get("UIScene")
-      .events.on("generate", this.generateFunction, this);
+    this.physics.add.collider(player, jewels, this.collectObject, null, this);
 
     this.collectedJewels = 0;
 
-    this.physics.add.collider(player, jewels, this.collectObject, null, this);
+    this.scene
+      .get("UIScene")
+      .events.on("generate", this.generateFunction, this);
 
     const playerCamera = new PlayerCamera(this, player, uiScene);
     playerCamera.setupCamera();

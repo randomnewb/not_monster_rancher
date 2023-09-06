@@ -17,6 +17,7 @@ export default class PlayerScene extends Phaser.Scene {
 
     this.tilePos = { x: 5, y: 5 };
     this.player = this.physics.add.sprite(0, 0, "player");
+    this.physics.world.enable(this.player);
 
     this.player.setPosition(
       this.tilePos.x * this.TILE_SIZE + this.OFFSET,
@@ -31,56 +32,58 @@ export default class PlayerScene extends Phaser.Scene {
 
   update() {
     const cursors = this.input.keyboard.createCursorKeys();
+    const TILE_SIZE = 16;
+    const DURATION = 100; // Duration of the movement in milliseconds
+    const OFFSET = 8;
 
-    if (cursors.left.isDown && !this.leftKeyDown) {
-      this.leftKeyDown = true;
+    if (!this.player.isMoving) {
+      let newX = this.player.x;
+      let newY = this.player.y;
 
-      if (this.tilePos.x - 1 >= 0) {
+      // Calculate the next tile position
+      const nextTileX = cursors.left.isDown
+        ? this.tilePos.x - 1
+        : this.tilePos.x + 1;
+      const nextTileY = cursors.up.isDown
+        ? this.tilePos.y - 1
+        : this.tilePos.y + 1;
+
+      if (cursors.left.isDown && this.tilePos.x - 1 >= 0) {
         this.tilePos.x -= 1;
-        this.player.x = this.tilePos.x * this.TILE_SIZE + this.OFFSET;
-      } else if (this.tilePos.x - 1 < 0) {
-        console.log("left edge");
-      }
-    } else if (cursors.right.isDown && !this.rightKeyDown) {
-      this.rightKeyDown = true;
-
-      if (this.tilePos.x + 1 < this.mapWidth) {
+        newX = this.tilePos.x * TILE_SIZE + OFFSET;
+      } else if (cursors.right.isDown && this.tilePos.x + 1 < this.mapWidth) {
         this.tilePos.x += 1;
-        this.player.x = this.tilePos.x * this.TILE_SIZE + this.OFFSET;
-      } else if (this.tilePos.x + 1 >= this.mapWidth) {
-        console.log("right edge");
-      }
-    } else if (cursors.up.isDown && !this.upKeyDown) {
-      this.upKeyDown = true;
-
-      if (this.tilePos.y - 1 >= 0) {
+        newX = this.tilePos.x * TILE_SIZE + OFFSET;
+      } else if (cursors.up.isDown && this.tilePos.y - 1 >= 0) {
         this.tilePos.y -= 1;
-        this.player.y = this.tilePos.y * this.TILE_SIZE + this.OFFSET;
-      } else if (this.tilePos.y - 1 < 0) {
-        console.log("top edge");
-      }
-    } else if (cursors.down.isDown && !this.downKeyDown) {
-      this.downKeyDown = true;
-
-      if (this.tilePos.y + 1 < this.mapHeight) {
+        newY = this.tilePos.y * TILE_SIZE + OFFSET;
+      } else if (cursors.down.isDown && this.tilePos.y + 1 < this.mapHeight) {
         this.tilePos.y += 1;
-        this.player.y = this.tilePos.y * this.TILE_SIZE + this.OFFSET;
-      } else if (this.tilePos.y + 1 >= this.mapHeight) {
-        console.log("bottom edge");
+        newY = this.tilePos.y * TILE_SIZE + OFFSET;
       }
-    }
 
-    if (cursors.left.isUp) {
-      this.leftKeyDown = false;
-    }
-    if (cursors.right.isUp) {
-      this.rightKeyDown = false;
-    }
-    if (cursors.up.isUp) {
-      this.upKeyDown = false;
-    }
-    if (cursors.down.isUp) {
-      this.downKeyDown = false;
+      if (this.player.x !== newX || this.player.y !== newY) {
+        this.player.isMoving = true;
+
+        // Calculate the velocity needed to move the player to the next tile within the desired duration
+        const velocityX = (newX - this.player.x) / (DURATION / 1000);
+        const velocityY = (newY - this.player.y) / (DURATION / 1000);
+
+        // Set the player's velocity
+        this.player.setVelocity(velocityX, velocityY);
+
+        // After the desired duration, stop the player and round its position to the nearest tile
+        this.time.delayedCall(DURATION, () => {
+          this.player.setVelocity(0, 0);
+          this.player.x =
+            Math.round((this.player.x - OFFSET) / TILE_SIZE) * TILE_SIZE +
+            OFFSET;
+          this.player.y =
+            Math.round((this.player.y - OFFSET) / TILE_SIZE) * TILE_SIZE +
+            OFFSET;
+          this.player.isMoving = false;
+        });
+      }
     }
   }
 }

@@ -17,7 +17,7 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [PlayerScene, GameScene, ObjectScene, TerrainScene, UIScene, Generate],
+  scene: [PlayerScene, TerrainScene, GameScene, ObjectScene, UIScene, Generate],
   physics: {
     default: "arcade",
     arcade: {
