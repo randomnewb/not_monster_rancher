@@ -5,11 +5,6 @@ export default class Player {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.cursorKeys = this.scene.joystick.createCursorKeys();
 
-    // var leftKeyDown = cursorKeys.left.isDown;
-    // var rightKeyDown = cursorKeys.right.isDown;
-    // var upKeyDown = cursorKeys.up.isDown;
-    // var downKeyDown = cursorKeys.down.isDown;
-
     this.collectedJewels = 0;
   }
 

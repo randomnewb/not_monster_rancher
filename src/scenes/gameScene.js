@@ -28,7 +28,6 @@ export default class GameScene extends Phaser.Scene {
     this.terrain = new Terrain(this);
     this.physics.world.enable(this.terrain);
 
-    // Create joystick
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
       x: 430,
       y: 310,
@@ -37,7 +36,12 @@ export default class GameScene extends Phaser.Scene {
       thumb: this.add.circle(0, 0, 20, 0xcccccc),
     });
 
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    this.joystick.setVisible(isMobile);
+
     this.player = new Player(this);
+
     const uiScene = this.scene.get("UIScene");
 
     const jewels = this.physics.add.group({ classType: Jewel });
@@ -82,5 +86,9 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     this.player.update();
+
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    this.joystick.setVisible(isMobile);
   }
 }
