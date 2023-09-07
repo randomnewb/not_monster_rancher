@@ -1,14 +1,12 @@
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 
-- [ ] Recreate terrain system using Phaser's built-in tilemaps
+- [x] Recreate terrain system using Phaser's built-in tilemaps
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field
 - [ ] On game over, disable player movement and show game over screen message like before
-- [ ] Implement collisions with certain tiles in the terrain
-- [ ] Implement mobile controls - easiest way would be on screen buttons
+- [x] Implement collisions with certain tiles in the terrain
+- [x] Implement mobile controls - easiest way would be on screen buttons
 - [ ] Implement click to move
-
-  - Since movement is implemented by changing the player's position, we can just check if the player's position is inside a tile that is not a floor tile
 
 - [ ] Implement Entity Class
   - Requirements

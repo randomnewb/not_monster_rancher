@@ -1,11 +1,9 @@
 import Phaser from "phaser";
 import style from "../main.css";
 import GameScene from "./scenes/gameScene.js";
-// import PlayerScene from "./scenes/playerScene.js";
 import ObjectScene from "./scenes/objectsScene.js";
-// import TerrainScene from "./scenes/terrainScene.js";
 import UIScene from "./scenes/uiScene.js";
-// import Generate from "./scripts/generate.js";
+import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
 
 const config = {
   type: Phaser.AUTO,
@@ -18,8 +16,6 @@ const config = {
     zoom: 2,
   },
   scene: [
-    // PlayerScene,
-    // TerrainScene,
     GameScene,
     // ObjectScene,
     UIScene,
@@ -31,6 +27,15 @@ const config = {
       gravity: { y: 0 },
       debug: true,
     },
+  },
+  plugins: {
+    global: [
+      {
+        key: "rexVirtualJoystick",
+        plugin: VirtualJoystickPlugin,
+        start: true,
+      },
+    ],
   },
 };
 
