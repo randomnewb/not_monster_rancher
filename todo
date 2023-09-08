@@ -1,11 +1,11 @@
-- [ ] Continue implementing remaining scenes as their own classes/scripts
+- [ ] Get collisions between the player and jewels working again
 
-- [x] Recreate terrain system using Phaser's built-in tilemaps
+  - stuck with this bug when player and jewel collide: "playerScene.js:23 Uncaught TypeError: Cannot read properties of undefined (reading 'setVelocity')"
+
+- [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field
 - [ ] On game over, disable player movement and show game over screen message like before
-- [x] Implement collisions with certain tiles in the terrain
-- [x] Implement mobile controls - easiest way would be on screen buttons
 - [ ] Implement click to move
 
 - [ ] Implement Entity Class

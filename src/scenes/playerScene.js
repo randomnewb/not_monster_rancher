@@ -39,21 +39,4 @@ export default class Player {
       this.sprite.body.setVelocityY(100);
     }
   }
-
-  collectObject(jewels) {
-    if (data.gameActive) {
-      jewels.destroy();
-      this.collectedJewels++;
-
-      if (this.collectedJewels >= 10) {
-        this.gameOver();
-      }
-    }
-  }
-
-  gameOver() {
-    data.gameActive = false;
-    this.collectedJewels = 0;
-    this.scene.get("UIScene").showGameOver();
-  }
 }

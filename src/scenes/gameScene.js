@@ -1,8 +1,7 @@
 import data from "../data/data.js";
-import Jewel from "../scenes/jewelScene.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
-import Terrain from "../scripts/terrain.js";
+import Terrain from "./terrainScene.js";
 import Player from "../scenes/playerScene.js";
 
 export default class GameScene extends Phaser.Scene {
@@ -20,7 +19,6 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.image("player", "./assets/player.png");
-
     this.load.image("jewel", "./assets/jewel.png");
   }
 
@@ -28,30 +26,28 @@ export default class GameScene extends Phaser.Scene {
     this.terrain = new Terrain(this);
     this.physics.world.enable(this.terrain);
 
+    const gameWidth = this.game.config.width;
+    const gameHeight = this.game.config.height;
+
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
-      x: 430,
-      y: 310,
-      radius: 25,
-      base: this.add.circle(0, 0, 40, 0x888888),
-      thumb: this.add.circle(0, 0, 20, 0xcccccc),
+      x: gameWidth / 1.69,
+      y: gameHeight / 1.8,
+      radius: 17,
+      base: this.add.circle(0, 0, 25, 0x888888),
+      thumb: this.add.circle(0, 0, 12, 0xcccccc),
     });
 
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
     this.joystick.setVisible(isMobile);
 
     this.player = new Player(this);
-
-    const uiScene = this.scene.get("UIScene");
-
-    const jewels = this.physics.add.group({ classType: Jewel });
+    this.jewels = this.physics.add.group();
 
     this.generateFunction = () => {
       Generate.create_objects(
-        Generate.placement_array(data.gameSeed, 40, 30, 0, 1),
-        data.gameSeed,
         this,
-        jewels,
+        Generate.placement_array(0, 1),
+        this.jewels,
         "jewel",
         {
           color1: 0x7e8bfe,
@@ -61,15 +57,17 @@ export default class GameScene extends Phaser.Scene {
       );
     };
 
+    this.generateFunction();
+
     this.physics.add.collider(
-      this.player,
-      jewels,
+      this.player.sprite,
+      this.jewels,
       this.collectObject,
       null,
       this
     );
 
-    this.collectedJewels = 0;
+    const uiScene = this.scene.get("UIScene");
 
     this.scene
       .get("UIScene")
@@ -90,5 +88,23 @@ export default class GameScene extends Phaser.Scene {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
     this.joystick.setVisible(isMobile);
+  }
+
+  collectObject(jewels) {
+    console.log(jewels);
+    if (data.gameActive) {
+      jewels.destroy();
+      this.player.collectedJewels++;
+
+      if (this.collectedJewels >= 10) {
+        this.gameOver();
+      }
+    }
+  }
+
+  gameOver() {
+    data.gameActive = false;
+    this.player.collectedJewels = 0;
+    this.scene.get("UIScene").showGameOver();
   }
 }

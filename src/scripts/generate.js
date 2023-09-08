@@ -1,54 +1,34 @@
+import { Create } from "phaser";
 import data from "../data/data.js";
 import seedrandom from "seedrandom";
 
-export default class Generate {
-  static create_objects(map, seed, scene, objects, objectName, colorOptions) {
-    const randomNumber = seedrandom(seed);
+var randomNumber = seedrandom(data.gameSeed);
 
-    scene.children.removeAll();
+export default class Generate {
+  static create_objects(scene, map, objects, texture, colorOptions) {
+    // get access to group of objects by their objectName
+    // optionally remove all children
 
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
         if (map[row][column] === 0 && randomNumber() < 0.05) {
-          const object = objects.create(
+          const object = scene.physics.add.sprite(
             column * 16 + 8,
             row * 16 + 8,
-            objectName
+            texture
           );
 
+          // Add the created sprite to the objects group
+          objects.add(object);
+
           if (randomNumber() > 0.5) {
-            object.changeColor(colorOptions.color1);
+            object.tint = colorOptions.color1;
           } else if (randomNumber() <= 0.5) {
-            object.changeColor(colorOptions.color2);
+            object.tint = colorOptions.color2;
           } else {
-            object.changeColor(colorOptions.color3);
+            object.tint = colorOptions.color3;
           }
         }
-      }
-    }
-  }
-
-  /**
-   *
-   * Draws the map of tiles to the scene
-   *
-   * @param {array} map - 2D array of integers representing a map
-   * @param {*} tilesheet - Phaser tileset spritesheet
-   * @param {*} tile_size - Integer representing the tile size
-   * @param {*} scene - Phaser scene to draw the map to
-   */
-
-  static draw_map(map, tilesheet, tile_size, scene) {
-    scene.children.removeAll();
-
-    for (let row = 0; row < map.length; row++) {
-      for (let column = 0; column < map[row].length; column++) {
-        const tile = scene.add.sprite(
-          column * tile_size + 8,
-          row * tile_size + 8,
-          tilesheet,
-          map[row][column]
-        );
       }
     }
   }
@@ -72,9 +52,6 @@ export default class Generate {
    * 9 = obstruction variant like a different tree or large rock
    *
    *
-   * @param {string} seed - Any length and characters
-   * @param {integer} width - Integer Greater than 1
-   * @param {integer} height - Integer Greater than 1
    * @param {integer} empty - Integer representing the empty space frame value (usually: 0)
    * @param {integer} walkable - Integer representing the walkable space frame value (usually: 1)
    * @param {integer} walkableVariant - Integer representing the walkable space variant frame value (usually: 2)
@@ -85,9 +62,6 @@ export default class Generate {
    */
 
   static placement_array(
-    seed,
-    width,
-    height,
     empty,
     walkable,
     walkableVariant,
@@ -100,11 +74,10 @@ export default class Generate {
     // const obstruction = 8;
     // const obstructionVariant = 9;
 
-    const randomNumber = seedrandom(seed);
     let map = [];
-    for (let row = 0; row < height; row++) {
+    for (let row = 0; row < 64; row++) {
       let newRow = [];
-      for (let column = 0; column < width; column++) {
+      for (let column = 0; column < 64; column++) {
         if (randomNumber() > 0.5) {
           newRow.push(empty);
         } else {

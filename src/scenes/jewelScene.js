@@ -1,17 +1,6 @@
-export default class Jewel extends Phaser.GameObjects.Sprite {
+export default class Jewel extends Phaser.Physics.Arcade.Sprite {
+  // should this be .Sprite or a GameObject?
   constructor(scene, x, y) {
     super(scene, x, y, "jewel");
   }
-
-  changeColor(color) {
-    this.tint = color;
-  }
 }
-Phaser.GameObjects.GameObjectFactory.register("jewel", function (x, y) {
-  var jewel = new Jewel(this.scene, x, y);
-
-  this.displayList.add(jewel);
-  this.updateList.add(jewel);
-
-  return jewel;
-});
