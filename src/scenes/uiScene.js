@@ -47,15 +47,15 @@ export default class UIScene extends Phaser.Scene {
       data.gameActive = true;
 
       const gameScene = this.scene.get("GameScene");
-      const terrainScene = this.scene.get("TerrainScene");
+      // const terrainScene = this.scene.get("TerrainScene");
 
       // Remove the event listeners
       this.events.off("generate", gameScene.generateFunction, gameScene);
-      this.events.off("generate", terrainScene.generateFunction, terrainScene);
+      // this.events.off("generate", terrainScene.generateFunction, terrainScene);
 
       // Restart the scenes
       gameScene.scene.restart();
-      terrainScene.scene.restart();
+      // terrainScene.scene.restart();
 
       this.hideGameOver();
     }

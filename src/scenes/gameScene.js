@@ -59,7 +59,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.generateFunction();
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player.sprite,
       this.jewels,
       this.collectObject,
@@ -90,13 +90,14 @@ export default class GameScene extends Phaser.Scene {
     this.joystick.setVisible(isMobile);
   }
 
-  collectObject(jewels) {
-    console.log(jewels);
+  collectObject(player, jewel) {
     if (data.gameActive) {
-      jewels.destroy();
-      this.player.collectedJewels++;
+      jewel.destroy();
 
-      if (this.collectedJewels >= 10) {
+      this.player.collectedJewels++;
+      console.log("jewels collected:", this.player.collectedJewels);
+
+      if (this.player.collectedJewels >= 10) {
         this.gameOver();
       }
     }
