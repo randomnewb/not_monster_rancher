@@ -1,5 +1,6 @@
 - [x] Get collisions between the player and jewels working again
-- [ ] Re-implement input field utilizing seed
+- [x] Re-implement input field utilizing seed
+- [ ] Re-implement seedrandom, user input for seed not working, makes a new unique map regardless of the input
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field

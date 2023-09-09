@@ -23,9 +23,6 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.terrain = new Terrain(this);
-    this.physics.world.enable(this.terrain);
-
     const gameWidth = this.game.config.width;
     const gameHeight = this.game.config.height;
 
@@ -44,6 +41,19 @@ export default class GameScene extends Phaser.Scene {
     this.jewels = this.physics.add.group();
 
     this.generateFunction = () => {
+      if (this.terrain) {
+        this.physics.world.removeCollider(this.playerTerrainCollider);
+        this.terrain.map.destroyLayer(this.terrain.layer);
+      }
+
+      this.terrain = new Terrain(this);
+      this.physics.world.enable(this.terrain);
+
+      this.playerTerrainCollider = this.physics.add.collider(
+        this.player.sprite,
+        this.terrain.layer
+      );
+
       Generate.create_objects(
         this,
         Generate.placement_array(0, 1),
@@ -57,9 +67,7 @@ export default class GameScene extends Phaser.Scene {
       );
     };
 
-    this.generateFunction();
-
-    this.physics.add.overlap(
+    this.playerJewelOverlap = this.physics.add.overlap(
       this.player.sprite,
       this.jewels,
       this.collectObject,
@@ -76,10 +84,9 @@ export default class GameScene extends Phaser.Scene {
     const playerCamera = new PlayerCamera(this, this.player.sprite, uiScene);
     playerCamera.setupCamera();
 
-    const debugGraphics = this.add.graphics();
-    this.terrain.layer.renderDebug(debugGraphics);
-
-    this.physics.add.collider(this.player.sprite, this.terrain.layer);
+    // Collision Boxes for Debugging
+    // const debugGraphics = this.add.graphics();
+    // this.terrain.layer.renderDebug(debugGraphics);
   }
 
   update() {
@@ -95,7 +102,6 @@ export default class GameScene extends Phaser.Scene {
       jewel.destroy();
 
       this.player.collectedJewels++;
-      console.log("jewels collected:", this.player.collectedJewels);
 
       if (this.player.collectedJewels >= 10) {
         this.gameOver();

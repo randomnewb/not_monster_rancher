@@ -4,7 +4,6 @@ export default class Terrain extends Phaser.GameObjects.Group {
   constructor(scene) {
     super(scene);
 
-    // Create the tilemap
     this.map = scene.make.tilemap({
       data: Generate.placement_array(0, 1, 2, 8, 9),
       tileWidth: 16,

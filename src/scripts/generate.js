@@ -1,4 +1,3 @@
-import { Create } from "phaser";
 import data from "../data/data.js";
 import seedrandom from "seedrandom";
 

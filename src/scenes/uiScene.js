@@ -7,11 +7,11 @@ export default class UIScene extends Phaser.Scene {
 
   create() {
     this.gameOverText = this.add.text(
-      320,
-      240,
+      1280 / 2,
+      720 / 2,
       "Game Over\nPress R to Restart",
       {
-        fontSize: "24px",
+        fontSize: "80px",
         fill: "#fff",
         align: "center",
       }
