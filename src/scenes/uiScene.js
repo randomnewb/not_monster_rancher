@@ -1,4 +1,5 @@
 import data from "../data/data.js";
+import InputText from "phaser3-rex-plugins/plugins/inputtext.js";
 
 export default class UIScene extends Phaser.Scene {
   constructor() {
@@ -6,6 +7,10 @@ export default class UIScene extends Phaser.Scene {
   }
 
   create() {
+    // access phaser 3 js config file
+    this.gameWidth = this.game.config.width;
+    this.gameHeight = this.game.config.height;
+
     this.gameOverText = this.add.text(
       1280 / 2,
       720 / 2,
@@ -22,24 +27,44 @@ export default class UIScene extends Phaser.Scene {
     this.input.keyboard.on("keydown-R", this.restartGame, this);
 
     this.create_input_field();
+    this.create_restart_button();
 
-    this.input.addEventListener("keydown", event => {
-      if (event.key === "Enter") {
-        data.gameSeed = this.input.value;
+    this.inputText.on(
+      "keydown",
+      function (inputText, e) {
+        if (e.key === "Enter") {
+          data.gameSeed = this.inputText.text;
 
-        this.events.emit("generate");
+          this.events.emit("generate");
 
-        this.input.value = "";
-      }
-    });
+          this.inputText.text = "";
+          this.inputText.visible = false;
+          this.inputText.setBlur();
+        }
+      },
+      this
+    );
+
+    // this.inputText.on("keydown", event => {
+    //   if (event.key === "Enter") {
+    //     data.gameSeed = this.input.value;
+
+    //     this.events.emit("generate");
+
+    //     this.inputText.text = "";
+    //   }
+    // });
   }
 
   showGameOver() {
     this.gameOverText.setVisible(true);
+    this.inputText.visible = true;
+    this.button.style.display = "block";
   }
 
   hideGameOver() {
     this.gameOverText.setVisible(false);
+    this.button.style.display = "none";
   }
 
   restartGame() {
@@ -62,17 +87,44 @@ export default class UIScene extends Phaser.Scene {
   }
 
   create_input_field() {
-    this.input = document.createElement("input");
-    this.input.type = "text";
-    this.input.placeholder = "Enter seed";
-    document.body.appendChild(this.input);
+    this.inputText = this.add.rexInputText({
+      x: 110,
+      y: 15,
+      width: 225,
+      height: 35,
+      type: "text",
+      placeholder: "Please enter a seed",
+      fontSize: "20px",
+      maxLength: 10,
+      backgroundColor: "lightblue",
+      color: "black",
+      align: "center",
+    });
 
+    // this.inputText.node.style.backgroundColor = "lightblue";
+  }
+
+  create_restart_button() {
+    // create a button and add it to the DOM
+    this.button = document.createElement("button");
+    this.button.innerHTML = "Restart";
+    document.body.appendChild(this.button);
+
+    // set the button position
     const canvas = document.querySelector("canvas");
     const canvasPosition = canvas.getBoundingClientRect();
-    this.input.style.position = "absolute";
-    this.input.style.top = `${canvasPosition.top + 10}px`;
-    this.input.style.left = `${canvasPosition.left + 10}px`;
-    this.input.style.width = "100px";
-    this.input.style.height = "25px";
+    this.button.style.position = "absolute";
+    this.button.style.top = `${canvasPosition.top}px`;
+    this.button.style.left = `${canvasPosition.left * 100.0}px`;
+
+    this.button.style.width = "250px";
+    this.button.style.height = "50px";
+
+    // add a listener to the button
+    this.button.addEventListener("click", () => {
+      this.restartGame();
+    });
+
+    // this.button.style.display = "none";
   }
 }

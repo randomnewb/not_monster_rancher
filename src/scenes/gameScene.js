@@ -119,7 +119,7 @@ export default class GameScene extends Phaser.Scene {
 
       this.player.collectedJewels++;
 
-      if (this.player.collectedJewels >= 10) {
+      if (this.player.collectedJewels >= 1) {
         this.gameOver();
       }
     }
