@@ -67,7 +67,7 @@ export default class GameScene extends Phaser.Scene {
 
       Generate.create_objects(
         this,
-        Generate.placement_array(0, 1),
+        this.terrain.map_array,
         this.jewels,
         "jewel",
         {
@@ -76,6 +76,9 @@ export default class GameScene extends Phaser.Scene {
           color3: 0xfe7e7e,
         }
       );
+      if (this.player) {
+        this.player.sprite.setDepth(1);
+      }
     };
 
     this.playerJewelOverlap = this.physics.add.overlap(
@@ -99,7 +102,7 @@ export default class GameScene extends Phaser.Scene {
     // const debugGraphics = this.add.graphics();
     // this.terrain.layer.renderDebug(debugGraphics);
 
-    // phaser 3 js, lock player within confines of the map
+    // this.generateFunction();
   }
 
   update() {

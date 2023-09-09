@@ -8,6 +8,8 @@ export default class Player {
     this.cursorKeys = this.scene.joystick.createCursorKeys();
 
     this.collectedJewels = 0;
+
+    this.sprite.tint = 0x2986cc;
   }
 
   update() {

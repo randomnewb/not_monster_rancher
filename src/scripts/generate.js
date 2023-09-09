@@ -33,11 +33,9 @@ export default class Generate {
 
   /**
    *
-   * Generates a 2D array of integers representing a map
+   * Generates a 2D array of integers representing a 64x64 map
    *
-   * Given an area, 640x480, with a tile size of 16x16, there would be 40 tiles wide and 30 tiles high
-   *
-   * Given a tilesheet with these frame values:
+   * Given a tilesheet with these frame index values:
    *
    * 0 = empty space
    *
