@@ -1,7 +1,9 @@
 export default class Player {
   constructor(scene) {
     this.scene = scene;
-    this.sprite = this.scene.physics.add.sprite(72, 72, "player");
+    this.sprite = this.scene.physics.add
+      .sprite(72, 72, "player")
+      .setCollideWorldBounds();
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.cursorKeys = this.scene.joystick.createCursorKeys();
 

@@ -1,6 +1,9 @@
 - [x] Get collisions between the player and jewels working again
 - [x] Re-implement input field utilizing seed
-- [ ] Re-implement seedrandom, user input for seed not working, makes a new unique map regardless of the input
+- [x] Bug: remove jewels before re-spawning them
+- [x] Re-implement seedrandom, user input for seed not working, makes a new unique map regardless of the input
+- [x] Lock player within confines of the zone
+- [ ] If possible, add random tint to tiles
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 - [ ] Implement players being unable to generate new map if one already has been generated, toggle visibility of the seed input field

@@ -38,6 +38,7 @@ export default class GameScene extends Phaser.Scene {
     this.joystick.setVisible(isMobile);
 
     this.player = new Player(this);
+
     this.jewels = this.physics.add.group();
 
     this.generateFunction = () => {
@@ -46,12 +47,22 @@ export default class GameScene extends Phaser.Scene {
         this.terrain.map.destroyLayer(this.terrain.layer);
       }
 
+      if (this.jewels) {
+        this.jewels.clear(true, true);
+      }
       this.terrain = new Terrain(this);
       this.physics.world.enable(this.terrain);
 
       this.playerTerrainCollider = this.physics.add.collider(
         this.player.sprite,
         this.terrain.layer
+      );
+
+      this.physics.world.setBounds(
+        0,
+        0,
+        this.terrain.map.widthInPixels,
+        this.terrain.map.heightInPixels
       );
 
       Generate.create_objects(
@@ -87,6 +98,8 @@ export default class GameScene extends Phaser.Scene {
     // Collision Boxes for Debugging
     // const debugGraphics = this.add.graphics();
     // this.terrain.layer.renderDebug(debugGraphics);
+
+    // phaser 3 js, lock player within confines of the map
   }
 
   update() {
