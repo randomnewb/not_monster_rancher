@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import GameScene from "./scenes/gameScene.js";
 import UIScene from "./scenes/uiScene.js";
+import MainMenuScene from "./scenes/mainMenuScene.js";
+import NewGameMenuScene from "./scenes/newGameMenuScene.js";
 
 import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
 import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin.js";
@@ -27,7 +29,7 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [GameScene, UIScene],
+  scene: [MainMenuScene, NewGameMenuScene, GameScene, UIScene],
   physics: {
     default: "arcade",
     arcade: {

@@ -6,7 +6,7 @@ import Player from "../scenes/playerScene.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super({ key: "GameScene", active: true });
+    super({ key: "GameScene", active: false });
   }
 
   preload() {

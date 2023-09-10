@@ -2,7 +2,7 @@ import data from "../data/data.js";
 
 export default class UIScene extends Phaser.Scene {
   constructor() {
-    super({ key: "UIScene", active: true });
+    super({ key: "UIScene", active: false });
   }
 
   create() {
@@ -44,11 +44,9 @@ export default class UIScene extends Phaser.Scene {
       .on("pointerup", () => {
         this.restartGame();
         this.restartButton.setStyle({ fill: "#10434e" });
-      })
-      .setVisible(true);
+      });
 
     this.create_input_field();
-    this.restartButton.visible = true;
 
     this.inputText.on(
       "keydown",
