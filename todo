@@ -8,7 +8,8 @@
 - [x] continue implementing text field from rex library
   - text field works, but text is not centered
   - text field needs to be hidden after user presses enter
-- [ ] implement button from rex library
+- [x] implement button
+- [ ] rework game restart
 - [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
