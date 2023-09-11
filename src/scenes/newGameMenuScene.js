@@ -33,11 +33,14 @@ export default class NewGameMenuScene extends Phaser.Scene {
     const gameScene = this.scene.get("GameScene");
     gameScene.scene.restart();
 
-    this.time.delayedCall(500, () => {
+    const uiScene = this.scene.get("UIScene");
+    uiScene.scene.restart();
+
+    this.time.delayedCall(250, () => {
       this.events.emit("generate");
       this.scene.stop("NewGameMenuScene");
-      this.scene.remove("NewGameMenuScene");
     });
+
     this.inputText.visible = false;
     this.generateWorldButton.visible = false;
     data.gameSeed = this.inputText.text;

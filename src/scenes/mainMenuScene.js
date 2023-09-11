@@ -7,20 +7,18 @@ export default class MainMenuScene extends Phaser.Scene {
 
   create() {
     this.newGameButton = this.createButton(250, 50, " New Game ", () => {
-      const newGameScene = this.scene.get("NewGameMenuScene");
-      newGameScene.scene.start();
+      const newGameMenuScene = this.scene.get("NewGameMenuScene");
+      newGameMenuScene.scene.restart();
+
       this.scene.bringToTop("NewGameMenuScene");
       this.scene.stop("MainMenuScene");
-      this.time.delayedCall(1000, () => {
-        this.scene.remove("MainMenuScene");
-      });
     });
 
     this.optionsButton = this.createButton(290, 280, " Options ", () => {
       console.log("Options");
     });
 
-    this.exitGameButton = this.createButton(230, 510, " Exit Game ", () => {
+    this.exitGameButton = this.createButton(220, 510, " Exit Game ", () => {
       console.log("Exit Game");
     });
   }

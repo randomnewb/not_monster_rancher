@@ -42,7 +42,6 @@ export default class GameScene extends Phaser.Scene {
     this.jewels = this.physics.add.group();
 
     this.generateFunction = () => {
-      console.log("generate");
       if (this.terrain) {
         this.physics.world.removeCollider(this.playerTerrainCollider);
         this.terrain.map.destroyLayer(this.terrain.layer);
@@ -120,7 +119,7 @@ export default class GameScene extends Phaser.Scene {
 
       this.player.collectedJewels++;
 
-      if (this.player.collectedJewels >= 1) {
+      if (this.player.collectedJewels >= 10) {
         this.gameOver();
       }
     }
@@ -129,6 +128,6 @@ export default class GameScene extends Phaser.Scene {
   gameOver() {
     data.gameActive = false;
     this.player.collectedJewels = 0;
-    // this.scene.get("UIScene").showGameOver();
+    this.scene.get("UIScene").showGameOver();
   }
 }
