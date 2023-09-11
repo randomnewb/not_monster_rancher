@@ -10,10 +10,10 @@
   - text field needs to be hidden after user presses enter
 - [x] implement button
 - [x] rework game restart (implementing game menus)
+- [x] On game over, disable player movement and show game over screen message like before
 - [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
-- [ ] On game over, disable player movement and show game over screen message like before
 - [ ] Implement click to move
 
 - [ ] (OPTIONAL) Jewels drop out of player on hit
