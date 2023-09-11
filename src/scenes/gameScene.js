@@ -106,11 +106,14 @@ export default class GameScene extends Phaser.Scene {
   }
 
   update() {
-    this.player.update();
+    if (data.gameActive) {
+      this.player.update();
 
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-    this.joystick.setVisible(isMobile);
+      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+      this.joystick.setVisible(isMobile);
+    } else {
+      this.player.sprite.body.setVelocity(0);
+    }
   }
 
   collectObject(player, jewel) {
@@ -119,7 +122,7 @@ export default class GameScene extends Phaser.Scene {
 
       this.player.collectedJewels++;
 
-      if (this.player.collectedJewels >= 10) {
+      if (this.player.collectedJewels >= 1) {
         this.gameOver();
       }
     }
@@ -128,6 +131,7 @@ export default class GameScene extends Phaser.Scene {
   gameOver() {
     data.gameActive = false;
     this.player.collectedJewels = 0;
+
     this.scene.get("UIScene").showGameOver();
   }
 }

@@ -16,6 +16,13 @@
 - [ ] On game over, disable player movement and show game over screen message like before
 - [ ] Implement click to move
 
+- [ ] (OPTIONAL) Jewels drop out of player on hit
+- [ ] Collectibles other than jewels
+- [ ] Monsters/beasts that wander around, attack player, interact with environment, drop items
+- [ ] Enemies (that wander around, attack player)
+- [ ] Character customization/select screen
+- [ ] Life Skills system - chop trees, mine rocks, etc.
+- [ ] Water tiles/swimming
 - [ ] Implement Entity Class
   - Requirements
     - [ ] Stats (health, attack, level, experience, etc.)
