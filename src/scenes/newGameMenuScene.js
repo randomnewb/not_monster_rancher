@@ -1,3 +1,5 @@
+import data from "../data/data.js";
+
 export default class NewGameMenuScene extends Phaser.Scene {
   constructor() {
     super({ key: "NewGameMenuScene" });
@@ -9,9 +11,40 @@ export default class NewGameMenuScene extends Phaser.Scene {
       440,
       " Generate World ",
       () => {
-        console.log("Generate World");
+        this.startGame();
       }
     );
+
+    this.create_input_field();
+
+    this.inputText.on(
+      "keydown",
+      function (inputText, e) {
+        if (e.key === "Enter") {
+          this.startGame();
+        }
+      },
+      this
+    );
+  }
+
+  startGame() {
+    this.add.rectangle(0, 0, 1280 * 2, 720 * 2, 0x000);
+    const gameScene = this.scene.get("GameScene");
+    gameScene.scene.restart();
+
+    this.time.delayedCall(500, () => {
+      this.events.emit("generate");
+      this.scene.stop("NewGameMenuScene");
+      this.scene.remove("NewGameMenuScene");
+    });
+    this.inputText.visible = false;
+    this.generateWorldButton.visible = false;
+    data.gameSeed = this.inputText.text;
+    this.inputText.text = "";
+    this.inputText.setBlur();
+
+    data.gameActive = true;
   }
 
   createButton(x, y, text, clickAction) {
@@ -41,5 +74,21 @@ export default class NewGameMenuScene extends Phaser.Scene {
       });
 
     return button;
+  }
+  create_input_field() {
+    this.inputText = this.add.rexInputText({
+      x: 665,
+      y: 150,
+      width: 800,
+      height: 100,
+      type: "text",
+      placeholder: "Please enter a seed",
+      fontSize: "100px",
+      maxLength: 10,
+      backgroundColor: "lightblue",
+      color: "black",
+      align: "center",
+      fontFamily: "HopeGold",
+    });
   }
 }
