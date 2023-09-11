@@ -3,8 +3,6 @@ export default class MainMenuScene extends Phaser.Scene {
     super({ key: "MainMenuScene", active: true });
   }
 
-  preload() {}
-
   create() {
     this.newGameButton = this.createButton(250, 50, " New Game ", () => {
       const newGameMenuScene = this.scene.get("NewGameMenuScene");
