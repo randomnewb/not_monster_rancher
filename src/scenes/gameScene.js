@@ -20,11 +20,18 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.image("player", "./assets/player.png");
     this.load.image("jewel", "./assets/jewel.png");
+    this.load.spritesheet("projectiles", "./assets/projectiles.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {
     const gameWidth = this.game.config.width;
     const gameHeight = this.game.config.height;
+
+    // attack_projectile sprite added
+    this.add.sprite(16, 16, "projectiles", 1);
 
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
       x: gameWidth / 1.69,
@@ -38,7 +45,6 @@ export default class GameScene extends Phaser.Scene {
     this.joystick.setVisible(isMobile);
 
     this.player = new Player(this);
-
     this.jewels = this.physics.add.group();
 
     this.generateFunction = () => {
@@ -122,7 +128,7 @@ export default class GameScene extends Phaser.Scene {
 
       this.player.collectedJewels++;
 
-      if (this.player.collectedJewels >= 1) {
+      if (this.player.collectedJewels >= 10) {
         this.gameOver();
       }
     }

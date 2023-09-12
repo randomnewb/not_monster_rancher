@@ -29,7 +29,13 @@ const config = {
     pixelArt: true,
     zoom: 2,
   },
-  scene: [MainMenuScene, NewGameMenuScene, GameScene, UIScene],
+  scene: [
+    // Uncomment below when testing complete
+    MainMenuScene,
+    NewGameMenuScene,
+    GameScene,
+    UIScene,
+  ],
   physics: {
     default: "arcade",
     arcade: {

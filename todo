@@ -1,16 +1,27 @@
-- [x] Get collisions between the player and jewels working again
-- [x] Re-implement input field utilizing seed
-- [x] Bug: remove jewels before re-spawning them
-- [x] Re-implement seedrandom, user input for seed not working, makes a new unique map regardless of the input
-- [x] Lock player within confines of the zone
-- [x] Bug: player can move out on the right side and bottom side of zone
-- [x] If possible, add random tint to tiles
-- [x] continue implementing text field from rex library
-  - text field works, but text is not centered
-  - text field needs to be hidden after user presses enter
-- [x] implement button
-- [x] rework game restart (implementing game menus)
-- [x] On game over, disable player movement and show game over screen message like before
+- [x] Using WASD for movement
+- [x] Implement some other keys for actions (J, K, L, I)
+- Create a projectile/object
+
+  - [ ] One example projectile image loaded
+  - [ ] Hitbox for projectile (just use the 16x16 sprite square)
+  - [ ] Create where the player is
+  - [ ] Do so in the direction the player just finished moving (their facing direction)
+  - [ ] OPTIONALLY: Make the projectile move outwards from the player with a little bit of velocity (pseudo-melee/ranged)
+  - [ ] Attach weapon to the player/add a swing animation with the weapon
+
+- [ ] Add in the weapons from Kenney's assets as a weapon sheet
+
+- [ ] Pixel Art: Tree stump
+- [ ] Pixel Art: Boulder
+- [ ] Pixel Art: Log/sticks
+- [ ] Pixel Art: Pebbles/small stones
+- [ ] Pixel Art: General item/bag
+- [ ] Implement Entity Class
+  - Requirements
+    - [ ] Stats (health, attack, level, experience, etc.)
+    - [ ] Sprite
+    - [ ] Physics/collisions/movement
+- [ ] Interactive objects have outlines around them
 - [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
@@ -23,11 +34,7 @@
 - [ ] Character customization/select screen
 - [ ] Life Skills system - chop trees, mine rocks, etc.
 - [ ] Water tiles/swimming
-- [ ] Implement Entity Class
-  - Requirements
-    - [ ] Stats (health, attack, level, experience, etc.)
-    - [ ] Sprite
-    - [ ] Physics/collisions/movement
+
 - [ ] Implement NPC class
   - Requirements
     - [ ] Inherits Entity Class
