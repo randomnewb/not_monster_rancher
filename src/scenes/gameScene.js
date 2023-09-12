@@ -3,6 +3,7 @@ import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
 import Player from "../scenes/playerScene.js";
+import { ProjectileGroup } from "../scripts/projectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -20,7 +21,11 @@ export default class GameScene extends Phaser.Scene {
 
     this.load.image("player", "./assets/player.png");
     this.load.image("jewel", "./assets/jewel.png");
-    this.load.spritesheet("projectiles", "./assets/projectiles.png", {
+    this.load.spritesheet("projectile", "./assets/projectiles.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+    this.load.spritesheet("weapons", "./assets/weaponSheet.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -31,7 +36,7 @@ export default class GameScene extends Phaser.Scene {
     const gameHeight = this.game.config.height;
 
     // attack_projectile sprite added
-    this.add.sprite(16, 16, "projectiles", 1);
+    // this.add.sprite(16, 16, "projectiles", 1);
 
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
       x: gameWidth / 1.69,
@@ -46,6 +51,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.player = new Player(this);
     this.jewels = this.physics.add.group();
+    this.projectileGroup = new ProjectileGroup(this);
 
     this.generateFunction = () => {
       if (this.terrain) {
@@ -95,6 +101,32 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+    this.action1 = () => {
+      // console.log("event received and firing");
+      // Get direction based on player's last movement
+      console.log(this.player.facing);
+      let direction;
+      switch (this.player.facing) {
+        case "up":
+          direction = { x: 0, y: -1 };
+          break;
+        case "down":
+          direction = { x: 0, y: 1 };
+          break;
+        case "left":
+          direction = { x: -1, y: 0 };
+          break;
+        case "right":
+          direction = { x: 1, y: 0 };
+          break;
+      }
+      this.projectileGroup.fireProjectile(
+        this.player.sprite.x,
+        this.player.sprite.y,
+        direction
+      );
+    };
+
     const uiScene = this.scene.get("UIScene");
 
     this.scene
@@ -120,6 +152,14 @@ export default class GameScene extends Phaser.Scene {
     } else {
       this.player.sprite.body.setVelocity(0);
     }
+
+    if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
+      this.action1();
+    }
+
+    // if (this.player.keys.J.isDown) {
+    //   this.action1();
+    // }
   }
 
   collectObject(player, jewel) {

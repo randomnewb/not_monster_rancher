@@ -42,7 +42,6 @@ export default class UIScene extends Phaser.Scene {
         this.gameOverButton.setStyle({ fill: "#10434e" });
       });
 
-    // this.gameOverText.setOrigin(0.5);
     this.gameOverText.setVisible(false);
     this.gameOverButton.setVisible(false);
   }

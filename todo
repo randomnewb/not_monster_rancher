@@ -1,15 +1,20 @@
 - [x] Using WASD for movement
 - [x] Implement some other keys for actions (J, K, L, I)
+
+- [ ] Implement buttons for mobile (3 different actions [action1, action2, action3], and an inventory action)
 - Create a projectile/object
 
-  - [ ] One example projectile image loaded
+  - [x] One example projectile image loaded
   - [ ] Hitbox for projectile (just use the 16x16 sprite square)
-  - [ ] Create where the player is
-  - [ ] Do so in the direction the player just finished moving (their facing direction)
-  - [ ] OPTIONALLY: Make the projectile move outwards from the player with a little bit of velocity (pseudo-melee/ranged)
+  - [x] Create where the player is
+  - [x] Do so in the direction the player just finished moving (their facing direction)
+  - [/] OPTIONALLY: Make the projectile move outwards from the player with a little bit of velocity (pseudo-melee/ranged)
+    - [ ] Projectile moves the whole length of the camera, make it expire after a certain amount of time instead
   - [ ] Attach weapon to the player/add a swing animation with the weapon
 
-- [ ] Add in the weapons from Kenney's assets as a weapon sheet
+- [x] Add in the weapons from Kenney's assets as a weapon sheet
+
+- [ ] Re-implement the player as a Class (Phaser Scene) with another Class for the player's sprite
 
 - [ ] Pixel Art: Tree stump
 - [ ] Pixel Art: Boulder
