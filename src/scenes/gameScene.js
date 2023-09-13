@@ -35,6 +35,21 @@ export default class GameScene extends Phaser.Scene {
     const gameWidth = this.game.config.width;
     const gameHeight = this.game.config.height;
 
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+
+    this.rectangle = this.add.rectangle(
+      centerX - 120,
+      centerY + 42,
+      30,
+      30,
+      0xffffff
+    );
+    this.rectangle.setInteractive();
+    this.rectangle.on("pointerdown", () => this.action1());
+
+    this.rectangle.setScrollFactor(0);
+
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
       x: gameWidth / 1.69,
       y: gameHeight / 1.8,
@@ -45,6 +60,7 @@ export default class GameScene extends Phaser.Scene {
 
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
     this.joystick.setVisible(isMobile);
+    this.rectangle.setVisible(isMobile);
 
     this.player = new Player(this);
     this.jewels = this.physics.add.group();
@@ -146,6 +162,7 @@ export default class GameScene extends Phaser.Scene {
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
       this.joystick.setVisible(isMobile);
+      this.rectangle.setVisible(isMobile);
 
       if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
         this.action1();
