@@ -35,6 +35,11 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
       console.log("projectile out of bounds");
       this.setActive(false);
       this.setVisible(false);
+
+      // Stop the timer if it's still running
+      if (this.lifespan) {
+        this.lifespan.remove(false);
+      }
     }
   }
 
@@ -46,9 +51,19 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
 
     this.setVelocity();
 
-    const speed = 900;
+    const speed = 200;
     this.setVelocityX(direction.x * speed);
     this.setVelocityY(direction.y * speed);
+
+    this.lifespan = this.scene.time.addEvent({
+      delay: 100, // milliseconds
+      callback: () => {
+        // When the timer completes, deactivate and hide the projectile
+        this.setActive(false);
+        this.setVisible(false);
+      },
+      loop: false, // Do not repeat the timer when it completes
+    });
   }
 }
 

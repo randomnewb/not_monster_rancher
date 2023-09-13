@@ -35,9 +35,6 @@ export default class GameScene extends Phaser.Scene {
     const gameWidth = this.game.config.width;
     const gameHeight = this.game.config.height;
 
-    // attack_projectile sprite added
-    // this.add.sprite(16, 16, "projectiles", 1);
-
     this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
       x: gameWidth / 1.69,
       y: gameHeight / 1.8,
@@ -149,12 +146,16 @@ export default class GameScene extends Phaser.Scene {
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
       this.joystick.setVisible(isMobile);
+
+      if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
+        this.action1();
+      }
+
+      // this.actionButton1.on("click", function () {
+      //   console.log("Action 1");
+      // });
     } else {
       this.player.sprite.body.setVelocity(0);
-    }
-
-    if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
-      this.action1();
     }
 
     // if (this.player.keys.J.isDown) {
