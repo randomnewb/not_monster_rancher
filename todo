@@ -1,8 +1,9 @@
 - [x] Using WASD for movement
 - [x] Implement some other keys for actions (J, K, L, I)
 
-- [ ] Implement buttons for mobile (3 different actions [action1, action2, action3], and an inventory action)
-  - Make sure it follows with the camera
+- [/] Implement one button for mobile
+  - [x] Make sure it follows with the camera
+  - [ ] (3 different actions [action1, action2, action3], and an inventory action)
 - Create a projectile/object
 
   - [x] One example projectile image loaded
