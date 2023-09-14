@@ -111,6 +111,11 @@ export default class GameScene extends Phaser.Scene {
         this.terrain.layer
       );
 
+      this.frogTerrainCollider = this.physics.add.collider(
+        this.frogs,
+        this.terrain.layer
+      );
+
       this.physics.world.setBounds(
         0,
         0,
