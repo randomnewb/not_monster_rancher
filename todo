@@ -1,5 +1,4 @@
-- [x] Using WASD for movement
-- [x] Implement some other keys for actions (J, K, L, I)
+- [/] Working on health bar
 
 - [/] Implement one button for mobile
   - [x] Make sure it follows with the camera
@@ -14,20 +13,22 @@
     - [x] Projectile moves the whole length of the camera, make it expire after a certain amount of time instead
   - [ ] Attach weapon to the player/add a swing animation with the weapon
 
-- [x] Add in the weapons from Kenney's assets as a weapon sheet
+- [x] Re-implement the player as a Class (Phaser Scene) with another Class for the player's sprite
+- [x] Implement Entity Class
 
-- [ ] Re-implement the player as a Class (Phaser Scene) with another Class for the player's sprite
+  - Requirements
+    - [x] Stats (health, attack, level, experience, etc.)
+    - [x] Sprite
+    - [x] Physics/collisions/movement
+
+- [ ] Player "animations" like tweening/bouncing/stretching side to side when player moves
 
 - [ ] Pixel Art: Tree stump
 - [ ] Pixel Art: Boulder
 - [ ] Pixel Art: Log/sticks
 - [ ] Pixel Art: Pebbles/small stones
 - [ ] Pixel Art: General item/bag
-- [ ] Implement Entity Class
-  - Requirements
-    - [ ] Stats (health, attack, level, experience, etc.)
-    - [ ] Sprite
-    - [ ] Physics/collisions/movement
+
 - [ ] Interactive objects have outlines around them
 - [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts

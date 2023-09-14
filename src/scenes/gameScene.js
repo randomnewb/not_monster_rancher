@@ -2,7 +2,7 @@ import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
-import Player from "../scenes/playerScene.js";
+import Player from "../classes/playerClass.js";
 import { ProjectileGroup } from "../scripts/projectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
@@ -62,7 +62,7 @@ export default class GameScene extends Phaser.Scene {
     this.joystick.setVisible(isMobile);
     this.rectangle.setVisible(isMobile);
 
-    this.player = new Player(this);
+    this.player = new Player(this, 72, 72, "player");
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
 
@@ -79,7 +79,7 @@ export default class GameScene extends Phaser.Scene {
       this.physics.world.enable(this.terrain);
 
       this.playerTerrainCollider = this.physics.add.collider(
-        this.player.sprite,
+        this.player,
         this.terrain.layer
       );
 
@@ -102,12 +102,12 @@ export default class GameScene extends Phaser.Scene {
         }
       );
       if (this.player) {
-        this.player.sprite.setDepth(1);
+        this.player.setDepth(1);
       }
     };
 
     this.playerJewelOverlap = this.physics.add.overlap(
-      this.player.sprite,
+      this.player,
       this.jewels,
       this.collectObject,
       null,
@@ -115,9 +115,6 @@ export default class GameScene extends Phaser.Scene {
     );
 
     this.action1 = () => {
-      // console.log("event received and firing");
-      // Get direction based on player's last movement
-      console.log(this.player.facing);
       let direction;
       switch (this.player.facing) {
         case "up":
@@ -134,8 +131,8 @@ export default class GameScene extends Phaser.Scene {
           break;
       }
       this.projectileGroup.fireProjectile(
-        this.player.sprite.x,
-        this.player.sprite.y,
+        this.player.x,
+        this.player.y,
         direction
       );
     };
@@ -146,7 +143,7 @@ export default class GameScene extends Phaser.Scene {
       .get("NewGameMenuScene")
       .events.on("generate", this.generateFunction, this);
 
-    const playerCamera = new PlayerCamera(this, this.player.sprite, uiScene);
+    const playerCamera = new PlayerCamera(this, this.player, uiScene);
     playerCamera.setupCamera();
 
     // Collision Boxes for Debugging
@@ -167,17 +164,9 @@ export default class GameScene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
         this.action1();
       }
-
-      // this.actionButton1.on("click", function () {
-      //   console.log("Action 1");
-      // });
     } else {
-      this.player.sprite.body.setVelocity(0);
+      this.player.body.setVelocity(0);
     }
-
-    // if (this.player.keys.J.isDown) {
-    //   this.action1();
-    // }
   }
 
   collectObject(player, jewel) {
