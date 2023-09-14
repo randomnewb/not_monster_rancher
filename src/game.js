@@ -43,6 +43,9 @@ const config = {
       debug: false,
     },
   },
+  input: {
+    activePointers: 3,
+  },
   plugins: {
     global: [
       {

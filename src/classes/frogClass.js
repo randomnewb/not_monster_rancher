@@ -5,8 +5,8 @@ export default class Frog extends Entity {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    this.max_health = 100;
-    this.current_health = 100;
+    this.max_health = Phaser.Math.Between(1, 3);
+    this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
     this.scene = scene;
@@ -56,14 +56,25 @@ export default class Frog extends Entity {
   takeDamage(damage) {
     this.current_health -= damage;
     // Check if health is less than 0 and set it to 0
-    if (this.current_health < 0) {
+    if (this.current_health <= 0) {
       this.current_health = 0;
       this.destroy();
     }
     this.healthBar.updateHealth(this.current_health);
   }
 
+  destroy() {
+    // Destroy the health bar
+    this.healthBar.destroy();
+
+    // Call the parent class's destroy method
+    super.destroy();
+  }
   update() {
+    if (!this.active) {
+      return;
+    }
+
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;
     }

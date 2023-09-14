@@ -72,7 +72,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.frogs = [];
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 20; i++) {
       let x = Phaser.Math.Between(0, 400);
       let y = Phaser.Math.Between(0, 400);
       this.frogs.push(new Frog(this, x, y, "frog"));
@@ -170,6 +170,22 @@ export default class GameScene extends Phaser.Scene {
       );
     };
 
+    this.physics.add.overlap(
+      this.projectileGroup,
+      this.frogs,
+      hitFrog,
+      null,
+      this
+    );
+
+    function hitFrog(frog, projectile) {
+      if (projectile.active) {
+        projectile.disable();
+
+        frog.takeDamage(1);
+        console.log("hitting frog", frog.current_health);
+      }
+    }
     const uiScene = this.scene.get("UIScene");
 
     this.scene

@@ -65,6 +65,11 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
       loop: false, // Do not repeat the timer when it completes
     });
   }
+
+  disable() {
+    this.setActive(false);
+    this.setVisible(false);
+  }
 }
 
 export { ProjectileGroup, Projectile };

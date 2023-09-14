@@ -6,7 +6,7 @@ export default class Player extends Entity {
     super(scene, x, y, texture);
 
     this.max_health = 100;
-    this.current_health = 100;
+    this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
     this.scene = scene;

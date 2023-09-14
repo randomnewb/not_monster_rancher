@@ -1,5 +1,6 @@
+- [ ] Option to flip touch controls (left/right)
+- [x] Mobile: multi-touch does not work (cannot move and shoot at the same time)
 - [x] Add frogs
-
 - [/] Health bar implementation
 
   - Jittery because its position is set to the player's position, need to implement move w/ camera
