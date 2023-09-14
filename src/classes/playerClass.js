@@ -27,10 +27,15 @@ export default class Player extends Entity {
     // Check if health is less than 0 and set it to 0
     if (this.current_health < 0) {
       this.current_health = 0;
+      this.scene.gameOver();
     }
     this.healthBar.updateHealth(this.current_health);
   }
   update() {
+    if (this.current_health > this.max_health) {
+      this.current_health = this.max_health;
+    }
+
     this.body.setVelocity(0);
 
     // Use joystick

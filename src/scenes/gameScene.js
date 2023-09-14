@@ -3,6 +3,7 @@ import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
 import Player from "../classes/playerClass.js";
+import Frog from "../classes/frogClass.js";
 import { ProjectileGroup } from "../scripts/projectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
@@ -20,6 +21,11 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.image("player", "./assets/player.png");
+    this.load.spritesheet("frog", "./assets/frog.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
     this.load.image("jewel", "./assets/jewel.png");
     this.load.spritesheet("projectile", "./assets/projectiles.png", {
       frameWidth: 16,
@@ -63,6 +69,28 @@ export default class GameScene extends Phaser.Scene {
     this.rectangle.setVisible(isMobile);
 
     this.player = new Player(this, 72, 72, "player");
+
+    this.frogs = [];
+
+    for (let i = 0; i < 10; i++) {
+      let x = Phaser.Math.Between(0, 400);
+      let y = Phaser.Math.Between(0, 400);
+      this.frogs.push(new Frog(this, x, y, "frog"));
+    }
+
+    this.anims.create({
+      key: "frog_move",
+      frames: this.anims.generateFrameNumbers("frog", { start: 0, end: 1 }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: "frog_idle",
+      frames: [{ key: "frog", frame: 0 }],
+      frameRate: 10,
+    });
+
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
 
@@ -164,6 +192,10 @@ export default class GameScene extends Phaser.Scene {
       if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
         this.action1();
       }
+
+      this.frogs.forEach(frog => {
+        frog.update();
+      });
     } else {
       this.player.body.setVelocity(0);
     }
@@ -174,6 +206,7 @@ export default class GameScene extends Phaser.Scene {
       jewel.destroy();
 
       this.player.collectedJewels++;
+      this.player.takeDamage(-10);
 
       if (this.player.collectedJewels >= 10) {
         this.gameOver();

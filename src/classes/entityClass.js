@@ -21,12 +21,13 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
   }
 
   // Method to take damage
-  takeDamage(damage) {
-    this.current_health -= damage;
-    if (this.current_health < 0) {
-      this.current_health = 0;
-    }
-  }
+  // takeDamage(damage) {
+  //   this.current_health -= damage;
+  //   if (this.current_health < 0) {
+  //     this.destroy();
+  //     this.current_health = 0;
+  //   }
+  // }
 
   // Method to attack another entity
   attackEntity(target) {
