@@ -12,6 +12,7 @@ export default class Player extends Entity {
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
+    this.body.setCircle(8);
     this.setCollideWorldBounds();
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();

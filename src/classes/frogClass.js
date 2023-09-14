@@ -13,14 +13,19 @@ export default class Frog extends Entity {
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
     this.scene.physics.world.enable(this);
+    this.body.setCircle(5, 5, 5);
     this.setCollideWorldBounds();
     this.isMoving = false;
+    this.invincibilityTimer = 0;
 
     const frogColors = [
       0x2986cc, 0x0cc986, 0x0ab478, 0x09a06b, 0x088c5d, 0x077850,
     ];
 
-    this.tint = frogColors[Math.floor(Math.random() * frogColors.length)];
+    this.originalTint =
+      frogColors[Math.floor(Math.random() * frogColors.length)];
+
+    this.setTint(this.originalTint);
 
     this.updateCounter = 0;
     this.toggleFrames = Phaser.Math.Between(60, 180);
@@ -61,6 +66,9 @@ export default class Frog extends Entity {
       this.destroy();
     }
     this.healthBar.updateHealth(this.current_health);
+
+    this.setTint(0xffffff);
+    this.invincibilityTimer = 100;
   }
 
   destroy() {
@@ -108,6 +116,17 @@ export default class Frog extends Entity {
       }
     } else {
       this.anims.play("frog_idle", true);
+    }
+
+    // implemented inside update() method
+    if (this.invincibilityTimer > 0) {
+      let elapsed = this.scene.sys.game.loop.delta;
+      this.invincibilityTimer -= elapsed;
+
+      if (this.invincibilityTimer <= 0) {
+        this.setTint(this.originalTint);
+        this.invincibilityTimer = 0;
+      }
     }
   }
 }

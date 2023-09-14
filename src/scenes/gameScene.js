@@ -9,15 +9,14 @@ import { ProjectileGroup } from "../scripts/projectileGroup.js";
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super({ key: "GameScene", active: false });
+    this.tileWidth = 16;
+    this.tileHeight = 16;
   }
 
   preload() {
-    const tileWidth = 16;
-    const tileHeight = 16;
-
     this.load.spritesheet("foliageTiles", "./assets/foliage.png", {
-      frameWidth: tileWidth,
-      frameHeight: tileHeight,
+      frameWidth: this.tileWidth,
+      frameHeight: this.tileHeight,
     });
 
     this.load.image("player", "./assets/player.png");
@@ -78,18 +77,22 @@ export default class GameScene extends Phaser.Scene {
       this.frogs.push(new Frog(this, x, y, "frog"));
     }
 
-    this.anims.create({
-      key: "frog_move",
-      frames: this.anims.generateFrameNumbers("frog", { start: 0, end: 1 }),
-      frameRate: 5,
-      repeat: -1,
-    });
+    if (!this.anims.exists("frog_move")) {
+      this.anims.create({
+        key: "frog_move",
+        frames: this.anims.generateFrameNumbers("frog", { start: 0, end: 1 }),
+        frameRate: 5,
+        repeat: -1,
+      });
+    }
 
-    this.anims.create({
-      key: "frog_idle",
-      frames: [{ key: "frog", frame: 0 }],
-      frameRate: 10,
-    });
+    if (!this.anims.exists("frog_idle")) {
+      this.anims.create({
+        key: "frog_idle",
+        frames: [{ key: "frog", frame: 0 }],
+        frameRate: 10,
+      });
+    }
 
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
@@ -97,6 +100,7 @@ export default class GameScene extends Phaser.Scene {
     this.generateFunction = () => {
       if (this.terrain) {
         this.physics.world.removeCollider(this.playerTerrainCollider);
+        this.physics.world.removeCollider(this.frogTerrainCollider);
         this.terrain.map.destroyLayer(this.terrain.layer);
       }
 
@@ -104,6 +108,7 @@ export default class GameScene extends Phaser.Scene {
         this.jewels.clear(true, true);
       }
       this.terrain = new Terrain(this);
+      this.terrain.setDepth(0);
       this.physics.world.enable(this.terrain);
 
       this.playerTerrainCollider = this.physics.add.collider(
@@ -135,7 +140,7 @@ export default class GameScene extends Phaser.Scene {
         }
       );
       if (this.player) {
-        this.player.setDepth(1);
+        this.player.setDepth(2);
       }
     };
 
@@ -183,7 +188,6 @@ export default class GameScene extends Phaser.Scene {
         projectile.disable();
 
         frog.takeDamage(1);
-        console.log("hitting frog", frog.current_health);
       }
     }
     const uiScene = this.scene.get("UIScene");
@@ -196,8 +200,7 @@ export default class GameScene extends Phaser.Scene {
     playerCamera.setupCamera();
 
     // Collision Boxes for Debugging
-    // const debugGraphics = this.add.graphics();
-    // this.terrain.layer.renderDebug(debugGraphics);
+    this.physics.world.createDebugGraphic();
 
     // this.generateFunction();
   }
@@ -215,6 +218,7 @@ export default class GameScene extends Phaser.Scene {
       }
 
       this.frogs.forEach(frog => {
+        frog.setDepth(1);
         frog.update();
       });
     } else {

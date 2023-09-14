@@ -32,7 +32,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
 
     // Check if the projectile is within the camera's world view
     if (!camera.worldView.contains(this.x, this.y)) {
-      console.log("projectile out of bounds");
       this.setActive(false);
       this.setVisible(false);
 
@@ -46,6 +45,8 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
   fire(x, y, direction) {
     this.body.reset(x, y);
 
+    this.body.setSize(15, 15);
+
     this.setActive(true);
     this.setVisible(true);
 
@@ -56,7 +57,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityY(direction.y * speed);
 
     this.lifespan = this.scene.time.addEvent({
-      delay: 100, // milliseconds
+      delay: 300, // milliseconds
       callback: () => {
         // When the timer completes, deactivate and hide the projectile
         this.setActive(false);
@@ -68,7 +69,6 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
 
   disable() {
     this.setActive(false);
-    this.setVisible(false);
   }
 }
 
