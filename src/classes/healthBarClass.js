@@ -1,56 +1,33 @@
-export default class HealthBar {
-  constructor(scene, x, y, max_health, health) {
-    this.bar = new Phaser.GameObjects.Graphics(scene);
+export default class HealthBar extends Phaser.GameObjects.Container {
+  constructor(scene, x, y, health) {
+    super(scene, x, y);
 
-    this.x = x;
-    this.y = y;
-    this.max_value = max_health;
-    this.value = health;
-    this.filledProportion = this.value / this.max_value;
+    this.scene = scene;
+    this.maxHealth = health;
+    this.currentHealth = health;
 
-    this.draw();
+    this.backgroundBar = this.scene.add.rectangle(0, 0, 25, 3, 0x8b0000);
+    this.healthBar = this.scene.add.rectangle(0, 0, 25, 3, 0xff0000);
 
-    scene.add.existing(this.bar);
+    this.add(this.backgroundBar);
+    this.add(this.healthBar);
+
+    this.scene.add.existing(this);
   }
 
-  decrease(health) {
-    this.value = health;
+  updateHealth(health) {
+    this.currentHealth = health;
 
-    if (this.value < 0) {
-      this.value = 0;
+    // Add check for negative health
+    if (this.currentHealth < 0) {
+      this.currentHealth = 0;
     }
 
-    this.filledProportion = this.value / this.max_value;
-
-    this.draw();
-
-    return this.value === 0;
-  }
-
-  draw() {
-    this.bar.clear();
-
-    //  BG
-    this.bar.fillStyle(0x000000);
-    this.bar.fillRect(0, 0, 50, 6);
-
-    //  Health
-    this.bar.fillStyle(0xffffff);
-    this.bar.fillRect(0, 0, 38, 3);
-
-    if (this.value < 10) {
-      this.bar.fillStyle(0xff0000);
-    } else {
-      this.bar.fillStyle(0x00ff00);
-    }
-
-    var filledWidth = Math.floor(this.filledProportion * this.value); // changed 'p' to 'filledProportion'
-
-    this.bar.fillRect(0, 0, filledWidth, 3);
+    this.healthBar.width = (this.currentHealth / this.maxHealth) * 25;
   }
 
   setPosition(x, y) {
-    this.bar.x = x;
-    this.bar.y = y;
+    this.x = x;
+    this.y = y;
   }
 }

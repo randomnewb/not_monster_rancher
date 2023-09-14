@@ -7,13 +7,7 @@ export default class Player extends Entity {
 
     this.max_health = 100;
     this.current_health = 100;
-    this.healthBar = new HealthBar(
-      scene,
-      x,
-      y,
-      this.max_health,
-      this.current_health
-    );
+    this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -30,14 +24,12 @@ export default class Player extends Entity {
 
   takeDamage(damage) {
     this.current_health -= damage;
-
+    // Check if health is less than 0 and set it to 0
     if (this.current_health < 0) {
       this.current_health = 0;
     }
-
-    this.healthBar.decrease(this.current_health);
+    this.healthBar.updateHealth(this.current_health);
   }
-
   update() {
     this.body.setVelocity(0);
 
@@ -93,6 +85,6 @@ export default class Player extends Entity {
       console.log(this.current_health);
     }
 
-    this.healthBar.setPosition(this.x - 20, this.y + this.height);
+    this.healthBar.setPosition(this.x, this.y + 12);
   }
 }
