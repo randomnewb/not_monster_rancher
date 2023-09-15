@@ -7,6 +7,8 @@
     - Remove this highlight if keyboard input is detected or once the tile is reached
   - [x] Pressing the fire button also moves the player to that mouse location so need to add a check for that somehow
 
+- [ ] Click to move at the edges is difficult, need something to help the player so they can move around obstacles easier, maybe change collision box of trees and such
+
 - [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
 - [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
