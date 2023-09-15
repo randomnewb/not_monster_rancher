@@ -1,4 +1,14 @@
-- [ ] Implement player projectile moving in direction of entity
+- [/] Implement click to move
+
+  - [x] Figure out how to access/log the location clicked
+  - [x] Get access to that tile/entity closest to that clicked location
+  - [ ] Move the player toward that location
+
+- [ ] Highlight the tile where the player is 'facing' or last moved towards
+
+- [/] Invincibility added to frog
+
+  - Actually setup frog being invincible during invincibility frames (100 milliseconds)
 
 - [ ] Option to flip touch controls (left/right)
 
@@ -33,7 +43,6 @@
 - [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
-- [ ] Implement click to move
 
 - [ ] (OPTIONAL) Jewels drop out of player on hit
 - [ ] Collectibles other than jewels

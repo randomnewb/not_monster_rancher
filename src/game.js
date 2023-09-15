@@ -31,7 +31,7 @@ const config = {
   },
   scene: [
     // Uncomment below when testing complete
-    MainMenuScene,
+    // MainMenuScene,
     NewGameMenuScene,
     GameScene,
     UIScene,

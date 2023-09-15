@@ -21,6 +21,50 @@ export default class Player extends Entity {
     this.collectedJewels = 0;
     this.tint = 0x2986cc;
     this.facing = "down";
+
+    this.highlight = this.scene.add.graphics({
+      fillStyle: { color: 0xffffff },
+    });
+    this.highlight.alpha = 0.5; // make it semi-transparent
+
+    this.scene.input.on(
+      "pointerdown",
+      pointer => this.handlePointerDown(pointer, this.scene.terrain.map),
+      this
+    );
+  }
+
+  handlePointerDown(pointer) {
+    this.tileWidth = 16;
+    this.tileHeight = 16;
+    // Get the position of the mouse click relative to the game canvas
+    let pointerX = pointer.downX;
+    let pointerY = pointer.downY;
+
+    // Convert the screen coordinates to world coordinates
+    let worldPoint = this.scene.cameras.main.getWorldPoint(pointerX, pointerY);
+
+    // Convert the world coordinates to tile coordinates
+    let tileXY = this.scene.terrain.map.worldToTileXY(
+      worldPoint.x,
+      worldPoint.y
+    );
+
+    // Convert the tile coordinates back to world coordinates
+    worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
+
+    // Log the position where the pointer was pressed
+    console.log(`Pointer down at tile ${tileXY.x}, ${tileXY.y}`);
+
+    // Draw a rectangle at the top-left corner of the clicked tile
+    this.highlight.fillRect(
+      worldPoint.x,
+      worldPoint.y,
+      this.tileWidth,
+      this.tileHeight
+    );
+
+    return tileXY;
   }
 
   takeDamage(damage) {

@@ -67,8 +67,6 @@ export default class GameScene extends Phaser.Scene {
     this.joystick.setVisible(isMobile);
     this.rectangle.setVisible(isMobile);
 
-    this.player = new Player(this, 72, 72, "player");
-
     this.frogs = [];
 
     for (let i = 0; i < 20; i++) {
@@ -93,9 +91,6 @@ export default class GameScene extends Phaser.Scene {
         frameRate: 10,
       });
     }
-
-    this.jewels = this.physics.add.group();
-    this.projectileGroup = new ProjectileGroup(this);
 
     this.generateFunction = () => {
       if (this.terrain) {
@@ -143,6 +138,11 @@ export default class GameScene extends Phaser.Scene {
         this.player.setDepth(2);
       }
     };
+
+    this.player = new Player(this, 72, 72, "player");
+
+    this.jewels = this.physics.add.group();
+    this.projectileGroup = new ProjectileGroup(this);
 
     this.playerJewelOverlap = this.physics.add.overlap(
       this.player,
@@ -200,7 +200,7 @@ export default class GameScene extends Phaser.Scene {
     playerCamera.setupCamera();
 
     // Collision Boxes for Debugging
-    this.physics.world.createDebugGraphic();
+    // this.physics.world.createDebugGraphic();
 
     // this.generateFunction();
   }

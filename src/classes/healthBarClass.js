@@ -11,7 +11,6 @@ export default class HealthBar extends Phaser.GameObjects.Container {
 
     this.add(this.backgroundBar);
     this.add(this.healthBar);
-
     this.scene.add.existing(this);
   }
 
