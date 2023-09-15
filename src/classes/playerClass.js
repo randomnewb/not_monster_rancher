@@ -16,16 +16,17 @@ export default class Player extends Entity {
     this.setCollideWorldBounds();
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    this.cursorKeys = this.scene.joystick.createCursorKeys();
+    // this.cursorKeys = this.scene.joystick.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
     this.tint = 0x2986cc;
     this.facing = "down";
 
+    this.highlights = [];
     this.highlight = this.scene.add.graphics({
       fillStyle: { color: 0xffffff },
     });
-    this.highlight.alpha = 0.5; // make it semi-transparent
+    this.highlight.alpha = 0.2; // make it semi-transparent
 
     this.scene.input.on(
       "pointerdown",
@@ -54,15 +55,44 @@ export default class Player extends Entity {
     worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
 
     // Log the position where the pointer was pressed
-    console.log(`Pointer down at tile ${tileXY.x}, ${tileXY.y}`);
+    // console.log(`Pointer down at tile ${tileXY.x}, ${tileXY.y}`);
 
     // Draw a rectangle at the top-left corner of the clicked tile
+    if (this.highlight) {
+      this.highlight.clear();
+    }
+
     this.highlight.fillRect(
       worldPoint.x,
       worldPoint.y,
       this.tileWidth,
       this.tileHeight
     );
+
+    worldPoint.x += this.tileWidth / 2;
+    worldPoint.y += this.tileHeight / 2;
+
+    this.targetPosition = worldPoint;
+
+    // Calculate the direction of the movement
+    let directionX = this.targetPosition.x - this.x;
+    let directionY = this.targetPosition.y - this.y;
+
+    // Normalize the direction
+    let length = Math.sqrt(directionX * directionX + directionY * directionY);
+    let normalizedDirection = {
+      x: directionX / length,
+      y: directionY / length,
+    };
+
+    // Update the facing direction based on the movement direction
+    if (Math.abs(normalizedDirection.x) > Math.abs(normalizedDirection.y)) {
+      // Horizontal movement
+      this.facing = normalizedDirection.x > 0 ? "right" : "left";
+    } else {
+      // Vertical movement
+      this.facing = normalizedDirection.y > 0 ? "down" : "up";
+    }
 
     return tileXY;
   }
@@ -76,6 +106,7 @@ export default class Player extends Entity {
     }
     this.healthBar.updateHealth(this.current_health);
   }
+
   update() {
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;
@@ -83,26 +114,52 @@ export default class Player extends Entity {
 
     this.body.setVelocity(0);
 
-    // Use joystick
-    if (this.cursorKeys) {
-      if (this.cursorKeys.left.isDown) {
-        this.body.setVelocityX(-100);
-        this.facing = "left";
-      } else if (this.cursorKeys.right.isDown) {
-        this.body.setVelocityX(100);
-        this.facing = "right";
-      }
+    if (this.targetPosition) {
+      const speed = 100; // adjust as needed
+      this.scene.physics.moveTo(
+        this,
+        this.targetPosition.x,
+        this.targetPosition.y,
+        speed
+      );
 
-      if (this.cursorKeys.up.isDown) {
-        this.body.setVelocityY(-100);
-        this.facing = "up";
-      } else if (this.cursorKeys.down.isDown) {
-        this.body.setVelocityY(100);
-        this.facing = "down";
+      // If close enough to target, stop moving
+      if (
+        Phaser.Math.Distance.Between(
+          this.x,
+          this.y,
+          this.targetPosition.x,
+          this.targetPosition.y
+        ) < 5
+      ) {
+        this.body.setVelocity(0);
+        this.targetPosition = null;
+        this.highlight.clear(); // Clear the highlight
+      }
+    }
+
+    if (this.cursorKeys) {
+      if (
+        this.cursorKeys.left.isDown ||
+        this.cursorKeys.right.isDown ||
+        this.cursorKeys.up.isDown ||
+        this.cursorKeys.down.isDown
+      ) {
+        this.targetPosition = null;
+        this.highlight.clear(); // Clear the highlight
       }
     }
 
     // Horizontal movement
+    if (
+      this.cursors.left.isDown ||
+      this.keys.A.isDown ||
+      this.cursors.right.isDown ||
+      this.keys.D.isDown
+    ) {
+      this.targetPosition = null;
+      this.highlight.clear(); // Clear the highlight
+    }
     if (this.cursors.left.isDown || this.keys.A.isDown) {
       this.body.setVelocityX(-100);
       this.facing = "left";
@@ -112,6 +169,15 @@ export default class Player extends Entity {
     }
 
     // Vertical movement
+    if (
+      this.cursors.up.isDown ||
+      this.keys.W.isDown ||
+      this.cursors.down.isDown ||
+      this.keys.S.isDown
+    ) {
+      this.targetPosition = null;
+      this.highlight.clear(); // Clear the highlight
+    }
     if (this.cursors.up.isDown || this.keys.W.isDown) {
       this.body.setVelocityY(-100);
       this.facing = "up";
@@ -138,3 +204,22 @@ export default class Player extends Entity {
     this.healthBar.setPosition(this.x, this.y + 12);
   }
 }
+
+// Use joystick
+// if (this.cursorKeys) {
+//   if (this.cursorKeys.left.isDown) {
+//     this.body.setVelocityX(-100);
+//     this.facing = "left";
+//   } else if (this.cursorKeys.right.isDown) {
+//     this.body.setVelocityX(100);
+//     this.facing = "right";
+//   }
+
+//   if (this.cursorKeys.up.isDown) {
+//     this.body.setVelocityY(-100);
+//     this.facing = "up";
+//   } else if (this.cursorKeys.down.isDown) {
+//     this.body.setVelocityY(100);
+//     this.facing = "down";
+//   }
+// }

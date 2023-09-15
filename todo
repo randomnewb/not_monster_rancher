@@ -2,9 +2,16 @@
 
   - [x] Figure out how to access/log the location clicked
   - [x] Get access to that tile/entity closest to that clicked location
-  - [ ] Move the player toward that location
+  - [x] Move the player toward that location
+  - [ ] On click to move, draw a border around the tile that was clicked
+    - Remove this highlight if keyboard input is detected or once the tile is reached
+  - [x] Pressing the fire button also moves the player to that mouse location so need to add a check for that somehow
 
-- [ ] Highlight the tile where the player is 'facing' or last moved towards
+- [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
+
+- [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
+
+  - [ ] Show an indicator of where the player will fire at next or if they can fire at all
 
 - [/] Invincibility added to frog
 

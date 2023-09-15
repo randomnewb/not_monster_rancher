@@ -51,20 +51,27 @@ export default class GameScene extends Phaser.Scene {
       0xffffff
     );
     this.rectangle.setInteractive();
-    this.rectangle.on("pointerdown", () => this.action1());
+    this.rectangle.on(
+      "pointerdown",
+      function (pointer, localX, localY, event) {
+        this.action1();
+        event.stopPropagation();
+      },
+      this
+    );
 
     this.rectangle.setScrollFactor(0);
 
-    this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
-      x: gameWidth / 1.69,
-      y: gameHeight / 1.8,
-      radius: 17,
-      base: this.add.circle(0, 0, 25, 0x888888),
-      thumb: this.add.circle(0, 0, 12, 0xcccccc),
-    });
+    // this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
+    //   x: gameWidth / 1.69,
+    //   y: gameHeight / 1.8,
+    //   radius: 17,
+    //   base: this.add.circle(0, 0, 25, 0x888888),
+    //   thumb: this.add.circle(0, 0, 12, 0xcccccc),
+    // });
 
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    this.joystick.setVisible(isMobile);
+    // this.joystick.setVisible(isMobile);
     this.rectangle.setVisible(isMobile);
 
     this.frogs = [];
@@ -210,7 +217,7 @@ export default class GameScene extends Phaser.Scene {
       this.player.update();
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-      this.joystick.setVisible(isMobile);
+      // this.joystick.setVisible(isMobile);
       this.rectangle.setVisible(isMobile);
 
       if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
