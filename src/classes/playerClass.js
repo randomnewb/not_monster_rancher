@@ -51,6 +51,9 @@ export default class Player extends Entity {
     this.easystar.setIterationsPerCalculation(1000);
     // this.easystar.enableDiagonals();
     this.easystar.disableCornerCutting();
+
+    // Initialize the timed event
+    this.timedEvent = null;
   }
 
   handlePointerDown(pointer) {
@@ -68,6 +71,12 @@ export default class Player extends Entity {
       worldPoint.y
     );
 
+    // If a timed event is currently running, stop it
+    if (this.timedEvent) {
+      this.timedEvent.remove();
+      this.timedEvent = null;
+    }
+
     // Find a path to the clicked tile
     this.easystar.findPath(
       this.playerTileX,
@@ -78,7 +87,7 @@ export default class Player extends Entity {
         if (path === null) {
           console.log("The path to the destination point was not found.");
         } else {
-          //Log the path
+          // Log the path
           console.log(path);
           // Save the path for later
           this.path = path;
@@ -158,7 +167,7 @@ export default class Player extends Entity {
     this.isClickToMove = true;
 
     // Create a timed event that fires every 500 milliseconds
-    let timedEvent = this.scene.time.addEvent({
+    this.timedEvent = this.scene.time.addEvent({
       delay: 500, // ms
       callback: () => {
         // Get the next tile from the path
@@ -181,7 +190,7 @@ export default class Player extends Entity {
 
         // If we've reached the end of the path, stop the timed event
         if (path.length === 0) {
-          timedEvent.remove();
+          this.timedEvent.remove();
           console.log("Reached final destination");
           this.isClickToMove = false;
         }
@@ -222,31 +231,6 @@ export default class Player extends Entity {
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;
     }
-
-    // Original click-to-move code
-    // if (this.targetPosition) {
-    //   const speed = 100; // adjust as needed
-    //   this.scene.physics.moveTo(
-    //     this,
-    //     this.targetPosition.x,
-    //     this.targetPosition.y,
-    //     speed
-    //   );
-
-    //   // If close enough to target, stop moving
-    //   if (
-    //     Phaser.Math.Distance.Between(
-    //       this.x,
-    //       this.y,
-    //       this.targetPosition.x,
-    //       this.targetPosition.y
-    //     ) < 5
-    //   ) {
-    //     this.body.setVelocity(0);
-    //     this.targetPosition = null;
-    //     this.highlight.clear(); // Clear the highlight
-    //   }
-    // }
 
     if (this.cursorKeys) {
       if (
@@ -319,21 +303,54 @@ export default class Player extends Entity {
   }
 }
 
-// Use joystick
-// if (this.cursorKeys) {
-//   if (this.cursorKeys.left.isDown) {
-//     this.body.setVelocityX(-100);
-//     this.facing = "left";
-//   } else if (this.cursorKeys.right.isDown) {
-//     this.body.setVelocityX(100);
-//     this.facing = "right";
-//   }
+/**  Use joystick
+if (this.cursorKeys) {
+  if (this.cursorKeys.left.isDown) {
+    this.body.setVelocityX(-100);
+    this.facing = "left";
+  } else if (this.cursorKeys.right.isDown) {
+    this.body.setVelocityX(100);
+    this.facing = "right";
+  }
 
-//   if (this.cursorKeys.up.isDown) {
-//     this.body.setVelocityY(-100);
-//     this.facing = "up";
-//   } else if (this.cursorKeys.down.isDown) {
-//     this.body.setVelocityY(100);
-//     this.facing = "down";
-//   }
-// }
+  if (this.cursorKeys.up.isDown) {
+    this.body.setVelocityY(-100);
+    this.facing = "up";
+  } else if (this.cursorKeys.down.isDown) {
+    this.body.setVelocityY(100);
+    this.facing = "down";
+  }
+}
+*/
+
+/** Original click-to-move code
+ * 
+ 
+
+if (this.targetPosition) {
+  const speed = 100; // adjust as needed
+  this.scene.physics.moveTo(
+    this,
+    this.targetPosition.x,
+    this.targetPosition.y,
+    speed
+  );
+
+  // If close enough to target, stop moving
+  if (
+    Phaser.Math.Distance.Between(
+      this.x,
+      this.y,
+      this.targetPosition.x,
+      this.targetPosition.y
+    ) < 5
+  ) {
+    this.body.setVelocity(0);
+    this.targetPosition = null;
+    this.highlight.clear(); // Clear the highlight
+  }
+}
+
+
+ * 
+ */
