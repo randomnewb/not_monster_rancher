@@ -258,10 +258,12 @@ export default class Player extends Entity {
       this.body.setVelocityX(-100);
       this.facing = "left";
       this.isClickToMove = false;
+      this.timedEvent.remove();
     } else if (this.cursors.right.isDown || this.keys.D.isDown) {
       this.body.setVelocityX(100);
       this.facing = "right";
       this.isClickToMove = false;
+      this.timedEvent.remove();
     }
 
     // Vertical movement
@@ -278,10 +280,12 @@ export default class Player extends Entity {
       this.body.setVelocityY(-100);
       this.facing = "up";
       this.isClickToMove = false;
+      this.timedEvent.remove();
     } else if (this.cursors.down.isDown || this.keys.S.isDown) {
       this.body.setVelocityY(100);
       this.facing = "down";
       this.isClickToMove = false;
+      this.timedEvent.remove();
     }
 
     // Future Actions to Implement
