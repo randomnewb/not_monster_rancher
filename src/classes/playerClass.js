@@ -57,7 +57,6 @@ export default class Player extends Entity {
   }
 
   handlePointerDown(pointer) {
-    console.log(data.currentMapArray);
     // Get the position of the mouse click relative to the game canvas
     let pointerX = pointer.downX;
     let pointerY = pointer.downY;
@@ -85,10 +84,7 @@ export default class Player extends Entity {
       tileXY.y,
       path => {
         if (path === null) {
-          console.log("The path to the destination point was not found.");
         } else {
-          // Log the path
-          console.log(path);
           // Save the path for later
           this.path = path;
           this.moveAlongPath(path);
@@ -118,10 +114,6 @@ export default class Player extends Entity {
     worldPoint.y += this.tileHeight / 2;
 
     this.targetPosition = worldPoint;
-
-    console.log(
-      `world point in handle pointer down: ${worldPoint.x}, ${worldPoint.y}`
-    );
 
     // Calculate the direction of the movement
     let direction = this.calculateDirection(
@@ -163,7 +155,6 @@ export default class Player extends Entity {
 
     // Guard clause in case no path given
     if (!path || path.length === 0) {
-      console.log("Reached final destination");
       this.isClickToMove = false;
       return;
     }
@@ -206,7 +197,6 @@ export default class Player extends Entity {
     // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
-    // console.log(`Player tile: ${this.playerTileX}, ${this.playerTileY}`);
     if (!this.isClickToMove) {
       this.body.setVelocity(0);
     }
