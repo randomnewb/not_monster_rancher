@@ -3,11 +3,23 @@
   - [x] Figure out how to access/log the location clicked
   - [x] Get access to that tile/entity closest to that clicked location
   - [x] Move the player toward that location
-  - [ ] On click to move, draw a border around the tile that was clicked
+  - [/] On click to move, draw a border around the tile that was clicked
     - Remove this highlight if keyboard input is detected or once the tile is reached
   - [x] Pressing the fire button also moves the player to that mouse location so need to add a check for that somehow
+  - [ ] Possible to add A\* pathfinding to the player?
+    - using EasyStar.js, an A\* pathfinding library
+    - save our map in data.js
+    - issue: if original map is edited, need to make sure we update the map in data.js,
+      such as if building is implemented or if obstructions are removed, the original array would need to be updated
 
 - [ ] Click to move at the edges is difficult, need something to help the player so they can move around obstacles easier, maybe change collision box of trees and such
+
+- Implementing certain actions based on what a mobile user is clicking on
+
+  - [ ] If the player clicks on a tree, the player will move towards the tree and chop it down
+  - [ ] If the player clicks on a rock, the player will move towards the rock and mine it
+  - [ ] If the player clicks on a monster, the player will move towards the monster and attack it
+  - [ ] If the player clicks on a jewel, the player will move towards the jewel and pick it up
 
 - [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 

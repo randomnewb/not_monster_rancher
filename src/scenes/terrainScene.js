@@ -9,6 +9,7 @@ export default class Terrain extends Phaser.GameObjects.Group {
     var randomNumber = seedrandom(data.gameSeed);
 
     this.map_array = Generate.placement_array(0, 1, 2, 8, 9);
+    data.currentMapArray = this.map_array;
 
     this.map = scene.make.tilemap({
       data: this.map_array,

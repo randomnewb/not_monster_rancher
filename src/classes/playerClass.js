@@ -1,5 +1,7 @@
+import data from "../data/data.js";
 import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
+import EasyStar from "easystarjs";
 
 export default class Player extends Entity {
   constructor(scene, x, y, texture) {
@@ -33,6 +35,15 @@ export default class Player extends Entity {
       pointer => this.handlePointerDown(pointer, this.scene.terrain.map),
       this
     );
+
+    this.targetPosition = null;
+
+    this.easystar = new EasyStar.js();
+    // this.easystar.setGrid(data.currentMapArray);
+    this.easystar.setAcceptableTiles([0, 1, 2]);
+    this.easystar.setIterationsPerCalculation(1000);
+    this.easystar.enableDiagonals();
+    this.easystar.disableCornerCutting();
   }
 
   handlePointerDown(pointer) {
@@ -50,6 +61,32 @@ export default class Player extends Entity {
       worldPoint.x,
       worldPoint.y
     );
+
+    // Convert the player's position to tile coordinates
+    let playerTileX = Math.floor(this.x / this.tileWidth);
+    let playerTileY = Math.floor(this.y / this.tileHeight);
+
+    console.log(`Player tile: ${playerTileX}, ${playerTileY}`);
+    console.log(`Tile clicked: ${tileXY.x}, ${tileXY.y}`);
+
+    // Find a path to the clicked tile
+    this.easystar.findPath(
+      playerTileX,
+      playerTileY,
+      tileXY.x,
+      tileXY.y,
+      function (path) {
+        if (path === null) {
+          console.log("The path to the destination point was not found.");
+        } else {
+          // Save the path for later
+          this.path = path;
+        }
+      }.bind(this)
+    );
+
+    // Don't forget to calculate the pathfinding!
+    this.easystar.calculate();
 
     // Convert the tile coordinates back to world coordinates
     worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
@@ -108,35 +145,82 @@ export default class Player extends Entity {
   }
 
   update() {
+    // detect if data.currentMapArray actually contains data, and if so, setGrid
+    if (data.currentMapArray.length > 0) {
+      this.easystar.setGrid(data.currentMapArray);
+    }
+
+    // Calculate the pathfinding
+    this.easystar.calculate();
+
+    // If a path was found, move the player along the path
+    if (this.path && this.path.length > 0) {
+      let nextPosition = this.path[0]; // Get the next position from the path
+
+      // Calculate the direction to the next position
+      let directionX = nextPosition.x - this.x;
+      let directionY = nextPosition.y - this.y;
+
+      // Normalize the direction
+      let length = Math.sqrt(directionX * directionX + directionY * directionY);
+      let normalizedDirection = {
+        x: directionX / length,
+        y: directionY / length,
+      };
+
+      // Set the player's velocity towards the next position
+      let speed = 100; // adjust as needed
+      this.body.setVelocity(
+        normalizedDirection.x * speed,
+        normalizedDirection.y * speed
+      );
+
+      // If the player is close enough to the next position, remove it from the path
+      if (
+        Phaser.Math.Distance.Between(
+          this.x,
+          this.y,
+          nextPosition.x,
+          nextPosition.y
+        ) < 5
+      ) {
+        this.path.shift();
+      }
+    }
+
+    if (this.current_health > this.max_health) {
+      this.current_health = this.max_health;
+    }
+
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;
     }
 
     this.body.setVelocity(0);
 
-    if (this.targetPosition) {
-      const speed = 100; // adjust as needed
-      this.scene.physics.moveTo(
-        this,
-        this.targetPosition.x,
-        this.targetPosition.y,
-        speed
-      );
+    // if (this.targetPosition) {
+    //   const speed = 100; // adjust as needed
+    //   this.scene.physics.moveTo(
+    //     this,
+    //     this.targetPosition.x,
+    //     this.targetPosition.y,
+    //     speed
+    //   );
 
-      // If close enough to target, stop moving
-      if (
-        Phaser.Math.Distance.Between(
-          this.x,
-          this.y,
-          this.targetPosition.x,
-          this.targetPosition.y
-        ) < 5
-      ) {
-        this.body.setVelocity(0);
-        this.targetPosition = null;
-        this.highlight.clear(); // Clear the highlight
-      }
-    }
+    //   // If close enough to target, stop moving
+    //   if (
+    //     Phaser.Math.Distance.Between(
+    //       this.x,
+    //       this.y,
+    //       this.targetPosition.x,
+    //       this.targetPosition.y
+    //     ) < 5
+    //   ) {
+    //     this.body.setVelocity(0);
+    //     this.targetPosition = null;
+    //     this.highlight.clear(); // Clear the highlight
+    //   }
+    // }
 
     if (this.cursorKeys) {
       if (

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "easystarjs": "^0.4.4",
     "nodemon": "^3.0.1",
     "phaser": "^3.60.0",
     "phaser3-rex-plugins": "^1.60.5",
