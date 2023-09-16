@@ -181,6 +181,15 @@ export default class Player extends Entity {
       this.targetWorldPoint.y,
       speed
     );
+
+    // Calculate the direction of the movement
+    let direction = this.calculateDirection(
+      this.targetWorldPoint.x,
+      this.targetWorldPoint.y
+    );
+
+    // Update the facing direction based on the movement direction
+    this.updateFacingDirection(direction);
   }
 
   takeDamage(damage) {
