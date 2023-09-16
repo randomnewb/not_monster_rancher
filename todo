@@ -6,13 +6,15 @@
   - [/] On click to move, draw a border around the tile that was clicked
     - Remove this highlight if keyboard input is detected or once the tile is reached
   - [x] Pressing the fire button also moves the player to that mouse location so need to add a check for that somehow
-  - [ ] Possible to add A\* pathfinding to the player?
+  - [x] Possible to add A\* pathfinding to the player?
+
     - using EasyStar.js, an A\* pathfinding library
     - save our map in data.js
-    - issue: if original map is edited, need to make sure we update the map in data.js,
-      such as if building is implemented or if obstructions are removed, the original array would need to be updated
 
-- [ ] Click to move at the edges is difficult, need something to help the player so they can move around obstacles easier, maybe change collision box of trees and such
+  - [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
+        such as if building is implemented or if obstructions are removed, the original array would need to be updated
+
+- [x] Click to move at the edges is difficult, need something to help the player so they can move around obstacles easier, maybe change collision box of trees and such
 
 - Implementing certain actions based on what a mobile user is clicking on
 

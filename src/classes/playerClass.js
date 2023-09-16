@@ -14,7 +14,7 @@ export default class Player extends Entity {
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
-    this.body.setCircle(8);
+    this.body.setCircle(6);
     this.setCollideWorldBounds();
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -158,48 +158,38 @@ export default class Player extends Entity {
   }
 
   moveAlongPath(path) {
+    // Stop any previous movement
+    this.body.setVelocity(0);
+
+    // Guard clause in case no path given
     if (!path || path.length === 0) {
       console.log("Reached final destination");
       this.isClickToMove = false;
       return;
     }
 
+    // Activate moving flag
     this.isClickToMove = true;
 
-    // Create a timed event that fires every 500 milliseconds
-    this.timedEvent = this.scene.time.addEvent({
-      delay: 500, // ms
-      callback: () => {
-        // Get the next tile from the path
-        const nextTile = path.shift();
-        const worldPoint = this.scene.terrain.map.tileToWorldXY(
-          nextTile.x,
-          nextTile.y
-        );
+    this.currentPath = path;
 
-        worldPoint.x += this.tileWidth / 2;
-        worldPoint.y += this.tileHeight / 2;
+    const nextTile = this.currentPath.shift();
+    this.targetWorldPoint = this.scene.terrain.map.tileToWorldXY(
+      nextTile.x,
+      nextTile.y
+    );
 
-        console.log(
-          `world point in move along path: ${worldPoint.x}, ${worldPoint.y}`
-        );
+    // Adding half of the tile's width and height to place the target in the middle of the tile
+    this.targetWorldPoint.x += this.tileWidth / 2;
+    this.targetWorldPoint.y += this.tileHeight / 2;
 
-        // Teleport the player to the next tile
-        this.x = worldPoint.x;
-        this.y = worldPoint.y;
-
-        // If we've reached the end of the path, stop the timed event
-        if (path.length === 0) {
-          this.timedEvent.remove();
-          console.log("Reached final destination");
-          this.isClickToMove = false;
-        }
-      },
-      // Scope of callback function
-      callbackScope: this,
-      // Repeat forever until we manually stop it
-      loop: true,
-    });
+    const speed = 100; // Can be adjusted accordingly to your preference
+    this.scene.physics.moveTo(
+      this,
+      this.targetWorldPoint.x,
+      this.targetWorldPoint.y,
+      speed
+    );
   }
 
   takeDamage(damage) {
@@ -219,6 +209,65 @@ export default class Player extends Entity {
     // console.log(`Player tile: ${this.playerTileX}, ${this.playerTileY}`);
     if (!this.isClickToMove) {
       this.body.setVelocity(0);
+    }
+
+    if (this.isClickToMove && this.targetWorldPoint) {
+      // Calculate the direction to the target point
+      let direction = this.calculateDirection(
+        this.targetWorldPoint.x,
+        this.targetWorldPoint.y
+      );
+
+      // Check if the player is moving in the opposite direction
+      if (
+        (direction.x > 0 && this.body.velocity.x < 0) ||
+        (direction.x < 0 && this.body.velocity.x > 0) ||
+        (direction.y > 0 && this.body.velocity.y < 0) ||
+        (direction.y < 0 && this.body.velocity.y > 0)
+      ) {
+        // Reset the player's velocity to move it back towards the target point
+        this.scene.physics.moveTo(
+          this,
+          this.targetWorldPoint.x,
+          this.targetWorldPoint.y,
+          100 // adjust speed as needed
+        );
+      }
+
+      if (
+        Phaser.Math.Distance.Between(
+          this.x,
+          this.y,
+          this.targetWorldPoint.x,
+          this.targetWorldPoint.y
+        ) < 1
+      ) {
+        // Close enough to tile so stop pathfinding process to the current tile
+        this.body.setVelocity(0);
+        this.isClickToMove = false;
+        this.targetWorldPoint = null;
+
+        // continue moving along the path (if any tiles left)
+        this.moveAlongPath(this.currentPath);
+      }
+
+      // Check if the player is stuck
+      if (
+        this.lastPosition &&
+        Phaser.Math.Distance.Between(
+          this.x,
+          this.y,
+          this.lastPosition.x,
+          this.lastPosition.y
+        ) < 1
+      ) {
+        // The player hasn't moved significantly, so it's probably stuck
+        // Adjust the player's position here
+        // ...
+      }
+
+      // Remember the player's current position for the next frame
+      this.lastPosition = { x: this.x, y: this.y };
     }
 
     // Calculate the pathfindings
@@ -258,12 +307,16 @@ export default class Player extends Entity {
       this.body.setVelocityX(-100);
       this.facing = "left";
       this.isClickToMove = false;
-      this.timedEvent.remove();
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+      }
     } else if (this.cursors.right.isDown || this.keys.D.isDown) {
       this.body.setVelocityX(100);
       this.facing = "right";
       this.isClickToMove = false;
-      this.timedEvent.remove();
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+      }
     }
 
     // Vertical movement
@@ -280,12 +333,16 @@ export default class Player extends Entity {
       this.body.setVelocityY(-100);
       this.facing = "up";
       this.isClickToMove = false;
-      this.timedEvent.remove();
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+      }
     } else if (this.cursors.down.isDown || this.keys.S.isDown) {
       this.body.setVelocityY(100);
       this.facing = "down";
       this.isClickToMove = false;
-      this.timedEvent.remove();
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+      }
     }
 
     // Future Actions to Implement
