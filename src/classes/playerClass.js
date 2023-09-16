@@ -240,24 +240,6 @@ export default class Player extends Entity {
         // continue moving along the path (if any tiles left)
         this.moveAlongPath(this.currentPath);
       }
-
-      // Check if the player is stuck
-      if (
-        this.lastPosition &&
-        Phaser.Math.Distance.Between(
-          this.x,
-          this.y,
-          this.lastPosition.x,
-          this.lastPosition.y
-        ) < 1
-      ) {
-        // The player hasn't moved significantly, so it's probably stuck
-        // Adjust the player's position here
-        // ...
-      }
-
-      // Remember the player's current position for the next frame
-      this.lastPosition = { x: this.x, y: this.y };
     }
 
     // Calculate the pathfindings
