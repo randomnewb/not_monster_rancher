@@ -10,6 +10,7 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     this.map_array = Generate.placement_array(0, 1, 2, 8, 9);
     data.currentMapArray = this.map_array;
+    this.scene.events.emit("mapArrayReady");
 
     this.map = scene.make.tilemap({
       data: this.map_array,
