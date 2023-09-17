@@ -14,7 +14,7 @@ export default class Player extends Entity {
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
-    this.body.setCircle(5);
+    this.body.setCircle(5, 3.4, 4);
     this.setCollideWorldBounds();
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -239,7 +239,7 @@ export default class Player extends Entity {
           this.y,
           this.targetWorldPoint.x,
           this.targetWorldPoint.y
-        ) < 1
+        ) < 3
       ) {
         // Close enough to tile so stop pathfinding process to the current tile
         this.body.setVelocity(0);
