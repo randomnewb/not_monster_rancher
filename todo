@@ -24,7 +24,6 @@
   - [ ] If the player clicks on a jewel, the player will move towards the jewel and pick it up
 
 - [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-
 - [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
 
   - [ ] Show an indicator of where the player will fire at next or if they can fire at all
@@ -63,7 +62,6 @@
 - [ ] Pixel Art: General item/bag
 
 - [ ] Interactive objects have outlines around them
-- [ ] Rework joystick for player movement on mobile, kind of janky/not smooth
 - [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 
@@ -77,7 +75,7 @@
 
 - [ ] Implement NPC class
   - Requirements
-    - [ ] Inherits Entity Class
+    - [x] Inherits Entity Class
     - [ ] AI Behavior via states (idle, wander, chase/follow, attacking/fighting)
     - [ ] Droppable items
 - [ ] Setters/getter for health

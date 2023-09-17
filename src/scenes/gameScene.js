@@ -76,7 +76,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.frogs = [];
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 1100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
       this.frogs.push(new Frog(this, x, y, "frog"));
