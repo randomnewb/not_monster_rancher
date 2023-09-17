@@ -62,21 +62,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.rectangle.setScrollFactor(0);
 
-    // this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
-    //   x: gameWidth / 1.69,
-    //   y: gameHeight / 1.8,
-    //   radius: 17,
-    //   base: this.add.circle(0, 0, 25, 0x888888),
-    //   thumb: this.add.circle(0, 0, 12, 0xcccccc),
-    // });
-
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    // this.joystick.setVisible(isMobile);
+
     this.rectangle.setVisible(isMobile);
 
     this.frogs = [];
 
-    for (let i = 0; i < 1100; i++) {
+    for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
       this.frogs.push(new Frog(this, x, y, "frog"));
@@ -253,3 +245,19 @@ export default class GameScene extends Phaser.Scene {
     this.scene.get("UIScene").showGameOver();
   }
 }
+
+/** joystick code
+
+create() {
+  this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
+    x: gameWidth / 1.69,
+    y: gameHeight / 1.8,
+    radius: 17,
+    base: this.add.circle(0, 0, 25, 0x888888),
+    thumb: this.add.circle(0, 0, 12, 0xcccccc),
+  });
+
+this.joystick.setVisible(isMobile);
+}
+
+ */

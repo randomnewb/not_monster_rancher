@@ -1,12 +1,10 @@
+- [x] Player "animations" like tweening/bouncing/stretching side to side when player moves
+
 - [/] Implement click to move
 
-  - [x] Figure out how to access/log the location clicked
-  - [x] Get access to that tile/entity closest to that clicked location
-  - [x] Move the player toward that location
-  - [/] On click to move, draw a border around the tile that was clicked
+  - [/] On click to move, draw a border (not a full rectangle) around the tile that was clicked
+
     - Remove this highlight if keyboard input is detected or once the tile is reached
-  - [x] Pressing the fire button also moves the player to that mouse location so need to add a check for that somehow
-  - [x] Possible to add A\* pathfinding to the player?
 
     - using EasyStar.js, an A\* pathfinding library
     - save our map in data.js
@@ -14,7 +12,7 @@
   - [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
         such as if building is implemented or if obstructions are removed, the original array would need to be updated
 
-- [x] Click to move at the edges is difficult, need something to help the player so they can move around obstacles easier, maybe change collision box of trees and such
+- [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
 
 - Implementing certain actions based on what a mobile user is clicking on
 
@@ -24,7 +22,6 @@
   - [ ] If the player clicks on a jewel, the player will move towards the jewel and pick it up
 
 - [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-- [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
 
   - [ ] Show an indicator of where the player will fire at next or if they can fire at all
 
@@ -53,7 +50,6 @@
 - [ ] Implement pre-made structures in tilemap system (like a 2x2-sized tree or small structure)
 
 - [ ] Pressing ESC opens up a pause/options menu
-- [ ] Player "animations" like tweening/bouncing/stretching side to side when player moves
 
 - [x] Pixel Art: Tree stump
 - [x] Pixel Art: Boulder

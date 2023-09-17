@@ -54,6 +54,8 @@ export default class Player extends Entity {
 
     // Initialize the timed event
     this.timedEvent = null;
+
+    this.createBounceTween();
   }
 
   handlePointerDown(pointer) {
@@ -202,6 +204,18 @@ export default class Player extends Entity {
     this.healthBar.updateHealth(this.current_health);
   }
 
+  createBounceTween() {
+    // simple bounce animation tween
+    this.bounceTween = this.scene.tweens.add({
+      targets: this,
+      scaleY: 1.2,
+      duration: 100,
+      yoyo: true,
+      repeat: -1,
+      paused: true, // Start with the tween paused
+    });
+  }
+
   update() {
     // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
@@ -342,6 +356,19 @@ export default class Player extends Entity {
     }
 
     this.healthBar.setPosition(this.x, this.y + 12);
+
+    // Check if the player has velocity
+    if (this.body.velocity.x !== 0 || this.body.velocity.y !== 0) {
+      // If the player is moving and the tween is not active, start the tween
+      if (!this.bounceTween.isPlaying()) {
+        this.bounceTween.resume();
+      }
+    } else {
+      // If the player is not moving and the tween is active, stop the tween
+      if (this.bounceTween.isPlaying()) {
+        this.bounceTween.pause();
+      }
+    }
   }
 }
 
