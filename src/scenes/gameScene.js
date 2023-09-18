@@ -30,7 +30,13 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
     this.load.spritesheet("weapons", "./assets/weaponSheet.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("explosion", "./assets/explosion.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -88,6 +94,18 @@ export default class GameScene extends Phaser.Scene {
         key: "frog_idle",
         frames: [{ key: "frog", frame: 0 }],
         frameRate: 10,
+      });
+    }
+
+    if (!this.anims.exists("explosion")) {
+      this.anims.create({
+        key: "explosion",
+        frames: this.anims.generateFrameNumbers("explosion", {
+          start: 0,
+          end: 5,
+        }),
+        frameRate: 10,
+        repeat: 0,
       });
     }
 
