@@ -1,4 +1,7 @@
+- [x] Player fires towards closest entity or button is disabled if no enemies are close enough
 - [x] Player "animations" like tweening/bouncing/stretching side to side when player moves
+
+- [/] Show an indicator of where the player will fire at next or if they can fire at all
 
 - [/] Implement click to move
 
@@ -12,8 +15,6 @@
   - [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
         such as if building is implemented or if obstructions are removed, the original array would need to be updated
 
-- [ ] Player fires towards closest entity or button is disabled if no enemies are close enough
-
 - Implementing certain actions based on what a mobile user is clicking on
 
   - [ ] If the player clicks on a tree, the player will move towards the tree and chop it down
@@ -22,8 +23,6 @@
   - [ ] If the player clicks on a jewel, the player will move towards the jewel and pick it up
 
 - [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-
-  - [ ] Show an indicator of where the player will fire at next or if they can fire at all
 
 - [/] Invincibility added to frog
 

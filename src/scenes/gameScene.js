@@ -43,17 +43,14 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
-    const gameWidth = this.game.config.width;
-    const gameHeight = this.game.config.height;
-
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
 
     this.rectangle = this.add.rectangle(
-      centerX - 120,
-      centerY + 42,
-      30,
-      30,
+      centerX - 128,
+      centerY + 58,
+      40,
+      40,
       0xffffff
     );
     this.rectangle.setInteractive();
@@ -66,14 +63,11 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
-    this.rectangle.setScrollFactor(0);
-
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
+    this.rectangle.setScrollFactor(0);
     this.rectangle.setVisible(isMobile);
 
     this.frogs = [];
-
     for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
@@ -169,27 +163,41 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
+    this.directionToClosestEntity = null;
+    this.graphics = this.add.graphics();
+    this.debugRectangle = new Phaser.Geom.Rectangle(0, 0, 16, 16);
+
     this.action1 = () => {
-      let direction;
-      switch (this.player.facing) {
-        case "up":
-          direction = { x: 0, y: -1 };
-          break;
-        case "down":
-          direction = { x: 0, y: 1 };
-          break;
-        case "left":
-          direction = { x: -1, y: 0 };
-          break;
-        case "right":
-          direction = { x: 1, y: 0 };
-          break;
+      if (this.directionToClosestEntity) {
+        // Fire the projectile towards the closest entity
+        this.projectileGroup.fireProjectile(
+          this.player.x,
+          this.player.y,
+          this.directionToClosestEntity
+        );
+      } else {
+        // If there are no nearby entities, keep the current behavior
+        let direction;
+        switch (this.player.facing) {
+          case "up":
+            direction = { x: 0, y: -1 };
+            break;
+          case "down":
+            direction = { x: 0, y: 1 };
+            break;
+          case "left":
+            direction = { x: -1, y: 0 };
+            break;
+          case "right":
+            direction = { x: 1, y: 0 };
+            break;
+        }
+        this.projectileGroup.fireProjectile(
+          this.player.x,
+          this.player.y,
+          direction
+        );
       }
-      this.projectileGroup.fireProjectile(
-        this.player.x,
-        this.player.y,
-        direction
-      );
     };
 
     this.physics.add.overlap(
@@ -238,6 +246,66 @@ export default class GameScene extends Phaser.Scene {
         frog.setDepth(1);
         frog.update();
       });
+
+      this.frogs = this.frogs.filter(frog => frog.active);
+      // Get all entities within 3 tiles distance
+      const nearbyEntities = this.frogs.filter(frog => {
+        const distance = Phaser.Math.Distance.Between(
+          this.player.x,
+          this.player.y,
+          frog.x,
+          frog.y
+        );
+
+        return distance <= 3 * this.tileWidth;
+      });
+
+      // If there are nearby entities, find the closest one
+      if (nearbyEntities.length > 0) {
+        const closestEntity = nearbyEntities.reduce((closest, entity) => {
+          const distanceToCurrent = Phaser.Math.Distance.Between(
+            this.player.x,
+            this.player.y,
+            entity.x,
+            entity.y
+          );
+          const distanceToClosest = closest
+            ? Phaser.Math.Distance.Between(
+                this.player.x,
+                this.player.y,
+                closest.x,
+                closest.y
+              )
+            : Infinity;
+          return distanceToCurrent < distanceToClosest ? entity : closest;
+        }, null);
+
+        // Calculate the direction towards the closest entity
+        this.directionToClosestEntity = {
+          x: closestEntity.x - this.player.x,
+          y: closestEntity.y - this.player.y,
+        };
+
+        // draw a 16x16 at that frog's position
+        this.graphics.clear();
+        this.graphics.lineStyle(1, 0xffff00);
+        this.debugRectangle.setPosition(
+          closestEntity.x - 8,
+          closestEntity.y - 8
+        );
+        this.graphics.strokeRectShape(this.debugRectangle);
+
+        // Normalize the direction
+        const magnitude = Math.sqrt(
+          this.directionToClosestEntity.x * this.directionToClosestEntity.x +
+            this.directionToClosestEntity.y * this.directionToClosestEntity.y
+        );
+        this.directionToClosestEntity.x /= magnitude;
+        this.directionToClosestEntity.y /= magnitude;
+      } else {
+        this.directionToClosestEntity = null;
+        this.graphics.clear();
+      }
     } else {
       this.player.body.setVelocity(0);
     }
