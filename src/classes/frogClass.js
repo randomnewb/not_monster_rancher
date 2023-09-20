@@ -72,12 +72,16 @@ export default class Frog extends Entity {
   }
 
   destroy() {
+    // Emit an event to the scene to let it know that this entity was destroyed
+    this.emit("frogDestroyed");
+
     // Destroy the health bar
     this.healthBar.destroy();
 
     // Call the parent class's destroy method
     super.destroy();
   }
+
   update() {
     if (!this.active) {
       return;

@@ -4,10 +4,11 @@ import UIScene from "./scenes/uiScene.js";
 import MainMenuScene from "./scenes/mainMenuScene.js";
 import NewGameMenuScene from "./scenes/newGameMenuScene.js";
 
-import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
+// import VirtualJoystickPlugin from "phaser3-rex-plugins/plugins/virtualjoystick-plugin.js";
 import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin.js";
 
 const config = {
+  backgroundColor: 0x212121,
   type: Phaser.AUTO,
   parent: "root",
   dom: {
@@ -48,11 +49,11 @@ const config = {
   },
   plugins: {
     global: [
-      {
-        key: "rexVirtualJoystick",
-        plugin: VirtualJoystickPlugin,
-        start: true,
-      },
+      // {
+      //   key: "rexVirtualJoystick",
+      //   plugin: VirtualJoystickPlugin,
+      //   start: true,
+      // },
       {
         key: "rexInputTextPlugin",
         plugin: InputTextPlugin,

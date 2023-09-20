@@ -1,3 +1,11 @@
+- [ ] During generation, generate a barrier of walls or trees along the edges of the map
+
+- HUD
+
+  - [x] Display health (setter/getter)
+  - [x] Display jewels collected
+  - [x] Display frogs fried (killed)
+
 - [x] Player fires towards closest entity or button is disabled if no enemies are close enough
 - [x] Player "animations" like tweening/bouncing/stretching side to side when player moves
 
@@ -97,5 +105,3 @@
 - Game world/map also made of a 2d array
   - Broken into zones made of 32x32 tiles
   - Zones have properties like biomes/types, levels, etc. which also contain certain entities
-- HUD
-  - [ ] Display some basic information like health or jewels collected

@@ -202,6 +202,8 @@ export default class Player extends Entity {
       this.scene.gameOver();
     }
     this.healthBar.updateHealth(this.current_health);
+
+    this.emit("healthChanged", this.current_health);
   }
 
   createBounceTween() {

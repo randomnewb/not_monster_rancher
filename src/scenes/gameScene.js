@@ -151,6 +151,7 @@ export default class GameScene extends Phaser.Scene {
     };
 
     this.player = new Player(this, 72, 72, "player");
+    this.player.on("healthChanged", this.handleHealthChanged, this);
 
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
@@ -215,6 +216,11 @@ export default class GameScene extends Phaser.Scene {
         frog.takeDamage(1);
       }
     }
+
+    this.frogs.forEach(frog => {
+      frog.on("frogDestroyed", this.handleFrogFried, this);
+    });
+
     const uiScene = this.scene.get("UIScene");
 
     this.scene
@@ -228,6 +234,15 @@ export default class GameScene extends Phaser.Scene {
     // this.physics.world.createDebugGraphic();
 
     // this.generateFunction();
+  }
+
+  handleHealthChanged(playerHealth) {
+    // Emit a 'playerhealthchanged' event from the scene
+    this.events.emit("playerHealthChanged", playerHealth);
+  }
+
+  handleFrogFried(frog) {
+    this.events.emit("playerFrogsFried", frog);
   }
 
   update() {
@@ -316,6 +331,7 @@ export default class GameScene extends Phaser.Scene {
       jewel.destroy();
 
       this.player.collectedJewels++;
+      this.events.emit("playerJewelCollected", this.player.collectedJewels);
       this.player.takeDamage(-10);
 
       if (this.player.collectedJewels >= 10) {
