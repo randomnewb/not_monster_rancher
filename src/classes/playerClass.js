@@ -72,30 +72,38 @@ export default class Player extends Entity {
       worldPoint.y
     );
 
-    // If a timed event is currently running, stop it
-    if (this.timedEvent) {
-      this.timedEvent.remove();
-      this.timedEvent = null;
-    }
-
-    // Find a path to the clicked tile
-    this.easystar.findPath(
-      this.playerTileX,
-      this.playerTileY,
-      tileXY.x,
-      tileXY.y,
-      path => {
-        if (path === null) {
-        } else {
-          // Save the path for later
-          this.path = path;
-          this.moveAlongPath(path);
-        }
+    // Check if the tile coordinates are within the grid boundaries
+    if (
+      tileXY.x >= 0 &&
+      tileXY.y >= 0 &&
+      tileXY.x < this.scene.terrain.map.width &&
+      tileXY.y < this.scene.terrain.map.height
+    ) {
+      // If a timed event is currently running, stop it
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+        this.timedEvent = null;
       }
-    );
 
-    // Don't forget to calculate the pathfinding!
-    this.easystar.calculate();
+      // Find a path to the clicked tile
+      this.easystar.findPath(
+        this.playerTileX,
+        this.playerTileY,
+        tileXY.x,
+        tileXY.y,
+        path => {
+          if (path === null) {
+          } else {
+            // Save the path for later
+            this.path = path;
+            this.moveAlongPath(path);
+          }
+        }
+      );
+
+      // Don't forget to calculate the pathfinding!
+      this.easystar.calculate();
+    }
 
     // Convert the tile coordinates back to world coordinates
     worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);

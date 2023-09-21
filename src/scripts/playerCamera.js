@@ -19,6 +19,6 @@ export default class PlayerCamera {
     });
 
     // setup the camera bounds based on the map size
-    this.cameras.main.setBounds(0, 0, 1024, 1024);
+    this.cameras.main.setBounds(-64, -64, 1024 + 128, 1024 + 128);
   }
 }

@@ -1,3 +1,6 @@
+- To solve rubberbanding issue, implement A-Star into WASD/Arrow key movements to generate an array of
+  1 length based on the input, then move player to that location
+
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
 
 - HUD

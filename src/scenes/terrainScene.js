@@ -22,6 +22,14 @@ export default class Terrain extends Phaser.GameObjects.Group {
     this.layer = this.map.createLayer(0, tiles, 0, 0);
     this.layer.setCollision([8, 9]);
 
+    /** Debug graphics 
+    const debugGraphics = scene.add.graphics().setAlpha(0.75);
+    this.map.renderDebug(debugGraphics, {
+      tileColor: null, // Non-colliding tiles
+      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 200), // Colliding tiles
+      faceColor: new Phaser.Display.Color(40, 39, 37, 255), // Colliding face edges
+    });
+*/
     var dataLayer = this.layer.layer.data;
 
     const grassTileColors = [
