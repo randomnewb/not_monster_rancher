@@ -1,7 +1,14 @@
-- To solve rubberbanding issue, implement A-Star into WASD/Arrow key movements to generate an array of
+- [/] To solve rubberbanding issue, implement A-Star into WASD/Arrow key movements to generate an array of
   1 length based on the input, then move player to that location
 
+  - Potentially still buggy, need to test more, player can get stuck and then slide/slow down forever until
+    click-to-move is used
+
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
+- [ ] Display damage numbers on projectile hit
+- [ ] Implement random damage within range (like 1-3 player damage)
+
+- [ ] Bug: After game is over, WASD/Arrow Keys cannot be used in input field (world map/map generation input field)
 
 - HUD
 

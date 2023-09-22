@@ -41,6 +41,7 @@ export default class Player extends Entity {
     );
 
     this.targetPosition = null;
+    this.isPathfinding = false;
 
     this.easystar = new EasyStar.js();
     this.scene.events.on("mapArrayReady", () => {
@@ -137,6 +138,50 @@ export default class Player extends Entity {
     return tileXY;
   }
 
+  handleKeyboardMovement(targetX, targetY) {
+    // Convert the world coordinates to tile coordinates
+    let tileXY = this.scene.terrain.map.worldToTileXY(targetX, targetY);
+
+    // Check if the tile coordinates are within the grid boundaries
+    if (
+      tileXY.x >= 0 &&
+      tileXY.y >= 0 &&
+      tileXY.x < this.scene.terrain.map.width &&
+      tileXY.y < this.scene.terrain.map.height
+    ) {
+      // If a timed event is currently running, stop it
+      if (this.timedEvent) {
+        this.timedEvent.remove();
+        this.timedEvent = null;
+      }
+
+      // Only initiate the pathfinding process if it's not already ongoing
+      if (!this.isPathfinding && !this.isClickToMove) {
+        this.isPathfinding = true;
+
+        // Find a path to the target tile
+        this.easystar.findPath(
+          this.playerTileX,
+          this.playerTileY,
+          tileXY.x,
+          tileXY.y,
+          path => {
+            if (path === null) {
+              this.isPathfinding = false;
+            } else {
+              // Save the path for later
+              this.path = path;
+              this.moveAlongPath(path);
+            }
+          }
+        );
+
+        // Don't forget to calculate the pathfinding!
+        this.easystar.calculate();
+      }
+    }
+  }
+
   calculateDirection(targetX, targetY) {
     let directionX = targetX - this.x;
     let directionY = targetY - this.y;
@@ -166,6 +211,7 @@ export default class Player extends Entity {
     // Guard clause in case no path given
     if (!path || path.length === 0) {
       this.isClickToMove = false;
+      this.isPathfinding = false; // Reset the isPathfinding flag
       return;
     }
 
@@ -298,56 +344,26 @@ export default class Player extends Entity {
       }
     }
 
-    // Horizontal movement
-    if (
-      this.cursors.left.isDown ||
-      this.keys.A.isDown ||
-      this.cursors.right.isDown ||
-      this.keys.D.isDown
-    ) {
-      this.targetPosition = null;
-      this.highlight.clear(); // Clear the highlight
-    }
-    if (this.cursors.left.isDown || this.keys.A.isDown) {
-      this.body.setVelocityX(-100);
-      this.facing = "left";
-      this.isClickToMove = false;
-      if (this.timedEvent) {
-        this.timedEvent.remove();
-      }
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
-      this.body.setVelocityX(100);
-      this.facing = "right";
-      this.isClickToMove = false;
-      if (this.timedEvent) {
-        this.timedEvent.remove();
-      }
+    // Vertical movement
+    if (this.cursors.up.isDown || this.keys.W.isDown) {
+      // Calculate new target position
+      let targetY = this.y - this.tileHeight;
+      this.handleKeyboardMovement(this.x, targetY);
+    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
+      // Calculate new target position
+      let targetY = this.y + this.tileHeight;
+      this.handleKeyboardMovement(this.x, targetY);
     }
 
-    // Vertical movement
-    if (
-      this.cursors.up.isDown ||
-      this.keys.W.isDown ||
-      this.cursors.down.isDown ||
-      this.keys.S.isDown
-    ) {
-      this.targetPosition = null;
-      this.highlight.clear(); // Clear the highlight
-    }
-    if (this.cursors.up.isDown || this.keys.W.isDown) {
-      this.body.setVelocityY(-100);
-      this.facing = "up";
-      this.isClickToMove = false;
-      if (this.timedEvent) {
-        this.timedEvent.remove();
-      }
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
-      this.body.setVelocityY(100);
-      this.facing = "down";
-      this.isClickToMove = false;
-      if (this.timedEvent) {
-        this.timedEvent.remove();
-      }
+    // Horizontal movement
+    if (this.cursors.left.isDown || this.keys.A.isDown) {
+      // Calculate new target position
+      let targetX = this.x - this.tileWidth;
+      this.handleKeyboardMovement(targetX, this.y);
+    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
+      // Calculate new target position
+      let targetX = this.x + this.tileWidth;
+      this.handleKeyboardMovement(targetX, this.y);
     }
 
     // Future Actions to Implement
@@ -381,55 +397,3 @@ export default class Player extends Entity {
     }
   }
 }
-
-/**  Use joystick
-if (this.cursorKeys) {
-  if (this.cursorKeys.left.isDown) {
-    this.body.setVelocityX(-100);
-    this.facing = "left";
-  } else if (this.cursorKeys.right.isDown) {
-    this.body.setVelocityX(100);
-    this.facing = "right";
-  }
-
-  if (this.cursorKeys.up.isDown) {
-    this.body.setVelocityY(-100);
-    this.facing = "up";
-  } else if (this.cursorKeys.down.isDown) {
-    this.body.setVelocityY(100);
-    this.facing = "down";
-  }
-}
-*/
-
-/** Original click-to-move code
- * 
- 
-
-if (this.targetPosition) {
-  const speed = 100; // adjust as needed
-  this.scene.physics.moveTo(
-    this,
-    this.targetPosition.x,
-    this.targetPosition.y,
-    speed
-  );
-
-  // If close enough to target, stop moving
-  if (
-    Phaser.Math.Distance.Between(
-      this.x,
-      this.y,
-      this.targetPosition.x,
-      this.targetPosition.y
-    ) < 5
-  ) {
-    this.body.setVelocity(0);
-    this.targetPosition = null;
-    this.highlight.clear(); // Clear the highlight
-  }
-}
-
-
- * 
- */
