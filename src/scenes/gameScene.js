@@ -334,7 +334,7 @@ export default class GameScene extends Phaser.Scene {
       this.events.emit("playerJewelCollected", this.player.collectedJewels);
       this.player.takeDamage(-10);
 
-      if (this.player.collectedJewels >= 10) {
+      if (this.player.collectedJewels >= 1) {
         this.gameOver();
       }
     }
@@ -344,22 +344,20 @@ export default class GameScene extends Phaser.Scene {
     data.gameActive = false;
     this.player.collectedJewels = 0;
 
+    if (this.player) {
+      this.player.setVisible(false);
+      this.player.setActive(false);
+    }
+
+    // Release the keys
+    Object.values(this.scene.scene.player.cursors).forEach(key => {
+      this.input.keyboard.removeCapture(key.keyCode);
+    });
+
+    Object.values(this.scene.scene.player.keys).forEach(key => {
+      this.input.keyboard.removeCapture(key.keyCode);
+    });
+
     this.scene.get("UIScene").showGameOver();
   }
 }
-
-/** joystick code
-
-create() {
-  this.joystick = this.plugins.get("rexVirtualJoystick").add(this, {
-    x: gameWidth / 1.69,
-    y: gameHeight / 1.8,
-    radius: 17,
-    base: this.add.circle(0, 0, 25, 0x888888),
-    thumb: this.add.circle(0, 0, 12, 0xcccccc),
-  });
-
-this.joystick.setVisible(isMobile);
-}
-
- */

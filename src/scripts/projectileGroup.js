@@ -4,7 +4,7 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
 
     this.createMultiple({
       classType: Projectile,
-      frameQuantity: 50,
+      frameQuantity: 20,
       active: false,
       visible: false,
       key: "projectile",

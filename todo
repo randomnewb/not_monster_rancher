@@ -8,7 +8,7 @@
 - [ ] Display damage numbers on projectile hit
 - [ ] Implement random damage within range (like 1-3 player damage)
 
-- [ ] Bug: After game is over, WASD/Arrow Keys cannot be used in input field (world map/map generation input field)
+- [x] Bug: After game is over, WASD/Arrow Keys cannot be used in input field (world map/map generation input field)
 
 - HUD
 

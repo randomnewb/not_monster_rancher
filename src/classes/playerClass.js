@@ -18,7 +18,6 @@ export default class Player extends Entity {
     this.setCollideWorldBounds();
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-    // this.cursorKeys = this.scene.joystick.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
     this.tint = 0x2986cc;
