@@ -4,8 +4,8 @@ import HealthBar from "./healthBarClass.js";
 import EasyStar from "easystarjs";
 
 export default class Player extends Entity {
-  constructor(scene, x, y, texture) {
-    super(scene, x, y, texture);
+  constructor(scene, x, y, texture, frame) {
+    super(scene, x, y, texture, frame);
 
     this.max_health = 100;
     this.current_health = this.max_health;
@@ -23,7 +23,12 @@ export default class Player extends Entity {
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
-    this.tint = 0x2986cc;
+
+    const playerColors = [
+      0xddac46, 0xc25940, 0x683d64, 0x51b1ca, 0x1773b8, 0x639f5b, 0x376e49,
+    ];
+
+    this.tint = playerColors[Math.floor(Math.random() * playerColors.length)];
     this.facing = "down";
     this.isClickToMove = false;
 

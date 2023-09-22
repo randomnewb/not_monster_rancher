@@ -20,7 +20,12 @@ export default class GameScene extends Phaser.Scene {
       frameHeight: this.tileHeight,
     });
 
-    this.load.image("player", "./assets/player.png");
+    // this.load.image("player", "./assets/player.png");
+
+    this.load.spritesheet("characters", "./assets/characters.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
     this.load.spritesheet("frog", "./assets/frog.png", {
       frameWidth: 16,
       frameHeight: 16,
@@ -151,7 +156,9 @@ export default class GameScene extends Phaser.Scene {
       }
     };
 
-    this.player = new Player(this, 72, 72, "player");
+    const randomFrame = Phaser.Math.Between(0, 15);
+    this.player = new Player(this, 72, 72, "characters", randomFrame);
+
     this.player.on("healthChanged", this.handleHealthChanged, this);
 
     this.jewels = this.physics.add.group();
