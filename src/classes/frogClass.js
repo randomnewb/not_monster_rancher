@@ -5,7 +5,7 @@ export default class Frog extends Entity {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    this.max_health = Phaser.Math.Between(1, 3);
+    this.max_health = Phaser.Math.Between(3, 5);
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 

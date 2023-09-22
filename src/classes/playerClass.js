@@ -11,6 +11,9 @@ export default class Player extends Entity {
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
+    this.min_attack = 1;
+    this.max_attack = 3;
+
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);

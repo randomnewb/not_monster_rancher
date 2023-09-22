@@ -9,7 +9,8 @@ export default class Entity extends Phaser.Physics.Arcade.Sprite {
 
     // Initialize stats
     this.max_health = 100;
-    this.attack = 10;
+    this.min_attack = 1;
+    this.max_attack = 1;
     this.level = 1;
   }
 

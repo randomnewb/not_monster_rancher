@@ -4,6 +4,7 @@ import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
 import Player from "../classes/playerClass.js";
 import Frog from "../classes/frogClass.js";
+import DamageValue from "../classes/damageValueClass.js";
 import { ProjectileGroup } from "../scripts/projectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
@@ -213,7 +214,19 @@ export default class GameScene extends Phaser.Scene {
       if (projectile.active) {
         projectile.disable();
 
-        frog.takeDamage(1);
+        let randomDamage = Phaser.Math.Between(
+          this.player.min_attack,
+          this.player.max_attack
+        );
+
+        frog.takeDamage(randomDamage);
+
+        let damageText = new DamageValue(
+          this,
+          frog.x,
+          frog.y - 10,
+          `${randomDamage}`
+        );
       }
     }
 
@@ -334,7 +347,7 @@ export default class GameScene extends Phaser.Scene {
       this.events.emit("playerJewelCollected", this.player.collectedJewels);
       this.player.takeDamage(-10);
 
-      if (this.player.collectedJewels >= 1) {
+      if (this.player.collectedJewels >= 10) {
         this.gameOver();
       }
     }
