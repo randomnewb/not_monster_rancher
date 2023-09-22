@@ -50,7 +50,7 @@ export default class Player extends Entity {
       this.easystar.setGrid(data.currentMapArray);
     });
 
-    this.easystar.setAcceptableTiles([0, 1, 2]);
+    this.easystar.setAcceptableTiles([0, 1, 2, 3, 4, 5, 6, 7]);
     this.easystar.setIterationsPerCalculation(1000);
     // this.easystar.enableDiagonals();
     this.easystar.disableCornerCutting();

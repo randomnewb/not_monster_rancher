@@ -8,7 +8,13 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     var randomNumber = seedrandom(data.gameSeed);
 
-    this.map_array = Generate.placement_array(0, 1, 2, 8, 9);
+    this.map_array = Generate.placement_array(
+      0,
+      1,
+      [2, 3, 4, 5, 6, 7],
+      8,
+      [9, 10, 11, 12, 13]
+    );
     data.currentMapArray = this.map_array;
     this.scene.events.emit("mapArrayReady");
 
@@ -44,17 +50,29 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     dataLayer.forEach(row => {
       row.forEach(tile => {
-        if (tile.index === 1) {
+        if (
+          tile.index === 1 ||
+          tile.index === 5 ||
+          tile.index === 6 ||
+          tile.index === 7
+        ) {
           tile.tint =
             grassTileColors[
               Math.floor(randomNumber() * grassTileColors.length)
             ];
-        } else if (tile.index === 2) {
+        } else if (tile.index === 2 || tile.index === 3 || tile.index === 4) {
           tile.tint =
             stoneTileColors[
               Math.floor(randomNumber() * stoneTileColors.length)
             ];
-        } else if (tile.index === 8 || tile.index === 9) {
+        } else if (
+          tile.index === 8 ||
+          tile.index === 9 ||
+          tile.index === 10 ||
+          tile.index === 11 ||
+          tile.index === 12 ||
+          tile.index === 13
+        ) {
           tile.tint =
             obstructionTileColors[
               Math.floor(randomNumber() * obstructionTileColors.length)

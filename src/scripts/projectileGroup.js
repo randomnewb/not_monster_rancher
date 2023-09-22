@@ -7,7 +7,7 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
       frameQuantity: 20,
       active: false,
       visible: false,
-      key: "projectile",
+      key: "slash_projectile",
     });
   }
 
@@ -22,7 +22,7 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
 
 class Projectile extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, "projectile", 0);
+    super(scene, x, y, "slash_projectile", 0);
   }
 
   preUpdate(time, delta) {

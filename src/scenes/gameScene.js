@@ -27,7 +27,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.image("jewel", "./assets/jewel.png");
-    this.load.spritesheet("projectile", "./assets/projectiles.png", {
+    this.load.spritesheet("slash_projectile", "./assets/projectiles.png", {
       frameWidth: 16,
       frameHeight: 16,
     });

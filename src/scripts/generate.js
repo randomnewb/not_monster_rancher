@@ -93,7 +93,11 @@ export default class Generate {
       for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map[row].length; column++) {
           if (map[row][column] === walkable && randomNumber() < 0.5) {
-            map[row][column] = walkableVariant;
+            map[row][column] =
+              // choose one walkableVariant from the range of walkable variants in its array
+              walkableVariant[
+                Math.floor(Math.random() * walkableVariant.length)
+              ];
           }
         }
       }
@@ -102,14 +106,20 @@ export default class Generate {
     function replaceWithObstruction() {
       for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map[row].length; column++) {
-          if (map[row][column] === walkableVariant && randomNumber() > 0.8) {
+          if (
+            walkableVariant.includes(map[row][column]) &&
+            randomNumber() > 0.7
+          ) {
             map[row][column] = obstruction;
           } else if (
             map[row][column] === 2 &&
-            randomNumber() >= 0.8 &&
+            randomNumber() >= 0.55 &&
             randomNumber() < 0.99
           ) {
-            map[row][column] = obstructionVariant;
+            map[row][column] =
+              obstructionVariant[
+                Math.floor(Math.random() * obstructionVariant.length)
+              ];
           }
         }
       }
