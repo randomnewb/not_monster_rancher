@@ -20,6 +20,35 @@ export default class Player extends Entity {
     this.body.setCircle(5, 3.4, 4);
     this.setCollideWorldBounds();
 
+    // // Get the tile at the player's spawn location
+    // let spawnTile = this.scene.terrain.map.getTileAtWorldXY(x, y);
+
+    // // Check if the spawn tile is an obstruction tile
+    // if ([8, 9, 10, 11, 12, 13].includes(spawnTile.index)) {
+    //   // Find a non-obstruction tile
+    //   let nonObstructionTile = null;
+    //   for (let i = 0; i < this.scene.terrain.map.width; i++) {
+    //     for (let j = 0; j < this.scene.terrain.map.height; j++) {
+    //       let tile = this.scene.terrain.map.getTileAt(i, j);
+    //       if (![8, 9, 10, 11, 12, 13].includes(tile.index)) {
+    //         nonObstructionTile = tile;
+    //         break;
+    //       }
+    //     }
+    //     if (nonObstructionTile) break;
+    //   }
+
+    //   // Update the player's spawn location to the non-obstruction tile
+    //   if (nonObstructionTile) {
+    //     let newSpawnPoint = this.scene.terrain.map.tileToWorldXY(
+    //       nonObstructionTile.x,
+    //       nonObstructionTile.y
+    //     );
+    //     this.x = newSpawnPoint.x;
+    //     this.y = newSpawnPoint.y;
+    //   }
+    // }
+
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;

@@ -4,6 +4,7 @@ import seedrandom from "seedrandom";
 export default class Generate {
   static create_objects(scene, map, objects, texture, colorOptions) {
     var randomNumber = seedrandom(data.gameSeed);
+    randomNumber();
     // get access to group of objects by their objectName
     // optionally remove all children
 
@@ -65,6 +66,7 @@ export default class Generate {
     obstructionVariant
   ) {
     var randomNumber = seedrandom(data.gameSeed);
+    randomNumber();
     // const empty = 0;
     // const walkable = 1;
     // const walkableVariant = 2;

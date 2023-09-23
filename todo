@@ -5,10 +5,9 @@
     click-to-move is used
 
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
-- [x] Display damage numbers on projectile hit
-- [x] Implement random damage within range (like 1-3 player damage)
 
-- [x] Bug: After game is over, WASD/Arrow Keys cannot be used in input field (world map/map generation input field)
+- [x] Bug: Seed generation no longer works (random map no matter the string)
+- [ ] Bug: Sometimes when player spawns inside an obstruction and moves out of it, WASD cannot be used
 
 - HUD
 
