@@ -1,6 +1,8 @@
 import Entity from "./entityClass.js";
 import StateMachine from "./stateMachineClass.js";
 import IdleState from "../states/idle.js";
+import WanderState from "../states/wander.js";
+import DestroyedState from "../states/destroyed.js";
 
 export default class NPC extends Entity {
   constructor(scene, x, y, texture, frame) {
@@ -11,7 +13,8 @@ export default class NPC extends Entity {
       "idle",
       {
         idle: new IdleState(),
-        // wander: new WanderState(),
+        wander: new WanderState(),
+        destroyed: new DestroyedState(),
         // detect: new DetectState(),
         // chase: new ChaseState(),
         // attack: new AttackState(),

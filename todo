@@ -1,3 +1,5 @@
+- [ ] Bug: player cannot cancel touch to move with keyboard movement
+
 - [ ] Implement NPC class
 
   - Requirements

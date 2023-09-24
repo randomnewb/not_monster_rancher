@@ -19,11 +19,11 @@ export default class StateMachine {
     }
 
     this.state = this.possibleStates[stateName];
+    this.stateName = stateName;
     this.state.enter(...this.stateArgs);
   }
 
   transition(stateName) {
-    // Add your transition logic here
     this.setState(stateName);
   }
 

@@ -26,36 +26,6 @@ export default class Frog extends NPC {
       frogColors[Math.floor(Math.random() * frogColors.length)];
 
     this.setTint(this.originalTint);
-
-    this.updateCounter = 0;
-    this.toggleFrames = Phaser.Math.Between(60, 180);
-  }
-
-  toggleMovement() {
-    this.isMoving = !this.isMoving;
-
-    if (this.isMoving) {
-      let velocityIncrease = Phaser.Math.Between(20, 50);
-
-      // Randomly choose to increase or decrease velocityX or velocityY
-      if (Phaser.Math.Between(0, 1) === 0) {
-        // Randomly choose to increase or decrease velocityX
-        this.body.velocity.x +=
-          Phaser.Math.Between(0, 1) === 0
-            ? velocityIncrease
-            : -velocityIncrease;
-      } else {
-        // Randomly choose to increase or decrease velocityY
-        this.body.velocity.y +=
-          Phaser.Math.Between(0, 1) === 0
-            ? velocityIncrease
-            : -velocityIncrease;
-      }
-    } else {
-      // Set velocity to 0 to make the entity idle
-      this.body.velocity.x = 0;
-      this.body.velocity.y = 0;
-    }
   }
 
   takeDamage(damage) {
@@ -78,6 +48,9 @@ export default class Frog extends NPC {
     // Destroy the health bar
     this.healthBar.destroy();
 
+    // transition the frog to the destroyed state
+    this.stateMachine.transition("destroyed");
+
     // Call the parent class's destroy method
     super.destroy();
   }
@@ -92,20 +65,6 @@ export default class Frog extends NPC {
     }
 
     this.healthBar.setPosition(this.x, this.y + 10);
-
-    // increment the counter each update call
-    this.updateCounter++;
-
-    if (this.updateCounter >= this.toggleFrames) {
-      // if counter reached the toggle time, toggle the movement
-      this.toggleMovement();
-
-      // reset the counter
-      this.updateCounter = 0;
-
-      // set the next toggle time
-      this.toggleFrames = Phaser.Math.Between(60, 180);
-    }
 
     if (this.isMoving) {
       this.anims.play("frog_move", true);
@@ -134,3 +93,55 @@ export default class Frog extends NPC {
     }
   }
 }
+
+/** old movement code 
+
+in create() method
+// for frog movement
+// this.toggleFrames = Phaser.Math.Between(60, 180);
+
+this.updateCounter = 0;
+
+// separate function to toggle movement
+toggleMovement() {
+  this.isMoving = !this.isMoving;
+
+  if (this.isMoving) {
+    let velocityIncrease = Phaser.Math.Between(20, 50);
+
+    // Randomly choose to increase or decrease velocityX or velocityY
+    if (Phaser.Math.Between(0, 1) === 0) {
+      // Randomly choose to increase or decrease velocityX
+      this.body.velocity.x +=
+        Phaser.Math.Between(0, 1) === 0
+          ? velocityIncrease
+          : -velocityIncrease;
+    } else {
+      // Randomly choose to increase or decrease velocityY
+      this.body.velocity.y +=
+        Phaser.Math.Between(0, 1) === 0
+          ? velocityIncrease
+          : -velocityIncrease;
+    }
+  } else {
+    // Set velocity to 0 to make the entity idle
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+  }
+}
+
+    // increment the counter each update call
+    this.updateCounter++;
+
+    if (this.updateCounter >= this.toggleFrames) {
+      // if counter reached the toggle time, toggle the movement
+      this.toggleMovement();
+
+      // reset the counter
+      this.updateCounter = 0;
+
+      // set the next toggle time
+      this.toggleFrames = Phaser.Math.Between(60, 180);
+    }
+
+    */
