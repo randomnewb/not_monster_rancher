@@ -1,6 +1,8 @@
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
+- [ ] Bug: game crashes on second playthrough probably because player still exists and is trying find the terrain in the player update()
+  - trying to remove the player in the menus before this happens so the player can be reinstantiated for a clean start
 - [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 
 - [x] NPC Detection State

@@ -6,6 +6,7 @@ import Player from "../classes/playerClass.js";
 import Frog from "../classes/frogClass.js";
 import DamageValue from "../classes/damageValueClass.js";
 import { ProjectileGroup } from "../scripts/projectileGroup.js";
+import { EnemyProjectileGroup } from "../scripts/enemyProjectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -25,6 +26,11 @@ export default class GameScene extends Phaser.Scene {
       frameHeight: 16,
     });
     this.load.spritesheet("frog", "./assets/frog.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("enemy_attack1", "./assets/enemy_attack1.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -166,6 +172,7 @@ export default class GameScene extends Phaser.Scene {
 
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
+    this.enemyProjectiles = new EnemyProjectileGroup(this);
 
     this.playerJewelOverlap = this.physics.add.overlap(
       this.player,
@@ -212,6 +219,20 @@ export default class GameScene extends Phaser.Scene {
       }
     };
 
+    this.frogs.forEach(frog => {
+      frog.on("fireProjectile", (frog, direction) => {
+        this.enemyProjectiles.fireProjectile(frog.x, frog.y, direction);
+      });
+    });
+
+    this.physics.add.overlap(
+      this.enemyProjectiles,
+      this.player,
+      playerHit,
+      null,
+      this
+    );
+
     this.physics.add.overlap(
       this.projectileGroup,
       this.frogs,
@@ -219,6 +240,18 @@ export default class GameScene extends Phaser.Scene {
       null,
       this
     );
+
+    function playerHit(player, projectile) {
+      console.log("player hit by enemy projecitle");
+      // Play explosion animation
+      // ...
+
+      // Destroy the projectile
+      projectile.destroy();
+
+      // Player takes damage
+      player.takeDamage(1);
+    }
 
     function hitFrog(frog, projectile) {
       if (projectile.active) {
@@ -357,7 +390,7 @@ export default class GameScene extends Phaser.Scene {
       this.events.emit("playerJewelCollected", this.player.collectedJewels);
       this.player.takeDamage(-10);
 
-      if (this.player.collectedJewels >= 10) {
+      if (this.player.collectedJewels >= 1) {
         this.gameOver();
       }
     }

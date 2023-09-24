@@ -6,7 +6,7 @@ export default class DetectState extends State {
   }
 
   enter(scene, npc) {
-    console.log(`${npc.constructor.name} entered the detect state`);
+    // console.log(`${npc.constructor.name} entered the detect state`);
     npc.setVelocity(0);
     npc.isMoving = false;
 
@@ -69,6 +69,7 @@ export default class DetectState extends State {
         },
       });
     }
+
     // Check if the counter has exceeded the detect time
     else if (npc.detectCounter > npc.detectTime) {
       npc.stateMachine.transition("chase");
@@ -77,6 +78,7 @@ export default class DetectState extends State {
   }
 
   exit(scene, npc) {
+    npc.isMoving = false;
     if (npc.detectCounter) {
       // If there's an detect event scheduled
       npc.detectCounter = 0; // Reset counter

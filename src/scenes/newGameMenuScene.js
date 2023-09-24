@@ -6,6 +6,11 @@ export default class NewGameMenuScene extends Phaser.Scene {
   }
 
   create() {
+    const player = this.scene.get("GameScene").player;
+    console.log(player);
+    if (player) {
+      player.destroy();
+    }
     this.generateWorldButton = this.createButton(
       195,
       440,
@@ -30,6 +35,7 @@ export default class NewGameMenuScene extends Phaser.Scene {
 
   startGame() {
     this.add.rectangle(0, 0, 1280 * 2, 720 * 2, 0x000);
+
     const gameScene = this.scene.get("GameScene");
     gameScene.scene.restart();
 

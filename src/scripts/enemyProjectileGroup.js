@@ -1,13 +1,13 @@
-class ProjectileGroup extends Phaser.Physics.Arcade.Group {
+class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene) {
     super(scene.physics.world, scene);
 
     this.createMultiple({
-      classType: Projectile,
+      classType: EnemyProjectile,
       frameQuantity: 200,
       active: false,
       visible: false,
-      key: "projectiles",
+      key: "enemy_attack1",
     });
   }
 
@@ -20,9 +20,9 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
   }
 }
 
-class Projectile extends Phaser.Physics.Arcade.Sprite {
+class EnemyProjectile extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, "projectiles", 1);
+    super(scene, x, y, "enemy_attack1", 0);
   }
 
   preUpdate(time, delta) {
@@ -83,4 +83,4 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
   }
 }
 
-export { ProjectileGroup, Projectile };
+export { EnemyProjectileGroup, EnemyProjectile };
