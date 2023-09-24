@@ -21,7 +21,7 @@ export default class WanderState extends State {
     // Wander state logic
     let directions = [0, 90, 180, 270]; // Orthogonal directions in degrees
     let direction = Phaser.Math.RND.pick(directions) * (Math.PI / 180); // Pick a random direction and convert to radians
-    let speed = 15; // Adjust speed to your needs
+    let speed = npc.speed; // Adjust speed to your needs
     npc.setVelocity(Math.cos(direction) * speed, Math.sin(direction) * speed);
 
     // Schedule a transition back to the 'idle' state after a random amount of time

@@ -4,8 +4,10 @@
 
   - Requirements
     - [x] Inherits Entity Class
-    - [ ] AI Behavior via states (idle, wander, chase/follow, attacking/fighting)
-    - [ ] Droppable items
+    - [/] AI Behavior via states
+      - [x] implemented idle, wander, and destroyed
+      - [ ] working on chase/follow, attacking/fighting
+    - [ ] Droppable items, experience points, etc. potentially destroyed state
 
 - [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
 
