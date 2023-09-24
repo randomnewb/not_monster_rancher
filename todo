@@ -1,5 +1,5 @@
-- [ ] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
-      the game crashes because it is trying to setVelocity
+- [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
+  the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
 - [ ] NPC Detection State
 
@@ -26,7 +26,7 @@
     - [/] AI Behavior via states
       - [x] implemented idle, wander, and destroyed
       - [ ] working on chase/follow, attacking/fighting
-    - [ ] Droppable items, experience points, etc. potentially destroyed state
+      - [ ] destroyed state could provide droppable items, experience points
 
 - [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
 

@@ -33,11 +33,11 @@ export default class Frog extends NPC {
 
     this.setTint(this.originalTint);
 
-    this.stateEvent = null;
+    // this.stateEvent = null;
 
     // Initialize state machine
     this.stateMachine = new StateMachine(
-      "wander",
+      "idle",
       {
         idle: new IdleState(),
         wander: new WanderState(),
@@ -78,6 +78,12 @@ export default class Frog extends NPC {
   }
 
   update() {
+    // Call the parent class's update method
+    super.update();
+
+    // Call step on the new stateMachine
+    this.stateMachine.step();
+
     if (!this.active) {
       return;
     }

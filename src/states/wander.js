@@ -16,24 +16,27 @@ export default class WanderState extends State {
     npc.setVelocity(Math.cos(direction) * speed, Math.sin(direction) * speed);
 
     // Schedule a transition back to the 'idle' state after a random amount of time
-    let wanderTime = Phaser.Math.Between(1, 5) * 1000; // Wander for 1 to 5 seconds
-    npc.stateEvent = scene.time.delayedCall(wanderTime, () => {
-      npc.stateMachine.transition("idle");
-    });
-    // console.log(scene.time.delayedCall().delay);
+    npc.wanderTime = Phaser.Math.Between(1, 5) * 60; // Wander for 1 to 5 seconds (60 frames per second)
+    npc.wanderCounter = 0; // Initialize counter
   }
 
   execute(scene, npc) {
-    // Wander state logic can be left empty if you don't need to do anything every frame
+    // Increment the counter each frame
+    npc.wanderCounter++;
+
+    // Check if the counter has exceeded the wander time
+    if (npc.wanderCounter > npc.wanderTime) {
+      npc.stateMachine.transition("idle");
+      npc.wanderCounter = 0; // Reset counter
+    }
   }
 
   exit(scene, npc) {
     npc.isMoving = false;
     // Wander state exit logic
-    if (npc.stateEvent) {
+    if (npc.wanderCounter) {
       // If there's a wander event scheduled
-      npc.stateEvent.remove(); // Remove it to prevent it from firing after we've exited the state
-      npc.stateEvent = null;
+      npc.wanderCounter = 0; // Reset counter
     }
   }
 }
