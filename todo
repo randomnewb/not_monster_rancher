@@ -7,7 +7,10 @@
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
 
 - [x] Bug: Seed generation no longer works (random map no matter the string)
-- [ ] Bug: Sometimes when player spawns inside an obstruction and moves out of it, WASD cannot be used
+- [/] Bug: Sometimes when player spawns inside an obstruction and moves out of it, WASD cannot be used
+
+  - try this with seed "f"
+  - seems fixed
 
 - HUD
 

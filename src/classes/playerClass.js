@@ -20,35 +20,6 @@ export default class Player extends Entity {
     this.body.setCircle(5, 3.4, 4);
     this.setCollideWorldBounds();
 
-    // // Get the tile at the player's spawn location
-    // let spawnTile = this.scene.terrain.map.getTileAtWorldXY(x, y);
-
-    // // Check if the spawn tile is an obstruction tile
-    // if ([8, 9, 10, 11, 12, 13].includes(spawnTile.index)) {
-    //   // Find a non-obstruction tile
-    //   let nonObstructionTile = null;
-    //   for (let i = 0; i < this.scene.terrain.map.width; i++) {
-    //     for (let j = 0; j < this.scene.terrain.map.height; j++) {
-    //       let tile = this.scene.terrain.map.getTileAt(i, j);
-    //       if (![8, 9, 10, 11, 12, 13].includes(tile.index)) {
-    //         nonObstructionTile = tile;
-    //         break;
-    //       }
-    //     }
-    //     if (nonObstructionTile) break;
-    //   }
-
-    //   // Update the player's spawn location to the non-obstruction tile
-    //   if (nonObstructionTile) {
-    //     let newSpawnPoint = this.scene.terrain.map.tileToWorldXY(
-    //       nonObstructionTile.x,
-    //       nonObstructionTile.y
-    //     );
-    //     this.x = newSpawnPoint.x;
-    //     this.y = newSpawnPoint.y;
-    //   }
-    // }
-
     this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
@@ -78,6 +49,8 @@ export default class Player extends Entity {
 
     this.targetPosition = null;
     this.isPathfinding = false;
+
+    this.obstructionTiles = [8, 9, 10, 11, 12, 13];
 
     this.easystar = new EasyStar.js();
     this.scene.events.on("mapArrayReady", () => {
@@ -309,6 +282,21 @@ export default class Player extends Entity {
   }
 
   update() {
+    // Check if the terrain and map exist
+    if (this.scene.terrain && this.scene.terrain.map) {
+      // Get the index of the player's current tile
+      let playerTileIndex = this.scene.terrain.map.getTileAtWorldXY(
+        this.x,
+        this.y
+      ).index;
+
+      // Check if the player's current tile is an obstruction
+      if (this.obstructionTiles.includes(playerTileIndex)) {
+        // If it is, move the player to the nearest non-obstruction tile
+        this.moveOutOfObstruction();
+      }
+    }
+
     // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
@@ -429,6 +417,43 @@ export default class Player extends Entity {
       // If the player is not moving and the tween is active, stop the tween
       if (this.bounceTween.isPlaying()) {
         this.bounceTween.pause();
+      }
+    }
+  }
+
+  moveOutOfObstruction() {
+    // Check if the terrain map exists
+    if (!this.scene.terrain.map) {
+      return;
+    }
+
+    // Get the player's current tile coordinates
+    let playerTileX = this.scene.terrain.map.worldToTileX(this.x);
+    let playerTileY = this.scene.terrain.map.worldToTileY(this.y);
+
+    // Search for the nearest non-obstruction tile
+    for (
+      let distance = 1;
+      distance < this.scene.terrain.map.width;
+      distance++
+    ) {
+      for (let dx = -distance; dx <= distance; dx++) {
+        for (let dy = -distance; dy <= distance; dy++) {
+          let tile = this.scene.terrain.map.getTileAt(
+            playerTileX + dx,
+            playerTileY + dy
+          );
+          if (tile && !this.obstructionTiles.includes(tile.index)) {
+            // If a non-obstruction tile is found, move the player there
+            let worldPoint = this.scene.terrain.map.tileToWorldXY(
+              tile.x,
+              tile.y
+            );
+            this.x = worldPoint.x;
+            this.y = worldPoint.y;
+            return;
+          }
+        }
       }
     }
   }
