@@ -24,8 +24,21 @@ export default class WanderState extends State {
     // Increment the counter each frame
     npc.wanderCounter++;
 
+    // Calculate the distance between the npc and the player
+    const distance = Phaser.Math.Distance.Between(
+      npc.x,
+      npc.y,
+      scene.player.x,
+      scene.player.y
+    );
+
+    // Check if the player is within 3 tiles distance
+    if (distance <= 48) {
+      npc.stateMachine.transition("detect");
+      npc.wanderCounter = 0; // Reset counter
+    }
     // Check if the counter has exceeded the wander time
-    if (npc.wanderCounter > npc.wanderTime) {
+    else if (npc.wanderCounter > npc.wanderTime) {
       npc.stateMachine.transition("idle");
       npc.wanderCounter = 0; // Reset counter
     }

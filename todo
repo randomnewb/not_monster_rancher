@@ -1,16 +1,18 @@
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
-- [ ] NPC Detection State
+- [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
+
+- [x] NPC Detection State
 
   - Entering parameters:
-    - [ ] When NPC and player are within a certain range and NPC is in a certain state like idle or wander
-    - [ ] Create the exclamation point sprite above the NPC
+    - [x] When NPC and player are within a certain range and NPC is in a certain state like idle or wander
+    - [x] Create the exclamation point sprite above the NPC
   - Executing parameters:
-    - [ ] If the NPC stays within the range of the player long enough (like 2 seconds), switch to the attack state
-    - [ ] If the player moves out of range, switch back to the idle or wander state
+    - [x] If the NPC stays within the range of the player long enough (like 2 seconds), switch to the attack state
+    - [x] If the player moves out of range, switch back to the idle or wander state
   - Exiting parameters:
-    - [ ] None at this time
+    - [x] None at this time
 
 - [ ] Bug: player cannot cancel touch to move with keyboard movement
 

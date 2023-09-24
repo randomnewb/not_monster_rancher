@@ -17,8 +17,21 @@ export default class IdleState extends State {
     // Increment the counter each frame
     npc.idleCounter++;
 
+    // Calculate the distance between the npc and the player
+    const distance = Phaser.Math.Distance.Between(
+      npc.x,
+      npc.y,
+      scene.player.x,
+      scene.player.y
+    );
+
+    // Check if the player is within 3 tiles distance
+    if (distance <= 64) {
+      npc.stateMachine.transition("detect");
+      npc.idleCounter = 0; // Reset counter
+    }
     // Check if the counter has exceeded the idle time
-    if (npc.idleCounter > npc.idleTime) {
+    else if (npc.idleCounter > npc.idleTime) {
       npc.stateMachine.transition("wander");
       npc.idleCounter = 0; // Reset counter
     }
