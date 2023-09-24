@@ -1,7 +1,7 @@
-import Entity from "./entityClass.js";
+import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
 
-export default class Frog extends Entity {
+export default class Frog extends NPC {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 

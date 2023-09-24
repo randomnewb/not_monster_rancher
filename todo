@@ -1,3 +1,12 @@
+- [ ] Implement NPC class
+
+  - Requirements
+    - [x] Inherits Entity Class
+    - [ ] AI Behavior via states (idle, wander, chase/follow, attacking/fighting)
+    - [ ] Droppable items
+
+- [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
+
 - [/] To solve rubberbanding issue, implement A-Star into WASD/Arrow key movements to generate an array of
   1 length based on the input, then move player to that location
 
@@ -88,13 +97,6 @@
 - [ ] Life Skills system - chop trees, mine rocks, etc.
 - [ ] Water tiles/swimming
 
-- [ ] Implement NPC class
-  - Requirements
-    - [x] Inherits Entity Class
-    - [ ] AI Behavior via states (idle, wander, chase/follow, attacking/fighting)
-    - [ ] Droppable items
-- [ ] Setters/getter for health
-  - Health bar, health text, etc.
 - Inventory system via an array or grid inventory (stretch) system
   - [ ] Inventory UI
   - [ ] Inventory slots

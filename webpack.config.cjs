@@ -43,6 +43,7 @@ module.exports = {
         { from: "./src/data", to: "data" },
         { from: "./src/scripts", to: "scripts" },
         { from: "./src/classes", to: "classes" },
+        { from: "./src/states", to: "states" },
       ],
     }),
   ],
