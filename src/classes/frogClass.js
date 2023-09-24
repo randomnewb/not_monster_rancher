@@ -1,5 +1,9 @@
 import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
+import StateMachine from "./stateMachineClass.js";
+import IdleState from "../states/idle.js";
+import WanderState from "../states/wander.js";
+import DestroyedState from "../states/destroyed.js";
 
 export default class Frog extends NPC {
   constructor(scene, x, y, texture) {
@@ -28,6 +32,22 @@ export default class Frog extends NPC {
       frogColors[Math.floor(Math.random() * frogColors.length)];
 
     this.setTint(this.originalTint);
+
+    this.stateEvent = null;
+
+    // Initialize state machine
+    this.stateMachine = new StateMachine(
+      "wander",
+      {
+        idle: new IdleState(),
+        wander: new WanderState(),
+        destroyed: new DestroyedState(),
+        // detect: new DetectState(),
+        // chase: new ChaseState(),
+        // attack: new AttackState(),
+      },
+      [scene, this]
+    );
   }
 
   takeDamage(damage) {

@@ -1,6 +1,25 @@
+- [ ] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
+      the game crashes because it is trying to setVelocity
+
+- [ ] NPC Detection State
+
+  - Entering parameters:
+    - [ ] When NPC and player are within a certain range and NPC is in a certain state like idle or wander
+    - [ ] Create the exclamation point sprite above the NPC
+  - Executing parameters:
+    - [ ] If the NPC stays within the range of the player long enough (like 2 seconds), switch to the attack state
+    - [ ] If the player moves out of range, switch back to the idle or wander state
+  - Exiting parameters:
+    - [ ] None at this time
+
 - [ ] Bug: player cannot cancel touch to move with keyboard movement
 
-- [ ] Implement NPC class
+- [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating,
+      the game crashes
+
+  - Probably need to implement some sort of loading screen and then allow the player to move and click the screen
+
+- [/] Implement NPC class
 
   - Requirements
     - [x] Inherits Entity Class
@@ -19,20 +38,10 @@
 
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
 
-- [x] Bug: Seed generation no longer works (random map no matter the string)
 - [/] Bug: Sometimes when player spawns inside an obstruction and moves out of it, WASD cannot be used
 
   - try this with seed "f"
   - seems fixed
-
-- HUD
-
-  - [x] Display health (setter/getter)
-  - [x] Display jewels collected
-  - [x] Display frogs fried (killed)
-
-- [x] Player fires towards closest entity or button is disabled if no enemies are close enough
-- [x] Player "animations" like tweening/bouncing/stretching side to side when player moves
 
 - [/] Show an indicator of where the player will fire at next or if they can fire at all
 

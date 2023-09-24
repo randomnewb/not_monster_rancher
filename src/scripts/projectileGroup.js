@@ -7,7 +7,7 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
       frameQuantity: 20,
       active: false,
       visible: false,
-      key: "slash_projectile",
+      key: "projectiles",
     });
   }
 
@@ -22,7 +22,7 @@ class ProjectileGroup extends Phaser.Physics.Arcade.Group {
 
 class Projectile extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, "slash_projectile", 0);
+    super(scene, x, y, "projectiles", 1);
   }
 
   preUpdate(time, delta) {
@@ -50,11 +50,22 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     this.setActive(true);
     this.setVisible(true);
 
-    this.setVelocity();
-
     const speed = 200;
     this.setVelocityX(direction.x * speed);
     this.setVelocityY(direction.y * speed);
+
+    // Calculate the angle between the player and the entity
+    const angle = Phaser.Math.RadToDeg(
+      Phaser.Math.Angle.BetweenPoints({ x: 0, y: 0 }, direction)
+    );
+
+    const OFFSET = 45.0;
+
+    // Adjust the angle
+    const adjustedAngle = angle + OFFSET;
+
+    // Set the rotation of the projectile sprite
+    this.setAngle(adjustedAngle);
 
     this.lifespan = this.scene.time.addEvent({
       delay: 300, // milliseconds

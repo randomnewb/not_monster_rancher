@@ -4,6 +4,7 @@ export default class DestroyedState extends State {
   enter(scene, npc) {
     // Destroyed state enter logic
     // console.log(`${npc.constructor.name} entered the destroyed state`);
+    // Add cleanup logic here
   }
 
   execute(scene, npc) {

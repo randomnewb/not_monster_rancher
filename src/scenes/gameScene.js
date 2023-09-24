@@ -20,8 +20,6 @@ export default class GameScene extends Phaser.Scene {
       frameHeight: this.tileHeight,
     });
 
-    // this.load.image("player", "./assets/player.png");
-
     this.load.spritesheet("characters", "./assets/characters.png", {
       frameWidth: 16,
       frameHeight: 16,
@@ -32,7 +30,7 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.image("jewel", "./assets/jewel.png");
-    this.load.spritesheet("slash_projectile", "./assets/projectiles.png", {
+    this.load.spritesheet("projectiles", "./assets/projectiles.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
@@ -43,6 +41,11 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.load.spritesheet("explosion", "./assets/explosion.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
+
+    this.load.spritesheet("reactions", "./assets/reactions.png", {
       frameWidth: 16,
       frameHeight: 16,
     });

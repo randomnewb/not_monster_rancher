@@ -3,15 +3,6 @@ import State from "./state.js";
 export default class WanderState extends State {
   constructor() {
     super();
-    this.wanderEvent = null; // Add this line
-  }
-
-  destroy(scene, npc) {
-    // Remove the wander event if it exists
-    if (this.wanderEvent) {
-      this.wanderEvent.remove();
-      this.wanderEvent = null;
-    }
   }
 
   enter(scene, npc) {
@@ -26,13 +17,10 @@ export default class WanderState extends State {
 
     // Schedule a transition back to the 'idle' state after a random amount of time
     let wanderTime = Phaser.Math.Between(1, 5) * 1000; // Wander for 1 to 5 seconds
-    this.wanderEvent = scene.time.delayedCall(wanderTime, () => {
-      if (npc.active) {
-        // Check if the NPC still exists
-        npc.setVelocity(0); // Stop moving
-        npc.stateMachine.transition("idle");
-      }
+    npc.stateEvent = scene.time.delayedCall(wanderTime, () => {
+      npc.stateMachine.transition("idle");
     });
+    // console.log(scene.time.delayedCall().delay);
   }
 
   execute(scene, npc) {
@@ -42,10 +30,10 @@ export default class WanderState extends State {
   exit(scene, npc) {
     npc.isMoving = false;
     // Wander state exit logic
-    if (this.wanderEvent) {
+    if (npc.stateEvent) {
       // If there's a wander event scheduled
-      this.wanderEvent.remove(); // Remove it to prevent it from firing after we've exited the state
-      this.wanderEvent = null;
+      npc.stateEvent.remove(); // Remove it to prevent it from firing after we've exited the state
+      npc.stateEvent = null;
     }
   }
 }
