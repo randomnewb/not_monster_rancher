@@ -128,7 +128,5 @@ export default class UIScene extends Phaser.Scene {
 
     this.scene.stop("GameScene");
     this.scene.stop("UIScene");
-    this.scene.stop("GameScene");
-    this.scene.stop("UIScene");
   }
 }
