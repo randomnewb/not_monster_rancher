@@ -16,7 +16,6 @@ export default class Terrain extends Phaser.GameObjects.Group {
       [9, 10, 11, 12, 13]
     );
     data.currentMapArray = this.map_array;
-    this.scene.events.emit("mapArrayReady");
 
     this.map = scene.make.tilemap({
       data: this.map_array,
@@ -27,6 +26,30 @@ export default class Terrain extends Phaser.GameObjects.Group {
     const tiles = this.map.addTilesetImage("foliageTiles");
     this.layer = this.map.createLayer(0, tiles, 0, 0);
     this.layer.setCollision([8, 9]);
+
+    // Define the indices for open tiles
+    const openTiles = [0, 1, 2, 3, 4, 5, 6, 7];
+
+    // Find an open tile
+    let openTile = null;
+    let openX = null;
+    let openY = null;
+    for (let y = 0; y < this.map.height; y++) {
+      for (let x = 0; x < this.map.width; x++) {
+        const tile = this.map.getTileAt(x, y);
+        if (openTiles.includes(tile.index)) {
+          // If the tile's index is included in the tiles array
+          openTile = tile;
+          openX = x;
+          openY = y;
+          break;
+        }
+      }
+      if (openTile) break;
+    }
+
+    // Emit the 'mapArrayReady' event with the x and y position of the open tile
+    this.scene.events.emit("mapArrayReady", { x: openX, y: openY });
 
     /** Debug graphics 
     const debugGraphics = scene.add.graphics().setAlpha(0.75);

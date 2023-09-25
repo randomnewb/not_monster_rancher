@@ -8,6 +8,7 @@ class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
       active: false,
       visible: false,
       key: "enemy_attack1",
+      setXY: { x: -100, y: -100 },
     });
   }
 

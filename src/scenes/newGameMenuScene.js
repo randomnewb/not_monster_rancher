@@ -6,11 +6,6 @@ export default class NewGameMenuScene extends Phaser.Scene {
   }
 
   create() {
-    const player = this.scene.get("GameScene").player;
-    console.log(player);
-    if (player) {
-      player.destroy();
-    }
     this.generateWorldButton = this.createButton(
       195,
       440,

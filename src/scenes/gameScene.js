@@ -129,6 +129,7 @@ export default class GameScene extends Phaser.Scene {
         this.jewels.clear(true, true);
       }
       this.terrain = new Terrain(this);
+
       this.terrain.setDepth(0);
       this.physics.world.enable(this.terrain);
 
