@@ -391,7 +391,7 @@ export default class GameScene extends Phaser.Scene {
       this.events.emit("playerJewelCollected", this.player.collectedJewels);
       this.player.takeDamage(-10);
 
-      if (this.player.collectedJewels >= 1) {
+      if (this.player.collectedJewels >= 20) {
         this.gameOver();
       }
     }
