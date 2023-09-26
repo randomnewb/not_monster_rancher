@@ -160,6 +160,7 @@ export default class Player extends Entity {
   }
 
   handleKeyboardMovement(targetX, targetY) {
+    this.currentPath = []; // Clear the current path
     // Convert the world coordinates to tile coordinates
     let tileXY = this.scene.terrain.map.worldToTileXY(targetX, targetY);
 
@@ -297,6 +298,7 @@ export default class Player extends Entity {
     // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
+
     if (!this.isClickToMove) {
       this.body.setVelocity(0);
     }
@@ -344,10 +346,6 @@ export default class Player extends Entity {
 
     // Calculate the pathfindings
     this.easystar.calculate();
-
-    if (this.current_health > this.max_health) {
-      this.current_health = this.max_health;
-    }
 
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;

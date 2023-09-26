@@ -1,7 +1,25 @@
+- [/] Implement NPC class
+
+  - Requirements
+    - [x] Inherits Entity Class
+    - [/] AI Behavior via states
+      - [x] implemented idle, wander, and destroyed
+      - [/] working on chase/follow, attacking/fighting
+      - [ ] destroyed state could provide droppable items, experience points
+    - NPC begins its attack very quickly
+      - [ ] Change how quickly the NPC can engage in its attack (need a little bit of time after the flashes)
+    - Once NPC begins to attack, doesn't stop attacking
+      - [ ] Add in a check so that if the player moves away, the NPC will switch back to idle or wander state
+
+- Damage against player isn't shown
+
+  - [ ] Implement damage against player
+  - [ ] Also implement random ranged damage of enemy (like frog can do 1-2 damage)
+
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
-- [ ] Bug: game crashes on second playthrough probably because player still exists and is trying find the terrain in the player update()
+- [x] Bug: game crashes on second playthrough probably because player still exists and is trying find the terrain in the player update()
   - trying to remove the player in the menus before this happens so the player can be reinstantiated for a clean start
 - [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 
@@ -16,21 +34,12 @@
   - Exiting parameters:
     - [x] None at this time
 
-- [ ] Bug: player cannot cancel touch to move with keyboard movement
+- [x] Bug: player cannot cancel touch to move with keyboard movement
 
 - [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating,
       the game crashes
 
   - Probably need to implement some sort of loading screen and then allow the player to move and click the screen
-
-- [/] Implement NPC class
-
-  - Requirements
-    - [x] Inherits Entity Class
-    - [/] AI Behavior via states
-      - [x] implemented idle, wander, and destroyed
-      - [ ] working on chase/follow, attacking/fighting
-      - [ ] destroyed state could provide droppable items, experience points
 
 - [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
 
@@ -41,25 +50,10 @@
     click-to-move is used
 
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
-
-- [/] Bug: Sometimes when player spawns inside an obstruction and moves out of it, WASD cannot be used
-
-  - try this with seed "f"
-  - seems fixed
-
 - [/] Show an indicator of where the player will fire at next or if they can fire at all
 
-- [/] Implement click to move
-
-  - [/] On click to move, draw a border (not a full rectangle) around the tile that was clicked
-
-    - Remove this highlight if keyboard input is detected or once the tile is reached
-
-    - using EasyStar.js, an A\* pathfinding library
-    - save our map in data.js
-
-  - [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
-        such as if building is implemented or if obstructions are removed, the original array would need to be updated
+- [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
+      such as if building is implemented or if obstructions are removed, the original array would need to be updated
 
 - Implementing certain actions based on what a mobile user is clicking on
 
@@ -96,8 +90,6 @@
 
 - [ ] Pressing ESC opens up a pause/options menu
 
-- [x] Pixel Art: Tree stump
-- [x] Pixel Art: Boulder
 - [ ] Pixel Art: Log/sticks
 - [ ] Pixel Art: Pebbles/small stones
 - [ ] Pixel Art: General item/bag
@@ -108,8 +100,8 @@
 
 - [ ] (OPTIONAL) Jewels drop out of player on hit
 - [ ] Collectibles other than jewels
-- [ ] Monsters/beasts that wander around, attack player, interact with environment, drop items
-- [ ] Enemies (that wander around, attack player)
+- [/] Monsters/beasts that wander around, attack player, interact with environment, drop items
+- [/] Enemies (that wander around, attack player)
 - [ ] Character customization/select screen
 - [ ] Life Skills system - chop trees, mine rocks, etc.
 - [ ] Water tiles/swimming
