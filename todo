@@ -1,3 +1,7 @@
+- [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
+- [ ] Bug - Low Priority: remove the clicked tile when the player either reaches the location or when WASD movement is detected
+
+- [x] player invincibility frames
 - [/] Implement NPC class
 
   - Requirements
@@ -5,7 +9,9 @@
     - [/] AI Behavior via states
       - [x] implemented idle, wander, and destroyed
       - [/] working on chase/follow, attacking/fighting
-      - [ ] destroyed state could provide droppable items, experience points
+      - destroyed state
+        - [ ] provides droppable items (for example, spawn/drop a jewel in place), provide experience points
+        - [ ] create a death animation
     - NPC begins its attack very quickly
       - [x] Change how quickly the NPC can engage in its attack (need a little bit of time after the flashes)
     - Once NPC begins to attack, doesn't stop attacking
@@ -13,14 +19,12 @@
 
 - Damage against player isn't shown
 
-  - [ ] Implement damage text against player
-  - [ ] Also implement random ranged damage of enemy (like frog can do 1-2 damage)
+  - [x] Implement damage text against player
+  - [x] Also implement random ranged damage of enemy (like frog can do 1-2 damage)
 
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
-- [x] Bug: game crashes on second playthrough probably because player still exists and is trying find the terrain in the player update()
-  - trying to remove the player in the menus before this happens so the player can be reinstantiated for a clean start
 - [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 
 - [x] NPC Detection State
@@ -61,8 +65,6 @@
   - [ ] If the player clicks on a rock, the player will move towards the rock and mine it
   - [ ] If the player clicks on a monster, the player will move towards the monster and attack it
   - [ ] If the player clicks on a jewel, the player will move towards the jewel and pick it up
-
-- [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
 - [/] Invincibility added to frog
 

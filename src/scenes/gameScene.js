@@ -221,8 +221,14 @@ export default class GameScene extends Phaser.Scene {
     };
 
     this.frogs.forEach(frog => {
-      frog.on("fireProjectile", (frog, direction) => {
-        this.enemyProjectiles.fireProjectile(frog.x, frog.y, direction);
+      frog.on("fireProjectile", (frog, direction, min_attack, max_attack) => {
+        this.enemyProjectiles.fireProjectile(
+          frog.x,
+          frog.y,
+          direction,
+          min_attack,
+          max_attack
+        );
       });
     });
 
@@ -243,7 +249,16 @@ export default class GameScene extends Phaser.Scene {
     );
 
     function playerHit(player, projectile) {
-      console.log("player hit by enemy projecitle");
+      // choose an amount of damage between the projectile's min_attack and max_attack
+      let projectileDamage = Phaser.Math.Between(
+        projectile.min_attack,
+        projectile.max_attack
+      );
+
+      console.log(
+        "player hit by enemy projectile, taking damage: ",
+        projectileDamage
+      );
       // Play explosion animation
       // ...
 
@@ -251,7 +266,16 @@ export default class GameScene extends Phaser.Scene {
       projectile.destroy();
 
       // Player takes damage
-      player.takeDamage(1);
+      player.takeDamage(projectileDamage);
+
+      // Create damage text with red color
+      let damageText = new DamageValue(
+        this,
+        player.x,
+        player.y - 10,
+        `${projectileDamage}`,
+        { color: "red" }
+      );
     }
 
     function hitFrog(frog, projectile) {

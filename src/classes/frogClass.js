@@ -13,6 +13,8 @@ export default class Frog extends NPC {
     super(scene, x, y, texture);
 
     this.max_health = Phaser.Math.Between(3, 5);
+    this.min_attack = 1;
+    this.max_attack = 2;
     this.speed = Phaser.Math.Between(10, 30);
 
     this.current_health = this.max_health;

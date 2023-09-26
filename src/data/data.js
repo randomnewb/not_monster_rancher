@@ -2,5 +2,5 @@ export default {
   gameActive: true,
   gameSeed: null,
   currentMapArray: [],
-  playerMaxHealth: 25,
+  playerMaxHealth: 100,
 };

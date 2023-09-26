@@ -84,7 +84,13 @@ export default class AttackState extends State {
         };
 
         // Emit an event instead of firing the projectile directly
-        npc.emit("fireProjectile", npc, directionVector);
+        npc.emit(
+          "fireProjectile",
+          npc,
+          directionVector,
+          npc.min_attack,
+          npc.max_attack
+        );
 
         // Reset cooldownCounter
         npc.cooldownCounter = npc.cooldownCounterMax;

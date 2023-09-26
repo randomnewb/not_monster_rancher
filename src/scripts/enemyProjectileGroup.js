@@ -12,11 +12,11 @@ class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
     });
   }
 
-  fireProjectile(x, y, direction) {
+  fireProjectile(x, y, direction, min_attack, max_attack) {
     // Get the first available sprite in the group
     const projectile = this.getFirstDead(false);
     if (projectile) {
-      projectile.fire(x, y, direction);
+      projectile.fire(x, y, direction, min_attack, max_attack);
     }
   }
 }
@@ -43,7 +43,7 @@ class EnemyProjectile extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
-  fire(x, y, direction) {
+  fire(x, y, direction, min_attack, max_attack) {
     this.body.reset(x, y);
 
     this.body.setSize(15, 15);
@@ -77,6 +77,10 @@ class EnemyProjectile extends Phaser.Physics.Arcade.Sprite {
       },
       loop: false, // Do not repeat the timer when it completes
     });
+
+    // Store min_attack and max_attack as properties of the projectile
+    this.min_attack = min_attack;
+    this.max_attack = max_attack;
   }
 
   disable() {
