@@ -7,18 +7,15 @@ export default class Player extends Entity {
   constructor(scene, x, y, key, frame) {
     super(scene, x, y, key, frame);
 
-    // // If a position was provided, use it
-    // if (position) {
-    //   this.x = position.x;
-    //   this.y = position.y;
-    // }
-
-    this.max_health = 100;
+    this.max_health = data.playerMaxHealth;
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
     this.min_attack = 1;
     this.max_attack = 3;
+
+    this.invincibilityCounter = 0;
+    this.invincibilityCounterMax = 45;
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -32,7 +29,6 @@ export default class Player extends Entity {
       this.y = openTile.y * this.tileHeight + this.tileHeight / 2;
     });
 
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
     this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
 
@@ -40,7 +36,11 @@ export default class Player extends Entity {
       0xddac46, 0xc25940, 0x683d64, 0x51b1ca, 0x1773b8, 0x639f5b, 0x376e49,
     ];
 
-    this.tint = playerColors[Math.floor(Math.random() * playerColors.length)];
+    this.originalTint =
+      playerColors[Math.floor(Math.random() * playerColors.length)];
+
+    this.setTint(this.originalTint);
+
     this.facing = "down";
     this.isClickToMove = false;
 
@@ -271,15 +271,23 @@ export default class Player extends Entity {
   }
 
   takeDamage(damage) {
-    this.current_health -= damage;
-    // Check if health is less than 0 and set it to 0
-    if (this.current_health < 0) {
-      this.current_health = 0;
-      this.scene.gameOver();
+    // Only take damage if not invincible
+    if (this.invincibilityCounter <= 0) {
+      this.current_health -= damage;
+      // Check if health is less than 0 and set it to 0
+      if (this.current_health < 0) {
+        this.current_health = 0;
+        this.scene.gameOver();
+      }
+      this.healthBar.updateHealth(this.current_health);
+      this.emit("healthChanged", this.current_health);
+      // Set invincibility counter only if it's not currently running
+      if (this.invincibilityCounter <= 0) {
+        this.invincibilityCounter = this.invincibilityCounterMax;
+      }
+      // Set the tint to white
+      this.setTint(0xffffff);
     }
-    this.healthBar.updateHealth(this.current_health);
-
-    this.emit("healthChanged", this.current_health);
   }
 
   createBounceTween() {
@@ -295,6 +303,19 @@ export default class Player extends Entity {
   }
 
   update() {
+    // Decrease invincibility counter if it's greater than 0
+    if (this.invincibilityCounter > 0) {
+      this.invincibilityCounter--;
+      // Create a flashing effect by alternating the tint
+      if (this.invincibilityCounter % 2 == 0) {
+        this.setTint(0xffffff);
+      } else {
+        this.setTint(this.originalTint);
+      }
+    } else {
+      // Reset the tint to the original color
+      this.setTint(this.originalTint);
+    }
     // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
@@ -351,35 +372,23 @@ export default class Player extends Entity {
       this.current_health = this.max_health;
     }
 
-    if (this.cursorKeys) {
-      if (
-        this.cursorKeys.left.isDown ||
-        this.cursorKeys.right.isDown ||
-        this.cursorKeys.up.isDown ||
-        this.cursorKeys.down.isDown
-      ) {
-        this.targetPosition = null;
-        this.highlight.clear(); // Clear the highlight
-      }
-    }
-
     // Vertical movement
-    if (this.cursors.up.isDown || this.keys.W.isDown) {
+    if (this.keys.W.isDown) {
       // Calculate new target position
       let targetY = this.y - this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
-    } else if (this.cursors.down.isDown || this.keys.S.isDown) {
+    } else if (this.keys.S.isDown) {
       // Calculate new target position
       let targetY = this.y + this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
     }
 
     // Horizontal movement
-    if (this.cursors.left.isDown || this.keys.A.isDown) {
+    if (this.keys.A.isDown) {
       // Calculate new target position
       let targetX = this.x - this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);
-    } else if (this.cursors.right.isDown || this.keys.D.isDown) {
+    } else if (this.keys.D.isDown) {
       // Calculate new target position
       let targetX = this.x + this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);

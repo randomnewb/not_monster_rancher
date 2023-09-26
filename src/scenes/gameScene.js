@@ -406,11 +406,6 @@ export default class GameScene extends Phaser.Scene {
       this.player.setActive(false);
     }
 
-    // Release the keys
-    Object.values(this.scene.scene.player.cursors).forEach(key => {
-      this.input.keyboard.removeCapture(key.keyCode);
-    });
-
     Object.values(this.scene.scene.player.keys).forEach(key => {
       this.input.keyboard.removeCapture(key.keyCode);
     });

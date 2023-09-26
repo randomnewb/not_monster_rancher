@@ -52,7 +52,7 @@ export default class UIScene extends Phaser.Scene {
     gameScene.events.on("playerJewelCollected", this.updateJewelText, this);
     gameScene.events.on("playerFrogsFried", this.updateFrogsText, this);
 
-    let playerHealth = 100; // replace this with the actual player's health
+    let playerHealth = data.playerMaxHealth; // replace this with the actual player's health
 
     this.playerHealthText = this.add.text(
       this.gameWidth / 2 - 220, // x position - center of the screen
