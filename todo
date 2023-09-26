@@ -1,8 +1,4 @@
-- [ ] Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-- [ ] Bug - Low Priority: remove the clicked tile when the player either reaches the location or when WASD movement is detected
-
-- [x] player invincibility frames
-- [/] Implement NPC class
+- [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
   - Requirements
     - [x] Inherits Entity Class
@@ -17,28 +13,10 @@
     - Once NPC begins to attack, doesn't stop attacking
       - [x] Add in a check so that if the player moves away, the NPC will switch back to idle or wander state
 
-- Damage against player isn't shown
-
-  - [x] Implement damage text against player
-  - [x] Also implement random ranged damage of enemy (like frog can do 1-2 damage)
-
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
 - [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
-
-- [x] NPC Detection State
-
-  - Entering parameters:
-    - [x] When NPC and player are within a certain range and NPC is in a certain state like idle or wander
-    - [x] Create the exclamation point sprite above the NPC
-  - Executing parameters:
-    - [x] If the NPC stays within the range of the player long enough (like 2 seconds), switch to the attack state
-    - [x] If the player moves out of range, switch back to the idle or wander state
-  - Exiting parameters:
-    - [x] None at this time
-
-- [x] Bug: player cannot cancel touch to move with keyboard movement
 
 - [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating,
       the game crashes

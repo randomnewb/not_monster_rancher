@@ -234,6 +234,10 @@ export default class Player extends Entity {
     if (!path || path.length === 0) {
       this.isClickToMove = false;
       this.isPathfinding = false; // Reset the isPathfinding flag
+      // Clear the highlight
+      if (this.highlight) {
+        this.highlight.clear();
+      }
       return;
     }
 
