@@ -1,5 +1,4 @@
 import State from "./state.js";
-import { EnemyProjectileGroup } from "../scripts/enemyProjectileGroup.js";
 
 export default class AttackState extends State {
   constructor() {
@@ -7,38 +6,49 @@ export default class AttackState extends State {
   }
 
   enter(scene, npc) {
-    // console.log(`${npc.constructor.name} entered the attack state`);
     npc.setVelocity(0);
     npc.isMoving = false;
 
-    npc.attackTime = Phaser.Math.Between(3, 5) * 60; // Idle for 1 to 5 seconds (60 frames per second)
-    npc.attackCounter = 0; // Initialize counter
+    // Initialize cooldown counter and max value
+    npc.cooldownCounterMax = Phaser.Math.Between(450, 700);
+    npc.cooldownCounter = 0;
 
     // Initialize flash counter and tint
-    npc.flashCounter = 300;
+    npc.flashCounter = 200;
     npc.flashTint = 0xffff00; // Yellow
-
-    // Create a new projectile group for this NPC
-    // npc.projectiles = new EnemyProjectileGroup(scene);
   }
 
   execute(scene, npc) {
-    // Increment the counter each frame
-    npc.attackCounter++;
+    // Calculate the distance between the npc and the player
+    const distance = Phaser.Math.Distance.Between(
+      npc.x,
+      npc.y,
+      scene.player.x,
+      scene.player.y
+    );
 
-    // Fire a projectile every 60 frames (1 second)
-    if (npc.attackCounter % 60 === 0) {
-      // Calculate the direction from the NPC to the player
-      let direction = Phaser.Math.Angle.BetweenPoints(npc, scene.player);
+    // Check if the player is more than 80 units away
+    if (distance > 80) {
+      npc.stateMachine.transition("idle");
 
-      // Convert the angle to a vector
-      let directionVector = { x: Math.cos(direction), y: Math.sin(direction) };
+      // Create the question mark sprite above the npc's head
+      let questionSprite = scene.add.sprite(
+        npc.x,
+        npc.y - npc.height,
+        "reactions",
+        2
+      );
 
-      // Fire a projectile in the direction of the player
-      // npc.projectiles.fireProjectile(npc.x, npc.y, directionVector);
-
-      // Emit an event instead of firing the projectile directly
-      npc.emit("fireProjectile", npc, directionVector);
+      // Make the sprite fade away after 1 second
+      scene.tweens.add({
+        targets: questionSprite,
+        alpha: 0,
+        duration: 1000,
+        onComplete: function () {
+          questionSprite.destroy();
+        },
+      });
+      return;
     }
 
     // Handle flashing
@@ -47,22 +57,45 @@ export default class AttackState extends State {
 
       if (npc.flashCounter <= 0) {
         npc.tint = npc.originalTint;
-      } else if (npc.flashCounter <= 75) {
+      } else if (npc.flashCounter <= 50) {
         npc.tint = npc.originalTint;
-      } else if (npc.flashCounter <= 150) {
+      } else if (npc.flashCounter <= 100) {
         npc.tint = npc.flashTint;
-      } else if (npc.flashCounter <= 225) {
+      } else if (npc.flashCounter <= 150) {
         npc.tint = npc.originalTint;
       } else {
         npc.tint = npc.flashTint;
       }
     }
+
+    // Only start cooldown counter when flashCounter is 0
+    if (npc.flashCounter === 0) {
+      npc.cooldownCounter--;
+
+      // Fire a projectile when cooldownCounter reaches 0
+      if (npc.cooldownCounter <= 0) {
+        // Calculate the direction from the NPC to the player
+        let direction = Phaser.Math.Angle.BetweenPoints(npc, scene.player);
+
+        // Convert the angle to a vector
+        let directionVector = {
+          x: Math.cos(direction),
+          y: Math.sin(direction),
+        };
+
+        // Emit an event instead of firing the projectile directly
+        npc.emit("fireProjectile", npc, directionVector);
+
+        // Reset cooldownCounter
+        npc.cooldownCounter = npc.cooldownCounterMax;
+      }
+    }
   }
 
   exit(scene, npc) {
-    if (npc.attackCounter) {
+    if (npc.cooldownCounter !== npc.cooldownCounterMax) {
       // If there's an attack event scheduled
-      npc.attackCounter = 0; // Reset counter
+      npc.cooldownCounter = npc.cooldownCounterMax; // Reset counter
     }
   }
 }
