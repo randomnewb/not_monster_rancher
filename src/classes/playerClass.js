@@ -293,6 +293,10 @@ export default class Player extends Entity {
         // Set the tint to white
         this.setTint(0xffffff);
       }
+    } else {
+      this.current_health -= damage;
+      this.healthBar.updateHealth(this.current_health);
+      this.emit("healthChanged", this.current_health);
     }
   }
 

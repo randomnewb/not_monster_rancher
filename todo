@@ -1,4 +1,5 @@
 - [x] Bug: Player flashes when collecting jewels (because these heal the player)
+- [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 - [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
   - Requirements
@@ -8,7 +9,7 @@
       - [/] working on chase/follow, attacking/fighting
       - destroyed state
         - [ ] provides droppable items (for example, spawn/drop a jewel in place), provide experience points
-        - [ ] create a death animation
+        - [x] create a death animation
     - NPC begins its attack very quickly
       - [x] Change how quickly the NPC can engage in its attack (need a little bit of time after the flashes)
     - Once NPC begins to attack, doesn't stop attacking
@@ -16,8 +17,6 @@
 
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
-
-- [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 
 - [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating,
       the game crashes
