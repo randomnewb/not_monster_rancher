@@ -1,8 +1,20 @@
 import data from "../data/data.js";
+import PlayerCamera from "../scripts/playerCamera.js";
 
 export default class UIScene extends Phaser.Scene {
   constructor() {
     super({ key: "UIScene" });
+  }
+
+  preload() {
+    this.load.spritesheet(
+      "auto_attack_indicator",
+      "./assets/auto_attack_indicator.png",
+      {
+        frameWidth: 16,
+        frameHeight: 16,
+      }
+    );
   }
 
   create() {
@@ -93,6 +105,17 @@ export default class UIScene extends Phaser.Scene {
         fontFamily: "HopeGold",
       }
     );
+
+    this.autoAttackIndicator = this.add.sprite(64, 64, "auto_attack_indicator");
+    this.autoAttackIndicator.setScale(4); // 2 is the zoom level, increase to zoom in more
+  }
+
+  update() {
+    const gameScene = this.scene.get("GameScene");
+
+    if (gameScene.player) {
+      this.autoAttackIndicator.setFrame(gameScene.player.attacking ? 0 : 1);
+    }
   }
 
   updateHealthText(newHealth) {

@@ -17,6 +17,11 @@ export default class Player extends Entity {
     this.invincibilityCounter = 0;
     this.invincibilityCounterMax = 45;
 
+    this.cooldownCounter = 0;
+    this.cooldownCounterMax = 100;
+
+    this.attacking = false;
+
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
@@ -313,6 +318,14 @@ export default class Player extends Entity {
   }
 
   update() {
+    if (this.attacking && this.cooldownCounter <= 0) {
+      this.cooldownCounter = this.cooldownCounterMax;
+    }
+    // Decrease cooldown counter if it's greater than 0
+    if (this.cooldownCounter > 0) {
+      this.cooldownCounter--;
+    }
+
     // Decrease invincibility counter if it's greater than 0
     if (this.invincibilityCounter > 0) {
       this.invincibilityCounter--;
@@ -409,6 +422,7 @@ export default class Player extends Entity {
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.keys.J)) {
+      this.attacking = !this.attacking;
     }
 
     if (Phaser.Input.Keyboard.JustDown(this.keys.K)) {

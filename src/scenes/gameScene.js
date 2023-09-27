@@ -55,6 +55,15 @@ export default class GameScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16,
     });
+
+    // this.load.spritesheet(
+    //   "auto_attack_indicator",
+    //   "./assets/auto_attack_indicator.png",
+    //   {
+    //     frameWidth: 16,
+    //     frameHeight: 16,
+    //   }
+    // );
   }
 
   create() {
@@ -72,7 +81,7 @@ export default class GameScene extends Phaser.Scene {
     this.rectangle.on(
       "pointerdown",
       function (pointer, localX, localY, event) {
-        this.action1();
+        this.player.attacking = !this.player.attacking;
         event.stopPropagation();
       },
       this
@@ -326,11 +335,20 @@ export default class GameScene extends Phaser.Scene {
     if (data.gameActive) {
       this.player.update();
 
+      if (this.player.attacking) {
+        this.rectangle.setFillStyle(0xffff00);
+      } else {
+        this.rectangle.setFillStyle(0xffffff);
+      }
+
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-      // this.joystick.setVisible(isMobile);
       this.rectangle.setVisible(isMobile);
 
-      if (Phaser.Input.Keyboard.JustUp(this.player.keys.J)) {
+      if (
+        this.player.attacking &&
+        this.directionToClosestEntity &&
+        this.player.cooldownCounter <= 0
+      ) {
         this.action1();
       }
 
@@ -340,7 +358,6 @@ export default class GameScene extends Phaser.Scene {
       });
 
       this.frogs = this.frogs.filter(frog => frog.active);
-      // Get all entities within 3 tiles distance
       const nearbyEntities = this.frogs.filter(frog => {
         const distance = Phaser.Math.Distance.Between(
           this.player.x,
@@ -348,8 +365,8 @@ export default class GameScene extends Phaser.Scene {
           frog.x,
           frog.y
         );
-
-        return distance <= 3 * this.tileWidth;
+        // distance between closest frog and player
+        return distance <= 5 * this.tileWidth;
       });
 
       // If there are nearby entities, find the closest one

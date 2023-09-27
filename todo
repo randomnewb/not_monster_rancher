@@ -1,5 +1,14 @@
+- Implement player auto attack
+
+  - [x] Toggle attack
+  - [x] Only attack if there is an enemy target nearby
+  - [x] Implement cooldown for player attack
+  - [x] Add an indicator when player is attacking for non-mobile users (like crossed sword icon on the middle HUD, and uncrossed when player is not attacking)
+  - [x] Change how far away player begins attacking from (how is the distance between player and enemy calculated?)
+
+- [x] Change color of mobile attack indicator when player's attack is toggled to true
+
 - [x] Bug: Player flashes when collecting jewels (because these heal the player)
-- [ ] Bug: projectile 'stops/'disables' if player spams attack button, allow the projectile exist for its entire duration or until it hits an entity
 - [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
   - Requirements

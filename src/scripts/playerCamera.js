@@ -21,4 +21,15 @@ export default class PlayerCamera {
     // setup the camera bounds based on the map size
     this.cameras.main.setBounds(-64, -64, 1024 + 128, 1024 + 128);
   }
+
+  zoomOnObject(object, zoomLevel) {
+    // Stop following the player
+    this.cameras.main.stopFollow();
+
+    // Move the object to the center of the scene
+    this.cameras.main.pan(object.x, object.y, 500);
+
+    // Zoom in
+    this.cameras.main.zoomTo(zoomLevel, 500);
+  }
 }

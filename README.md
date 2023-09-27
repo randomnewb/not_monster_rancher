@@ -25,3 +25,4 @@ A repo to house various learnings for a top down 2d game using the Phaser framew
 
 - [Kenney](https://www.kenney.nl/)
 - [GibbonGL's 1-Bit Oracles Monochrome Tilesets](https://gibbongl.itch.io/1-bit-oracles-monochrome-tilesets)
+- And others I have created or adapted myself
