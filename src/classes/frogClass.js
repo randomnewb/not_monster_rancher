@@ -75,16 +75,19 @@ export default class Frog extends NPC {
     // Destroy the health bar
     this.healthBar.destroy();
 
-    // Create an explosion sprite at the frog's position
-    const explosion = this.scene.add.sprite(this.x, this.y, "explosion");
+    // Check if the scene is defined
+    if (this.scene) {
+      // Create an explosion sprite at the frog's position
+      let explosion = this.scene.add.sprite(this.x, this.y, "explosion");
 
-    // Play the explosion animation
-    explosion.play("explosion");
+      // Play the explosion animation
+      explosion.play("explosion");
 
-    // Remove the explosion sprite when the animation is complete
-    explosion.on("animationcomplete", () => {
-      explosion.destroy();
-    });
+      // Remove the explosion sprite when the animation is complete
+      explosion.on("animationcomplete", () => {
+        explosion.destroy();
+      });
+    }
 
     // transition the frog to the destroyed state
     this.stateMachine.transition("destroyed");
