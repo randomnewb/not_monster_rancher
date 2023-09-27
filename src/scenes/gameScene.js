@@ -255,10 +255,6 @@ export default class GameScene extends Phaser.Scene {
         projectile.max_attack
       );
 
-      console.log(
-        "player hit by enemy projectile, taking damage: ",
-        projectileDamage
-      );
       // Play explosion animation
       // ...
 
