@@ -275,22 +275,24 @@ export default class Player extends Entity {
   }
 
   takeDamage(damage) {
-    // Only take damage if not invincible
-    if (this.invincibilityCounter <= 0) {
-      this.current_health -= damage;
-      // Check if health is less than 0 and set it to 0
-      if (this.current_health < 0) {
-        this.current_health = 0;
-        this.scene.gameOver();
-      }
-      this.healthBar.updateHealth(this.current_health);
-      this.emit("healthChanged", this.current_health);
-      // Set invincibility counter only if it's not currently running
+    if (damage > 0) {
+      // Only take damage if not invincible
       if (this.invincibilityCounter <= 0) {
-        this.invincibilityCounter = this.invincibilityCounterMax;
+        this.current_health -= damage;
+        // Check if health is less than 0 and set it to 0
+        if (this.current_health < 0) {
+          this.current_health = 0;
+          this.scene.gameOver();
+        }
+        this.healthBar.updateHealth(this.current_health);
+        this.emit("healthChanged", this.current_health);
+        // Set invincibility counter only if it's not currently running
+        if (this.invincibilityCounter <= 0) {
+          this.invincibilityCounter = this.invincibilityCounterMax;
+        }
+        // Set the tint to white
+        this.setTint(0xffffff);
       }
-      // Set the tint to white
-      this.setTint(0xffffff);
     }
   }
 
