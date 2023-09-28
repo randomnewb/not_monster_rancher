@@ -1,32 +1,22 @@
 import data from "../data/data.js";
 import seedrandom from "seedrandom";
+import Jewel from "../classes/jewelClass.js";
 
 export default class Generate {
   static create_objects(scene, map, objects, texture, colorOptions) {
     var randomNumber = seedrandom(data.gameSeed);
     randomNumber();
-    // get access to group of objects by their objectName
-    // optionally remove all children
 
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
         if (map[row][column] === 0 && randomNumber() < 0.05) {
-          const object = scene.physics.add.sprite(
+          new Jewel(
+            scene,
             column * 16 + 8,
             row * 16 + 8,
-            texture
+            objects,
+            colorOptions
           );
-
-          // Add the created sprite to the objects group
-          objects.add(object);
-
-          if (randomNumber() > 0.5) {
-            object.tint = colorOptions.color1;
-          } else if (randomNumber() <= 0.5) {
-            object.tint = colorOptions.color2;
-          } else {
-            object.tint = colorOptions.color3;
-          }
         }
       }
     }

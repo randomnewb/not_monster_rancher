@@ -7,6 +7,8 @@ import DetectState from "../states/detect.js";
 import ChaseState from "../states/chase.js";
 import AttackState from "../states/attack.js";
 import DestroyedState from "../states/destroyed.js";
+import Jewel from "./jewelClass.js";
+import data from "../data/data.js";
 
 export default class Frog extends NPC {
   constructor(scene, x, y, texture) {
@@ -28,6 +30,8 @@ export default class Frog extends NPC {
     this.setCollideWorldBounds();
     this.isMoving = false;
     this.invincibilityTimer = 0;
+
+    this.obstructionTiles = [8, 9, 10, 11, 12, 13];
 
     const frogColors = [
       0x2986cc, 0x0cc986, 0x0ab478, 0x09a06b, 0x088c5d, 0x077850,
@@ -86,6 +90,38 @@ export default class Frog extends NPC {
       // Remove the explosion sprite when the animation is complete
       explosion.on("animationcomplete", () => {
         explosion.destroy();
+      });
+
+      // Calculate the closest tile's center coordinates
+      let tileX = Math.round(this.x / 16);
+      let tileY = Math.round(this.y / 16);
+
+      // Check if the tile type at the calculated position is an obstruction
+      while (
+        this.obstructionTiles.includes(data.currentMapArray[tileY][tileX])
+      ) {
+        // If it is an obstruction, move to the next tile
+        tileX += 1;
+        if (tileX > 63) {
+          tileX = 63; // Keep tileX within world bounds
+          break; // Exit the loop if we've reached the world bounds
+        }
+        tileY += 1;
+        if (tileY > 63) {
+          tileY = 63; // Keep tileY within world bounds
+          break; // Exit the loop if we've reached the world bounds
+        }
+      }
+
+      // Adjust the coordinates to the center of the tile
+      let jewelX = Math.min(tileX * 16 + 8, 1023 - 8);
+      let jewelY = Math.min(tileY * 16 + 8, 1023 - 8);
+
+      // Instantiate a jewel at the closest non-obstruction tile's center
+      new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, {
+        color1: 0x7e8bfe,
+        color2: 0x7efeb8,
+        color3: 0xfe7e7e,
       });
     }
 
