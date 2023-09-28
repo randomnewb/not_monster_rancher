@@ -9,11 +9,14 @@ export default class Jewel extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     group.add(this);
 
-    if (Jewel.randomNumber === null) {
-      Jewel.randomNumber = seedrandom(gameSeed);
+    if (gameSeed !== undefined) {
+      if (Jewel.randomNumber === null) {
+        Jewel.randomNumber = seedrandom(gameSeed);
+      }
+      var randomValue = Jewel.randomNumber();
+    } else {
+      var randomValue = Math.random();
     }
-
-    var randomValue = Jewel.randomNumber();
 
     this.tint = colorOptions[Math.floor(randomValue * colorOptions.length)];
   }
