@@ -1,3 +1,30 @@
+- refactor time?
+
+  - [ ] separate components into own classes where possible
+  - [ ] separate certain code into their own methods where possible
+
+- [ ] frogs have a weighted chance to drop a jewel
+- [ ] diablo style enemy name and health bar at bottom
+- [ ] captured/tamed monsters have a different color outline than enemies
+- [ ] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
+- [ ] elite monsters ('larger' or scaled up monsters)
+- customized exp algorithm
+  - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
+  - players get exp towards a general level and also towards specific life skills
+  - exp is calculated based on the player's life skills level and the enemy's/encounter level
+  - need to create a skill tree menu for different life skills
+    - combat, taming, mining, woodcutting, etc. and these can be broken down further
+      - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
+- add in a 'level up' animation (like ragnarok online?)
+- player stats (strength, wisdom, dexterity, luck)
+
+  - [ ] strength affects melee damage, health, possibly carry capacity
+  - [ ] wisdom affects magic damage, magic defenses/resistances, mana
+  - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
+  - [ ] luck affects drop rates
+
+- [ ] Save/Load system
+
 - [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
   - Requirements
@@ -23,13 +50,6 @@
   - Probably need to implement some sort of loading screen and then allow the player to move and click the screen
 
 - [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
-
-- [/] To solve rubberbanding issue, implement A-Star into WASD/Arrow key movements to generate an array of
-  1 length based on the input, then move player to that location
-
-  - Potentially still buggy, need to test more, player can get stuck and then slide/slow down forever until
-    click-to-move is used
-
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
 - [/] Show an indicator of where the player will fire at next or if they can fire at all
 
