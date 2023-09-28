@@ -3,9 +3,11 @@ import seedrandom from "seedrandom";
 import Jewel from "../classes/jewelClass.js";
 
 export default class Generate {
-  static create_objects(scene, map, objects, texture, colorOptions) {
-    var randomNumber = seedrandom(data.gameSeed);
+  static create_objects(scene, map, objects, colorOptions, gameSeed) {
+    var randomNumber = seedrandom(gameSeed);
     randomNumber();
+
+    console.log("createobjects", randomNumber());
 
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
@@ -15,7 +17,8 @@ export default class Generate {
             column * 16 + 8,
             row * 16 + 8,
             objects,
-            colorOptions
+            colorOptions,
+            gameSeed
           );
         }
       }
@@ -63,6 +66,8 @@ export default class Generate {
     // const obstruction = 8;
     // const obstructionVariant = 9;
 
+    console.log("placement array", randomNumber());
+
     let map = [];
     for (let row = 0; row < 64; row++) {
       let newRow = [];
@@ -88,7 +93,7 @@ export default class Generate {
             map[row][column] =
               // choose one walkableVariant from the range of walkable variants in its array
               walkableVariant[
-                Math.floor(Math.random() * walkableVariant.length)
+                Math.floor(randomNumber() * walkableVariant.length)
               ];
           }
         }
@@ -110,7 +115,7 @@ export default class Generate {
           ) {
             map[row][column] =
               obstructionVariant[
-                Math.floor(Math.random() * obstructionVariant.length)
+                Math.floor(randomNumber() * obstructionVariant.length)
               ];
           }
         }

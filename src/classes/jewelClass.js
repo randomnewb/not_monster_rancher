@@ -1,17 +1,20 @@
+import seedrandom from "seedrandom";
+
 export default class Jewel extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y, group, colorOptions) {
+  static randomNumber = null;
+
+  constructor(scene, x, y, group, colorOptions, gameSeed) {
     super(scene, x, y, "jewel");
     scene.physics.world.enable(this);
     scene.add.existing(this);
     group.add(this);
 
-    var randomNumber = Math.random();
-    if (randomNumber > 0.5) {
-      this.tint = colorOptions.color1;
-    } else if (randomNumber <= 0.5) {
-      this.tint = colorOptions.color2;
-    } else {
-      this.tint = colorOptions.color3;
+    if (Jewel.randomNumber === null) {
+      Jewel.randomNumber = seedrandom(gameSeed);
     }
+
+    var randomValue = Jewel.randomNumber();
+
+    this.tint = colorOptions[Math.floor(randomValue * colorOptions.length)];
   }
 }

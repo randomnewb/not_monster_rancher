@@ -118,11 +118,13 @@ export default class Frog extends NPC {
       let jewelY = Math.min(tileY * 16 + 8, 1023 - 8);
 
       // Instantiate a jewel at the closest non-obstruction tile's center
-      new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, {
-        color1: 0x7e8bfe,
-        color2: 0x7efeb8,
-        color3: 0xfe7e7e,
-      });
+      new Jewel(
+        this.scene,
+        jewelX,
+        jewelY,
+        this.scene.jewels,
+        [0x7e8bfe, 0x7efeb8, 0xfe7e7e]
+      );
     }
 
     // transition the frog to the destroyed state

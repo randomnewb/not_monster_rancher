@@ -6,8 +6,6 @@ export default class Terrain extends Phaser.GameObjects.Group {
   constructor(scene) {
     super(scene);
 
-    var randomNumber = seedrandom(data.gameSeed);
-
     this.map_array = Generate.placement_array(
       0,
       1,
@@ -60,6 +58,8 @@ export default class Terrain extends Phaser.GameObjects.Group {
     });
 */
     var dataLayer = this.layer.layer.data;
+    var randomNumber = seedrandom(data.gameSeed);
+    randomNumber();
 
     const grassTileColors = [
       0x8fce00, 0x80b900, 0x72a400, 0x649000, 0x557b00, 0xbf9000, 0xab8100,

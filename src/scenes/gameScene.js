@@ -163,12 +163,9 @@ export default class GameScene extends Phaser.Scene {
         this,
         this.terrain.map_array,
         this.jewels,
-        "jewel",
-        {
-          color1: 0x7e8bfe,
-          color2: 0x7efeb8,
-          color3: 0xfe7e7e,
-        }
+        // "jewel",
+        [0x7e8bfe, 0x7efeb8, 0xfe7e7e],
+        data.gameSeed
       );
       if (this.player) {
         this.player.setDepth(2);
