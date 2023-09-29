@@ -1,12 +1,16 @@
+- remove the data.playerhealth and try to implement playerhealth directly from the playerclass
+
+  - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
+
 - refactor time?
 
   - [ ] separate components into own classes where possible
   - [ ] separate certain code into their own methods where possible
 
-- [ ] frogs have a weighted chance to drop a jewel
+- [x] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
+- [x] frogs have a weighted chance to drop a jewel (right now 50%)
 - [ ] diablo style enemy name and health bar at bottom
 - [ ] captured/tamed monsters have a different color outline than enemies
-- [ ] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
 - [ ] elite monsters ('larger' or scaled up monsters)
 - customized exp algorithm
   - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
@@ -22,6 +26,15 @@
   - [ ] wisdom affects magic damage, magic defenses/resistances, mana
   - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
   - [ ] luck affects drop rates
+
+- rework player death/game over
+
+  - [ ] on player death, hide player active/visibility, but then allow user to just revive, teleport back to a set point (right now it is initial spawn, later on, maybe a saved point)
+  - build in an in-game options menu when player hits ESC or presses gear icon on mobile and which pauses the game
+    - this will allow players access to
+      - [ ] resume game (close menu)
+      - [ ] options (options will come later)
+      - [ ] save and return to main menu (save will come later)
 
 - [ ] Save/Load system
 

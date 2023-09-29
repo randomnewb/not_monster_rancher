@@ -1,5 +1,4 @@
 import data from "../data/data.js";
-import PlayerCamera from "../scripts/playerCamera.js";
 
 export default class UIScene extends Phaser.Scene {
   constructor() {

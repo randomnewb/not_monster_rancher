@@ -21,6 +21,8 @@ export default class Frog extends NPC {
 
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
+    // set the visibility of the health bar to false by default
+    this.healthBar.setVisible(false);
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -66,6 +68,7 @@ export default class Frog extends NPC {
       this.current_health = 0;
       this.destroy();
     }
+    this.healthBar.setVisible(true);
     this.healthBar.updateHealth(this.current_health);
 
     this.setTint(0xffffff);
@@ -117,14 +120,18 @@ export default class Frog extends NPC {
       let jewelX = Math.min(tileX * 16 + 8, 1023 - 8);
       let jewelY = Math.min(tileY * 16 + 8, 1023 - 8);
 
-      // Instantiate a jewel at the closest non-obstruction tile's center
-      new Jewel(
-        this.scene,
-        jewelX,
-        jewelY,
-        this.scene.jewels,
-        [0x7e8bfe, 0x7efeb8, 0xfe7e7e]
-      );
+      // use math.random and an 50% chance to drop a jewel
+
+      if (Math.random() < 0.5) {
+        // Instantiate a jewel at the closest non-obstruction tile's center
+        new Jewel(
+          this.scene,
+          jewelX,
+          jewelY,
+          this.scene.jewels,
+          [0x7e8bfe, 0x7efeb8, 0xfe7e7e]
+        );
+      }
     }
 
     // transition the frog to the destroyed state

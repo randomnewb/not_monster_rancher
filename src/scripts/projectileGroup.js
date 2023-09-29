@@ -68,7 +68,7 @@ class Projectile extends Phaser.Physics.Arcade.Sprite {
     this.setAngle(adjustedAngle);
 
     this.lifespan = this.scene.time.addEvent({
-      delay: 300, // milliseconds
+      delay: 350, // milliseconds
       callback: () => {
         // When the timer completes, deactivate and hide the projectile
         this.setActive(false);
