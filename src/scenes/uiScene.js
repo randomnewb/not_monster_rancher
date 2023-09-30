@@ -1,3 +1,4 @@
+import { Scenes, Assets } from "../utils/constants.js";
 import data from "../data/data.js";
 
 export default class UIScene extends Phaser.Scene {
@@ -7,7 +8,7 @@ export default class UIScene extends Phaser.Scene {
 
   preload() {
     this.load.spritesheet(
-      "auto_attack_indicator",
+      Assets.AutoAttackIndicator,
       "./assets/auto_attack_indicator.png",
       {
         frameWidth: 16,
@@ -58,7 +59,7 @@ export default class UIScene extends Phaser.Scene {
     this.gameOverText.setVisible(false);
     this.gameOverButton.setVisible(false);
 
-    const gameScene = this.scene.get("GameScene");
+    const gameScene = this.scene.get(Scenes.Game);
     gameScene.events.on("playerHealthChanged", this.updateHealthText, this);
     gameScene.events.on("playerJewelCollected", this.updateJewelText, this);
     gameScene.events.on("playerFrogsFried", this.updateFrogsText, this);
@@ -110,7 +111,7 @@ export default class UIScene extends Phaser.Scene {
   }
 
   update() {
-    const gameScene = this.scene.get("GameScene");
+    const gameScene = this.scene.get(Scenes.Game);
 
     if (gameScene.player) {
       this.autoAttackIndicator.setFrame(gameScene.player.attacking ? 0 : 1);
@@ -145,10 +146,10 @@ export default class UIScene extends Phaser.Scene {
 
   restartGame() {
     this.add.rectangle(0, 0, 1280 * 2, 720 * 2, 0x000);
-    const mainMenuScene = this.scene.get("MainMenuScene");
+    const mainMenuScene = this.scene.get(Scenes.MainMenu);
     mainMenuScene.scene.restart();
 
-    this.scene.stop("GameScene");
-    this.scene.stop("UIScene");
+    this.scene.stop(Scenes.Game);
+    this.scene.stop(Scenes.UI);
   }
 }

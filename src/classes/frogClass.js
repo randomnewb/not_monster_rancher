@@ -1,3 +1,5 @@
+import { Scenes, Assets, States } from "../utils/constants.js";
+
 import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
 import StateMachine from "./stateMachineClass.js";
@@ -48,7 +50,7 @@ export default class Frog extends NPC {
 
     // Initialize state machine
     this.stateMachine = new StateMachine(
-      "idle",
+      States.Idle,
       {
         idle: new IdleState(),
         wander: new WanderState(),
@@ -85,7 +87,7 @@ export default class Frog extends NPC {
     // Check if the scene is defined
     if (this.scene) {
       // Create an explosion sprite at the frog's position
-      let explosion = this.scene.add.sprite(this.x, this.y, "explosion");
+      let explosion = this.scene.add.sprite(this.x, this.y, Assets.Explosion);
 
       // Play the explosion animation
       explosion.play("explosion");
@@ -135,7 +137,7 @@ export default class Frog extends NPC {
     }
 
     // transition the frog to the destroyed state
-    this.stateMachine.transition("destroyed");
+    this.stateMachine.transition(States.Destroyed);
 
     // Call the parent class's destroy method
     super.destroy();

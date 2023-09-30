@@ -1,3 +1,4 @@
+import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class DestroyedState extends State {

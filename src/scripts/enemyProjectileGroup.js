@@ -1,3 +1,5 @@
+import { Scenes, Assets } from "../utils/constants.js";
+
 class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
   constructor(scene) {
     super(scene.physics.world, scene);
@@ -7,7 +9,7 @@ class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
       frameQuantity: 200,
       active: false,
       visible: false,
-      key: "enemy_attack1",
+      key: Assets.EnemyAttack1,
       setXY: { x: -100, y: -100 },
     });
   }
@@ -23,7 +25,7 @@ class EnemyProjectileGroup extends Phaser.Physics.Arcade.Group {
 
 class EnemyProjectile extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
-    super(scene, x, y, "enemy_attack1", 0);
+    super(scene, x, y, Assets.EnemyAttack1, 0);
   }
 
   preUpdate(time, delta) {

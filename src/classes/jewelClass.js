@@ -1,10 +1,11 @@
+import { Assets } from "../utils/constants.js";
 import seedrandom from "seedrandom";
 
 export default class Jewel extends Phaser.Physics.Arcade.Sprite {
   static randomNumber = null;
 
   constructor(scene, x, y, group, colorOptions, gameSeed) {
-    super(scene, x, y, "jewel");
+    super(scene, x, y, Assets.Jewel);
     scene.physics.world.enable(this);
     scene.add.existing(this);
     group.add(this);

@@ -1,3 +1,4 @@
+import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class ChaseState extends State {
@@ -25,13 +26,13 @@ export default class ChaseState extends State {
 
     // Check if the player is more than 60 units away
     if (distance > 96) {
-      npc.stateMachine.transition("idle");
+      npc.stateMachine.transition(States.Idle);
 
       // Create the question mark sprite above the npc's head
       let questionSprite = scene.add.sprite(
         npc.x,
         npc.y - npc.height,
-        "reactions",
+        Assets.Reactions,
         2
       );
 
@@ -47,7 +48,7 @@ export default class ChaseState extends State {
     }
     // Check if the npc is within 2 tiles of the player
     else if (distance <= 32) {
-      npc.stateMachine.transition("attack");
+      npc.stateMachine.transition(States.Attack);
     } else {
       // Calculate the angle to the player
       const angle = Phaser.Math.Angle.Between(

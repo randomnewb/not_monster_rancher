@@ -1,3 +1,4 @@
+import { Scenes, Assets } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
@@ -21,7 +22,7 @@ export default class Terrain extends Phaser.GameObjects.Group {
       tileHeight: 16,
     });
 
-    const tiles = this.map.addTilesetImage("foliageTiles");
+    const tiles = this.map.addTilesetImage(Assets.FoliageTiles);
     this.layer = this.map.createLayer(0, tiles, 0, 0);
     this.layer.setCollision([8, 9]);
 

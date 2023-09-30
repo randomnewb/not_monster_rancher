@@ -1,3 +1,4 @@
+import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class IdleState extends State {
@@ -27,12 +28,12 @@ export default class IdleState extends State {
 
     // Check if the player is within 3 tiles distance
     if (distance <= 64) {
-      npc.stateMachine.transition("detect");
+      npc.stateMachine.transition(States.Detect);
       npc.idleCounter = 0; // Reset counter
     }
     // Check if the counter has exceeded the idle time
     else if (npc.idleCounter > npc.idleTime) {
-      npc.stateMachine.transition("wander");
+      npc.stateMachine.transition(States.Wander);
       npc.idleCounter = 0; // Reset counter
     }
   }

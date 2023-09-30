@@ -1,3 +1,12 @@
+- implementing constants/enums
+
+  - [x] scenes
+  - [x] states
+  - [x] assets
+  - [ ] events
+  - [ ] animations
+  - [ ] direction (up, down, left, right)
+
 - remove the data.playerhealth and try to implement playerhealth directly from the playerclass
 
   - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health

@@ -7,8 +7,6 @@ export default class Generate {
     var randomNumber = seedrandom(gameSeed);
     randomNumber();
 
-    console.log("createobjects", randomNumber());
-
     for (let row = 0; row < map.length; row++) {
       for (let column = 0; column < map[row].length; column++) {
         if (map[row][column] === 0 && randomNumber() < 0.05) {
@@ -65,8 +63,6 @@ export default class Generate {
     // const walkableVariant = 2;
     // const obstruction = 8;
     // const obstructionVariant = 9;
-
-    console.log("placement array", randomNumber());
 
     let map = [];
     for (let row = 0; row < 64; row++) {

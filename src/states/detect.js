@@ -1,3 +1,4 @@
+import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class DetectState extends State {
@@ -17,7 +18,7 @@ export default class DetectState extends State {
     let exclamationSprite = scene.add.sprite(
       npc.x,
       npc.y - npc.height,
-      "reactions",
+      Assets.Reactions,
       0
     );
 
@@ -48,14 +49,14 @@ export default class DetectState extends State {
 
     // Check if the player is more than 6 tiles away
     if (distance > 80) {
-      npc.stateMachine.transition("idle");
+      npc.stateMachine.transition(States.Idle);
       npc.detectCounter = 0; // Reset counter
 
       // Create the question mark sprite above the npc's head
       let questionSprite = scene.add.sprite(
         npc.x,
         npc.y - npc.height,
-        "reactions",
+        Assets.Reactions,
         2
       );
 
@@ -72,7 +73,7 @@ export default class DetectState extends State {
 
     // Check if the counter has exceeded the detect time
     else if (npc.detectCounter > npc.detectTime) {
-      npc.stateMachine.transition("chase");
+      npc.stateMachine.transition(States.Chase);
       npc.detectCounter = 0; // Reset counter
     }
   }

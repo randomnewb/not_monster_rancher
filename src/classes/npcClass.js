@@ -1,3 +1,4 @@
+import { States } from "../utils/constants.js";
 import Entity from "./entityClass.js";
 import StateMachine from "./stateMachineClass.js";
 import IdleState from "../states/idle.js";
@@ -13,7 +14,7 @@ export default class NPC extends Entity {
 
     // Initialize state machine
     this.stateMachine = new StateMachine(
-      "idle",
+      States.Idle,
       {
         idle: new IdleState(),
         wander: new WanderState(),

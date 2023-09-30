@@ -1,3 +1,4 @@
+import { Scenes, Assets } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
@@ -10,60 +11,53 @@ import { EnemyProjectileGroup } from "../scripts/enemyProjectileGroup.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
-    super({ key: "GameScene", active: false });
+    super({ key: Scenes.Game, active: false });
     this.tileWidth = 16;
     this.tileHeight = 16;
   }
 
   preload() {
-    this.load.spritesheet("foliageTiles", "./assets/foliage.png", {
+    this.load.spritesheet(Assets.FoliageTiles, "./assets/foliage.png", {
       frameWidth: this.tileWidth,
       frameHeight: this.tileHeight,
     });
 
-    this.load.spritesheet("characters", "./assets/characters.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-    this.load.spritesheet("frog", "./assets/frog.png", {
+    this.load.spritesheet(Assets.Characters, "./assets/characters.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.spritesheet("enemy_attack1", "./assets/enemy_attack1.png", {
+    this.load.spritesheet(Assets.Frog, "./assets/frog.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.image("jewel", "./assets/jewel.png");
-    this.load.spritesheet("projectiles", "./assets/projectiles.png", {
+    this.load.spritesheet(Assets.EnemyAttack1, "./assets/enemy_attack1.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.spritesheet("weapons", "./assets/weaponSheet.png", {
+    this.load.image(Assets.Jewel, "./assets/jewel.png");
+
+    this.load.spritesheet(Assets.Projectiles, "./assets/projectiles.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.spritesheet("explosion", "./assets/explosion.png", {
+    this.load.spritesheet(Assets.Weapons, "./assets/weaponSheet.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    this.load.spritesheet("reactions", "./assets/reactions.png", {
+    this.load.spritesheet(Assets.Explosion, "./assets/explosion.png", {
       frameWidth: 16,
       frameHeight: 16,
     });
 
-    // this.load.spritesheet(
-    //   "auto_attack_indicator",
-    //   "./assets/auto_attack_indicator.png",
-    //   {
-    //     frameWidth: 16,
-    //     frameHeight: 16,
-    //   }
-    // );
+    this.load.spritesheet(Assets.Reactions, "./assets/reactions.png", {
+      frameWidth: 16,
+      frameHeight: 16,
+    });
   }
 
   create() {
@@ -95,13 +89,16 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
-      this.frogs.push(new Frog(this, x, y, "frog"));
+      this.frogs.push(new Frog(this, x, y, Assets.Frog));
     }
 
     if (!this.anims.exists("frog_move")) {
       this.anims.create({
         key: "frog_move",
-        frames: this.anims.generateFrameNumbers("frog", { start: 0, end: 1 }),
+        frames: this.anims.generateFrameNumbers(Assets.Frog, {
+          start: 0,
+          end: 1,
+        }),
         frameRate: 5,
         repeat: -1,
       });
@@ -110,15 +107,15 @@ export default class GameScene extends Phaser.Scene {
     if (!this.anims.exists("frog_idle")) {
       this.anims.create({
         key: "frog_idle",
-        frames: [{ key: "frog", frame: 0 }],
+        frames: [{ key: Assets.Frog, frame: 0 }],
         frameRate: 10,
       });
     }
 
-    if (!this.anims.exists("explosion")) {
+    if (!this.anims.exists(Assets.Explosion)) {
       this.anims.create({
         key: "explosion",
-        frames: this.anims.generateFrameNumbers("explosion", {
+        frames: this.anims.generateFrameNumbers(Assets.Explosion, {
           start: 0,
           end: 5,
         }),
@@ -173,7 +170,7 @@ export default class GameScene extends Phaser.Scene {
     };
 
     const randomFrame = Phaser.Math.Between(0, 15);
-    this.player = new Player(this, 72, 72, "characters", randomFrame);
+    this.player = new Player(this, 72, 72, Assets.Characters, randomFrame);
 
     this.player.on("healthChanged", this.handleHealthChanged, this);
 
@@ -304,10 +301,10 @@ export default class GameScene extends Phaser.Scene {
       frog.on("frogDestroyed", this.handleFrogFried, this);
     });
 
-    const uiScene = this.scene.get("UIScene");
+    const uiScene = this.scene.get(Scenes.UI);
 
     this.scene
-      .get("NewGameMenuScene")
+      .get(Scenes.NewGameMenu)
       .events.on("generate", this.generateFunction, this);
 
     const playerCamera = new PlayerCamera(this, this.player, uiScene);
@@ -444,6 +441,6 @@ export default class GameScene extends Phaser.Scene {
       this.input.keyboard.removeCapture(key.keyCode);
     });
 
-    this.scene.get("UIScene").showGameOver();
+    this.scene.get(Scenes.UI).showGameOver();
   }
 }

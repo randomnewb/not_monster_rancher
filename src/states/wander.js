@@ -1,3 +1,4 @@
+import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class WanderState extends State {
@@ -34,12 +35,12 @@ export default class WanderState extends State {
 
     // Check if the player is within 3 tiles distance
     if (distance <= 48) {
-      npc.stateMachine.transition("detect");
+      npc.stateMachine.transition(States.Detect);
       npc.wanderCounter = 0; // Reset counter
     }
     // Check if the counter has exceeded the wander time
     else if (npc.wanderCounter > npc.wanderTime) {
-      npc.stateMachine.transition("idle");
+      npc.stateMachine.transition(States.Idle);
       npc.wanderCounter = 0; // Reset counter
     }
   }
