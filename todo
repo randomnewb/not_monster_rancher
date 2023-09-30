@@ -6,6 +6,12 @@
   - [ ] events
   - [ ] animations
   - [ ] direction (up, down, left, right)
+  - [ ] colors
+
+- [x] rename action1 to attackAction or something that explains it better
+- [ ] rework states and frog npc so that state reads properties/attributes or components more from the entity
+- for example, the 'attack' alerting animation could be unique and defined in each entity
+- or movement could be defined in each entity and read in the 'wander' state
 
 - [x] create testScene (basically a copy of gameScene) to test out new features
 - [ ] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
@@ -24,7 +30,8 @@
 - refactor time?
 
   - [ ] separate components into own classes where possible
-  - [ ] separate certain code into their own methods where possible
+  - separate certain code into their own methods where possible
+  - [ ] preloading all assets can be in their own method (preloadAssets())
 
 - [x] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
 - [x] frogs have a weighted chance to drop a jewel (right now 50%)

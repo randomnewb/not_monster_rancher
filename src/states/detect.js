@@ -1,4 +1,4 @@
-import { Assets, States } from "../utils/constants.js";
+import { Assets, States, Colors } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class DetectState extends State {
@@ -22,7 +22,7 @@ export default class DetectState extends State {
       0
     );
 
-    exclamationSprite.setTint(0xff0000);
+    exclamationSprite.setTint(Colors.Pink);
 
     // Make the sprite fade away after 2 seconds
     scene.tweens.add({

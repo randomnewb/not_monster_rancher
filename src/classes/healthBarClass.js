@@ -1,3 +1,5 @@
+import { Colors } from "../utils/constants.js";
+
 export default class HealthBar extends Phaser.GameObjects.Container {
   constructor(scene, x, y, health) {
     super(scene, x, y);
@@ -6,8 +8,14 @@ export default class HealthBar extends Phaser.GameObjects.Container {
     this.maxHealth = health;
     this.currentHealth = health;
 
-    this.backgroundBar = this.scene.add.rectangle(0, 0, 15, 1, 0x8b0000);
-    this.healthBar = this.scene.add.rectangle(0, 0, 15, 1, 0xff0000);
+    this.backgroundBar = this.scene.add.rectangle(
+      0,
+      0,
+      15,
+      1,
+      Colors.DarkBrown
+    );
+    this.healthBar = this.scene.add.rectangle(0, 0, 15, 1, Colors.Crimson);
 
     this.add(this.backgroundBar);
     this.add(this.healthBar);

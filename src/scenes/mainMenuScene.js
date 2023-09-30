@@ -30,23 +30,23 @@ export default class MainMenuScene extends Phaser.Scene {
         fill: "black",
         align: "center",
         fontFamily: "HopeGold",
-        backgroundColor: "lightblue",
+        backgroundColor: "#0099db",
       })
       .setInteractive({ useHandCursor: true });
 
     button
       .on("pointerover", () => {
-        button.setStyle({ fill: "#3d5a36" });
+        button.setStyle({ fill: "#733e39" });
       })
       .on("pointerout", () => {
         button.setStyle({ fill: "black" });
       })
       .on("pointerdown", () => {
-        button.setStyle({ fill: "#2e2740" });
+        button.setStyle({ fill: "#f77622" });
       })
       .on("pointerup", () => {
         clickAction();
-        button.setStyle({ fill: "#10434e" });
+        button.setStyle({ fill: "#3a4466" });
       });
 
     return button;

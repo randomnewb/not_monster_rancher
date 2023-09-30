@@ -1,3 +1,4 @@
+import { Colors } from "../utils/constants.js";
 import data from "../data/data.js";
 import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -38,7 +39,12 @@ export default class Player extends Entity {
     this.collectedJewels = 0;
 
     const playerColors = [
-      0xddac46, 0xc25940, 0x683d64, 0x51b1ca, 0x1773b8, 0x639f5b, 0x376e49,
+      Colors.Pumpkin,
+      Colors.Yellow,
+      Colors.LightGreen,
+      Colors.SkyBlue,
+      Colors.Purple,
+      Colors.CardinalRed,
     ];
 
     this.originalTint =
@@ -54,7 +60,7 @@ export default class Player extends Entity {
 
     this.highlights = [];
     this.highlight = this.scene.add.graphics({
-      fillStyle: { color: 0xffffff },
+      fillStyle: { color: Colors.White },
     });
     this.highlight.alpha = 0.2; // make it semi-transparent
 
@@ -76,7 +82,6 @@ export default class Player extends Entity {
 
     this.easystar.setAcceptableTiles([0, 1, 2, 3, 4, 5, 6, 7]);
     this.easystar.setIterationsPerCalculation(1000);
-    // this.easystar.enableDiagonals();
     this.easystar.disableCornerCutting();
 
     // Initialize the timed event
@@ -295,8 +300,7 @@ export default class Player extends Entity {
         if (this.invincibilityCounter <= 0) {
           this.invincibilityCounter = this.invincibilityCounterMax;
         }
-        // Set the tint to white
-        this.setTint(0xffffff);
+        this.setTint(Colors.White);
       }
     } else {
       this.current_health -= damage;
@@ -331,7 +335,7 @@ export default class Player extends Entity {
       this.invincibilityCounter--;
       // Create a flashing effect by alternating the tint
       if (this.invincibilityCounter % 2 == 0) {
-        this.setTint(0xffffff);
+        this.setTint(Colors.White);
       } else {
         this.setTint(this.originalTint);
       }

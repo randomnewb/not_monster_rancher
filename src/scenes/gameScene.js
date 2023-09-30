@@ -1,4 +1,4 @@
-import { Scenes, Assets } from "../utils/constants.js";
+import { Scenes, Assets, Colors } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
@@ -64,15 +64,15 @@ export default class GameScene extends Phaser.Scene {
     const centerX = this.cameras.main.width / 2;
     const centerY = this.cameras.main.height / 2;
 
-    this.rectangle = this.add.rectangle(
+    this.mobileAttackButton = this.add.rectangle(
       centerX - 128,
       centerY + 58,
       40,
       40,
-      0xffffff
+      Colors.White
     );
-    this.rectangle.setInteractive();
-    this.rectangle.on(
+    this.mobileAttackButton.setInteractive();
+    this.mobileAttackButton.on(
       "pointerdown",
       function (pointer, localX, localY, event) {
         this.player.attacking = !this.player.attacking;
@@ -82,8 +82,8 @@ export default class GameScene extends Phaser.Scene {
     );
 
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    this.rectangle.setScrollFactor(0);
-    this.rectangle.setVisible(isMobile);
+    this.mobileAttackButton.setScrollFactor(0);
+    this.mobileAttackButton.setVisible(isMobile);
 
     this.frogs = [];
     for (let i = 0; i < 100; i++) {
@@ -160,8 +160,7 @@ export default class GameScene extends Phaser.Scene {
         this,
         this.terrain.map_array,
         this.jewels,
-        // "jewel",
-        [0x7e8bfe, 0x7efeb8, 0xfe7e7e],
+        [Colors.CardinalRed, Colors.Yellow, Colors.LightBlue],
         data.gameSeed
       );
       if (this.player) {
@@ -190,7 +189,7 @@ export default class GameScene extends Phaser.Scene {
     this.graphics = this.add.graphics();
     this.debugRectangle = new Phaser.Geom.Rectangle(0, 0, 16, 16);
 
-    this.action1 = () => {
+    this.attackAction = () => {
       if (this.directionToClosestEntity) {
         // Fire the projectile towards the closest entity
         this.projectileGroup.fireProjectile(
@@ -330,20 +329,20 @@ export default class GameScene extends Phaser.Scene {
       this.player.update();
 
       if (this.player.attacking) {
-        this.rectangle.setFillStyle(0xffff00);
+        this.mobileAttackButton.setFillStyle(Colors.Gold);
       } else {
-        this.rectangle.setFillStyle(0xffffff);
+        this.mobileAttackButton.setFillStyle(Colors.DarkBlue);
       }
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-      this.rectangle.setVisible(isMobile);
+      this.mobileAttackButton.setVisible(isMobile);
 
       if (
         this.player.attacking &&
         this.directionToClosestEntity &&
         this.player.cooldownCounter <= 0
       ) {
-        this.action1();
+        this.attackAction();
       }
 
       this.frogs.forEach(frog => {
@@ -391,7 +390,7 @@ export default class GameScene extends Phaser.Scene {
 
         // draw a 16x16 at that frog's position
         this.graphics.clear();
-        this.graphics.lineStyle(1, 0xffff00);
+        this.graphics.lineStyle(1, Colors.Gold);
         this.debugRectangle.setPosition(
           closestEntity.x - 8,
           closestEntity.y - 8

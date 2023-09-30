@@ -1,4 +1,4 @@
-import { Scenes, Assets, States } from "../utils/constants.js";
+import { Assets, States, Colors } from "../utils/constants.js";
 
 import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -38,7 +38,10 @@ export default class Frog extends NPC {
     this.obstructionTiles = [8, 9, 10, 11, 12, 13];
 
     const frogColors = [
-      0x2986cc, 0x0cc986, 0x0ab478, 0x09a06b, 0x088c5d, 0x077850,
+      Colors.LightGreen,
+      Colors.DarkGreen,
+      Colors.ForestGreen,
+      Colors.DarkBlue,
     ];
 
     this.originalTint =
@@ -73,7 +76,7 @@ export default class Frog extends NPC {
     this.healthBar.setVisible(true);
     this.healthBar.updateHealth(this.current_health);
 
-    this.setTint(0xffffff);
+    this.setTint(Colors.White);
     this.invincibilityTimer = 100;
   }
 
@@ -126,13 +129,11 @@ export default class Frog extends NPC {
 
       if (Math.random() < 0.5) {
         // Instantiate a jewel at the closest non-obstruction tile's center
-        new Jewel(
-          this.scene,
-          jewelX,
-          jewelY,
-          this.scene.jewels,
-          [0x7e8bfe, 0x7efeb8, 0xfe7e7e]
-        );
+        new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, [
+          Colors.CardinalRed,
+          Colors.Yellow,
+          Colors.LightBlue,
+        ]);
       }
     }
 

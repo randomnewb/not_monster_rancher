@@ -1,4 +1,4 @@
-import { Assets, States } from "../utils/constants.js";
+import { Assets, States, Colors } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class AttackState extends State {
@@ -16,7 +16,7 @@ export default class AttackState extends State {
 
     // Initialize flash counter and tint
     npc.flashCounter = 200;
-    npc.flashTint = 0xffff00; // Yellow
+    npc.flashTint = Colors.Yellow;
   }
 
   execute(scene, npc) {
