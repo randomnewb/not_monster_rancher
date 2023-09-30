@@ -21,3 +21,7 @@ this.time.delayedCall(1000, () => {
   this.scene.remove("MainMenuScene");
 });
 ```
+
+- Clean Architecture book: https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164
+- good example project to look at for project structure: https://github.com/snowbillr/archer-adventure
+- Tiled and custom properties https://doc.mapeditor.org/en/stable/manual/custom-properties/
