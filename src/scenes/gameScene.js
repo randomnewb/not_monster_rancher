@@ -81,6 +81,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
 
+    this.keys = this.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
+    this.input.on(
+      "pointerdown",
+      pointer => this.player.handlePointerDown(pointer, this.terrain.map),
+      this
+    );
+
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
     this.enemyProjectiles = new EnemyProjectileGroup(this);
@@ -127,13 +134,22 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     if (data.gameActive) {
-      this.player.update();
+      // this.player.update();
 
-      if (this.player.attacking) {
-        this.mobileAttackButton.setFillStyle(Colors.Gold);
-      } else {
-        this.mobileAttackButton.setFillStyle(Colors.DarkBlue);
-      }
+      this.player.update(
+        this.keys.W.isDown,
+        this.keys.A.isDown,
+        this.keys.S.isDown,
+        this.keys.D.isDown,
+        Phaser.Input.Keyboard.JustDown(this.keys.I),
+        Phaser.Input.Keyboard.JustDown(this.keys.J),
+        Phaser.Input.Keyboard.JustDown(this.keys.K),
+        Phaser.Input.Keyboard.JustDown(this.keys.L)
+      );
+
+      this.mobileAttackButton.setFillStyle(
+        this.player.attacking ? Colors.Gold : Colors.DarkBlue
+      );
 
       const isMobile = /Mobi|Android/i.test(navigator.userAgent);
       this.mobileAttackButton.setVisible(isMobile);
@@ -398,7 +414,7 @@ export default class GameScene extends Phaser.Scene {
       this.player.setActive(false);
     }
 
-    Object.values(this.scene.scene.player.keys).forEach(key => {
+    Object.values(this.keys).forEach(key => {
       this.input.keyboard.removeCapture(key.keyCode);
     });
 

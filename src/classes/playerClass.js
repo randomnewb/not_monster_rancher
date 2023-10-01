@@ -35,7 +35,7 @@ export default class Player extends Entity {
       this.y = openTile.y * this.tileHeight + this.tileHeight / 2;
     });
 
-    this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
+    // this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
 
     const playerColors = [
@@ -64,11 +64,11 @@ export default class Player extends Entity {
     });
     this.highlight.alpha = 0.2; // make it semi-transparent
 
-    this.scene.input.on(
-      "pointerdown",
-      pointer => this.handlePointerDown(pointer, this.scene.terrain.map),
-      this
-    );
+    // this.scene.input.on(
+    //   "pointerdown",
+    //   pointer => this.handlePointerDown(pointer, this.scene.terrain.map),
+    //   this
+    // );
 
     this.targetPosition = null;
     this.isPathfinding = false;
@@ -321,7 +321,16 @@ export default class Player extends Entity {
     });
   }
 
-  update() {
+  update(
+    isWDown,
+    isADown,
+    isSDown,
+    isDDown,
+    isIDown,
+    isJDown,
+    isKDown,
+    isLDown
+  ) {
     if (this.attacking && this.cooldownCounter <= 0) {
       this.cooldownCounter = this.cooldownCounterMax;
     }
@@ -400,39 +409,39 @@ export default class Player extends Entity {
     }
 
     // Vertical movement
-    if (this.keys.W.isDown) {
+    if (isWDown) {
       // Calculate new target position
       let targetY = this.y - this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
-    } else if (this.keys.S.isDown) {
+    } else if (isSDown) {
       // Calculate new target position
       let targetY = this.y + this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
     }
 
     // Horizontal movement
-    if (this.keys.A.isDown) {
+    if (isADown) {
       // Calculate new target position
       let targetX = this.x - this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);
-    } else if (this.keys.D.isDown) {
+    } else if (isDDown) {
       // Calculate new target position
       let targetX = this.x + this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);
     }
 
     // Future Actions to Implement
-    if (Phaser.Input.Keyboard.JustDown(this.keys.I)) {
+    if (isIDown) {
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.keys.J)) {
+    if (isJDown) {
       this.attacking = !this.attacking;
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.keys.K)) {
+    if (isKDown) {
     }
 
-    if (Phaser.Input.Keyboard.JustDown(this.keys.L)) {
+    if (isLDown) {
       this.takeDamage(1);
       console.log(this.current_health);
     }
