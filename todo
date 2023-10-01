@@ -6,7 +6,7 @@
   - [ ] events
   - [ ] animations
   - [ ] direction (up, down, left, right)
-  - [ ] colors
+  - [x] colors
 
 - [x] rename action1 to attackAction or something that explains it better
 - [ ] rework states and frog npc so that state reads properties/attributes or components more from the entity

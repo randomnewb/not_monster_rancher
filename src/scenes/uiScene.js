@@ -43,17 +43,17 @@ export default class UIScene extends Phaser.Scene {
       })
       .setInteractive({ useHandCursor: true })
       .on("pointerover", () => {
-        button.setStyle({ fill: "#733e39" });
+        this.gameOverButton.setStyle({ fill: "#733e39" });
       })
       .on("pointerout", () => {
-        button.setStyle({ fill: "black" });
+        this.gameOverButton.setStyle({ fill: "black" });
       })
       .on("pointerdown", () => {
-        button.setStyle({ fill: "#f77622" });
+        this.gameOverButton.setStyle({ fill: "#f77622" });
       })
       .on("pointerup", () => {
-        clickAction();
-        button.setStyle({ fill: "#3a4466" });
+        this.restartGame();
+        this.gameOverButton.setStyle({ fill: "#3a4466" });
       });
 
     this.gameOverText.setVisible(false);
