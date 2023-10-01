@@ -1,4 +1,4 @@
-import { Colors } from "../utils/constants.js";
+import { Colors, Events } from "../utils/constants.js";
 import data from "../data/data.js";
 import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -30,7 +30,7 @@ export default class Player extends Entity {
     this.setCollideWorldBounds();
 
     // position the player on an open tile
-    this.scene.events.on("mapArrayReady", openTile => {
+    this.scene.events.on(Events.MapArrayReady, openTile => {
       this.x = openTile.x * this.tileWidth + this.tileWidth / 2;
       this.y = openTile.y * this.tileHeight + this.tileHeight / 2;
     });
@@ -76,7 +76,7 @@ export default class Player extends Entity {
     this.obstructionTiles = [8, 9, 10, 11, 12, 13];
 
     this.easystar = new EasyStar.js();
-    this.scene.events.on("mapArrayReady", () => {
+    this.scene.events.on(Events.MapArrayReady, () => {
       this.easystar.setGrid(data.currentMapArray);
     });
 
@@ -295,7 +295,7 @@ export default class Player extends Entity {
           this.scene.gameOver();
         }
         this.healthBar.updateHealth(this.current_health);
-        this.emit("healthChanged", this.current_health);
+        this.emit(Events.HealthChanged, this.current_health);
         // Set invincibility counter only if it's not currently running
         if (this.invincibilityCounter <= 0) {
           this.invincibilityCounter = this.invincibilityCounterMax;
@@ -305,7 +305,7 @@ export default class Player extends Entity {
     } else {
       this.current_health -= damage;
       this.healthBar.updateHealth(this.current_health);
-      this.emit("healthChanged", this.current_health);
+      this.emit(Events.HealthChanged, this.current_health);
     }
   }
 

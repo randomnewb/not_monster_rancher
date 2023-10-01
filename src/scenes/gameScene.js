@@ -1,4 +1,4 @@
-import { Scenes, Assets, Colors } from "../utils/constants.js";
+import { Scenes, Assets, Colors, Events } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
@@ -171,7 +171,7 @@ export default class GameScene extends Phaser.Scene {
     const randomFrame = Phaser.Math.Between(0, 15);
     this.player = new Player(this, 72, 72, Assets.Characters, randomFrame);
 
-    this.player.on("healthChanged", this.handleHealthChanged, this);
+    this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
 
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
@@ -223,15 +223,18 @@ export default class GameScene extends Phaser.Scene {
     };
 
     this.frogs.forEach(frog => {
-      frog.on("fireProjectile", (frog, direction, min_attack, max_attack) => {
-        this.enemyProjectiles.fireProjectile(
-          frog.x,
-          frog.y,
-          direction,
-          min_attack,
-          max_attack
-        );
-      });
+      frog.on(
+        Events.FireProjectile,
+        (frog, direction, min_attack, max_attack) => {
+          this.enemyProjectiles.fireProjectile(
+            frog.x,
+            frog.y,
+            direction,
+            min_attack,
+            max_attack
+          );
+        }
+      );
     });
 
     this.physics.add.overlap(
@@ -297,14 +300,14 @@ export default class GameScene extends Phaser.Scene {
     }
 
     this.frogs.forEach(frog => {
-      frog.on("frogDestroyed", this.handleFrogFried, this);
+      frog.on(Events.FrogDestroyed, this.handleFrogFried, this);
     });
 
     const uiScene = this.scene.get(Scenes.UI);
 
     this.scene
       .get(Scenes.NewGameMenu)
-      .events.on("generate", this.generateFunction, this);
+      .events.on(Events.Generate, this.generateFunction, this);
 
     const playerCamera = new PlayerCamera(this, this.player, uiScene);
     playerCamera.setupCamera();
@@ -317,11 +320,11 @@ export default class GameScene extends Phaser.Scene {
 
   handleHealthChanged(playerHealth) {
     // Emit a 'playerhealthchanged' event from the scene
-    this.events.emit("playerHealthChanged", playerHealth);
+    this.events.emit(Events.PlayerHealthChanged, playerHealth);
   }
 
   handleFrogFried(frog) {
-    this.events.emit("playerFrogsFried", frog);
+    this.events.emit(Events.PlayerFrogsFried, frog);
   }
 
   update() {
@@ -418,7 +421,10 @@ export default class GameScene extends Phaser.Scene {
       jewel.destroy();
 
       this.player.collectedJewels++;
-      this.events.emit("playerJewelCollected", this.player.collectedJewels);
+      this.events.emit(
+        Events.PlayerJewelCollected,
+        this.player.collectedJewels
+      );
       this.player.takeDamage(-10);
 
       if (this.player.collectedJewels >= 20) {

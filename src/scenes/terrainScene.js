@@ -1,4 +1,4 @@
-import { Scenes, Assets, Colors } from "../utils/constants.js";
+import { Scenes, Assets, Colors, Events } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
@@ -48,7 +48,7 @@ export default class Terrain extends Phaser.GameObjects.Group {
     }
 
     // Emit the 'mapArrayReady' event with the x and y position of the open tile
-    this.scene.events.emit("mapArrayReady", { x: openX, y: openY });
+    this.scene.events.emit(Events.MapArrayReady, { x: openX, y: openY });
 
     /** Debug graphics 
     const debugGraphics = scene.add.graphics().setAlpha(0.75);

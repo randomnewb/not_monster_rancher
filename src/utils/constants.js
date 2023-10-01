@@ -27,6 +27,17 @@ export const States = {
   Wander: "wander",
 };
 
+export const Events = {
+  FrogDestroyed: "frogDestroyed",
+  HealthChanged: "healthChanged",
+  PlayerHealthChanged: "playerHealthChanged",
+  PlayerFrogsFried: "playerFrogsFried",
+  PlayerJewelCollected: "playerJewelCollected",
+  Generate: "generate",
+  MapArrayReady: "mapArrayReady",
+  FireProjectile: "fireProjectile",
+};
+
 export const Colors = {
   Red: 0xbe4a2f,
   Orange: 0xd77643,

@@ -1,4 +1,4 @@
-import { Assets, States, Colors } from "../utils/constants.js";
+import { Assets, States, Colors, Events } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class AttackState extends State {
@@ -86,7 +86,7 @@ export default class AttackState extends State {
 
         // Emit an event instead of firing the projectile directly
         npc.emit(
-          "fireProjectile",
+          Events.FireProjectile,
           npc,
           directionVector,
           npc.min_attack,

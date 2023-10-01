@@ -1,4 +1,4 @@
-import { Assets, States, Colors } from "../utils/constants.js";
+import { Assets, States, Colors, Events } from "../utils/constants.js";
 
 import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -82,7 +82,7 @@ export default class Frog extends NPC {
 
   destroy() {
     // Emit an event to the scene to let it know that this entity was destroyed
-    this.emit("frogDestroyed");
+    this.emit(Events.FrogDestroyed);
 
     // Destroy the health bar
     this.healthBar.destroy();

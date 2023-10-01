@@ -1,4 +1,4 @@
-import { Scenes, Assets } from "../utils/constants.js";
+import { Scenes, Assets, Events } from "../utils/constants.js";
 import data from "../data/data.js";
 
 export default class UIScene extends Phaser.Scene {
@@ -60,9 +60,17 @@ export default class UIScene extends Phaser.Scene {
     this.gameOverButton.setVisible(false);
 
     const gameScene = this.scene.get(Scenes.Game);
-    gameScene.events.on("playerHealthChanged", this.updateHealthText, this);
-    gameScene.events.on("playerJewelCollected", this.updateJewelText, this);
-    gameScene.events.on("playerFrogsFried", this.updateFrogsText, this);
+    gameScene.events.on(
+      Events.PlayerHealthChanged,
+      this.updateHealthText,
+      this
+    );
+    gameScene.events.on(
+      Events.PlayerJewelCollected,
+      this.updateJewelText,
+      this
+    );
+    gameScene.events.on(Events.PlayerFrogsFried, this.updateFrogsText, this);
 
     let playerHealth = data.playerMaxHealth; // replace this with the actual player's health
 

@@ -3,7 +3,7 @@
   - [x] scenes
   - [x] states
   - [x] assets
-  - [ ] events
+  - [x] events
   - [ ] animations
   - [ ] direction (up, down, left, right)
   - [x] colors

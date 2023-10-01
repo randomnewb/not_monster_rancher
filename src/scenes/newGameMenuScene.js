@@ -1,3 +1,4 @@
+import { Scenes, Events } from "../utils/constants.js";
 import data from "../data/data.js";
 
 export default class NewGameMenuScene extends Phaser.Scene {
@@ -38,8 +39,8 @@ export default class NewGameMenuScene extends Phaser.Scene {
     uiScene.scene.restart();
 
     this.time.delayedCall(1000, () => {
-      this.events.emit("generate");
-      this.scene.stop("NewGameMenuScene");
+      this.events.emit(Events.Generate);
+      this.scene.stop(Scenes.NewGameMenu);
     });
 
     this.inputText.visible = false;
