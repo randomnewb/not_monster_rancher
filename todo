@@ -1,22 +1,19 @@
+- [ ] move input from playerClass into gameScene
+
 - implementing constants/enums
 
-  - [x] scenes
-  - [x] states
-  - [x] assets
-  - [x] events
-  - [ ] animations
   - [ ] direction (up, down, left, right)
-  - [x] colors
 
 - [x] rename action1 to attackAction or something that explains it better
-- [ ] rework states and frog npc so that state reads properties/attributes or components more from the entity
+- [/] rework states and frog npc so that state reads properties/attributes or components more from the entity
 - for example, the 'attack' alerting animation could be unique and defined in each entity
 - or movement could be defined in each entity and read in the 'wander' state
+- [x] implement properties for npc like detectionRange
 
 - [x] create testScene (basically a copy of gameScene) to test out new features
 - [ ] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
 - [ ] implement Tiled again for creating tilemaps with meta data (e.g. if a tile is collidable, interactable, etc.):
-- [ ] move input from playerClass into gameScene
+
 - [ ] create phaser plugins where possible for things like (e.g. playing sound effects, loading an area from a tilemap, controls available to my scene)
 - [ ] implement player FSM
 - [ ] continue to implement ECS: https://en.wikipedia.org/wiki/Entity_component_system

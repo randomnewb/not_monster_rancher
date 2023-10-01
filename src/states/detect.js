@@ -48,7 +48,7 @@ export default class DetectState extends State {
     );
 
     // Check if the player is more than 6 tiles away
-    if (distance > 80) {
+    if (distance > npc.disengagementRange) {
       npc.stateMachine.transition(States.Idle);
       npc.detectCounter = 0; // Reset counter
 

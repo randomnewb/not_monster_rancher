@@ -27,7 +27,7 @@ export default class IdleState extends State {
     );
 
     // Check if the player is within 3 tiles distance
-    if (distance <= 64) {
+    if (distance <= npc.detectionRange) {
       npc.stateMachine.transition(States.Detect);
       npc.idleCounter = 0; // Reset counter
     }

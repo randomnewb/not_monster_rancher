@@ -25,7 +25,7 @@ export default class ChaseState extends State {
     );
 
     // Check if the player is more than 60 units away
-    if (distance > 96) {
+    if (distance > npc.disengagementRange) {
       npc.stateMachine.transition(States.Idle);
 
       // Create the question mark sprite above the npc's head
@@ -47,7 +47,7 @@ export default class ChaseState extends State {
       });
     }
     // Check if the npc is within 2 tiles of the player
-    else if (distance <= 32) {
+    else if (distance <= npc.attackTransitionRange) {
       npc.stateMachine.transition(States.Attack);
     } else {
       // Calculate the angle to the player

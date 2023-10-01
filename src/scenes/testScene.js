@@ -4,7 +4,10 @@ import {
   Colors,
   Events,
   Animations,
+  AnimationKeys,
 } from "../utils/constants.js";
+
+import preloadAssets from "../utils/preloadAssets.js";
 
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
@@ -24,111 +27,17 @@ export default class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet(Assets.FoliageTiles, "./assets/foliage.png", {
-      frameWidth: this.tileWidth,
-      frameHeight: this.tileHeight,
-    });
-
-    this.load.spritesheet(Assets.Characters, "./assets/characters.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.spritesheet(Assets.Frog, "./assets/frog.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.spritesheet(Assets.EnemyAttack1, "./assets/enemy_attack1.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.image(Assets.Jewel, "./assets/jewel.png");
-
-    this.load.spritesheet(Assets.Projectiles, "./assets/projectiles.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.spritesheet(Assets.Weapons, "./assets/weaponSheet.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.spritesheet(Assets.Explosion, "./assets/explosion.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
-
-    this.load.spritesheet(Assets.Reactions, "./assets/reactions.png", {
-      frameWidth: 16,
-      frameHeight: 16,
-    });
+    preloadAssets.call(this, this.load, this.tileWidth, this.tileHeight);
   }
 
   create() {
-    const centerX = this.cameras.main.width / 2;
-    const centerY = this.cameras.main.height / 2;
-
-    this.mobileAttackButton = this.add.rectangle(
-      centerX - 128,
-      centerY + 58,
-      40,
-      40,
-      Colors.White
-    );
-    this.mobileAttackButton.setInteractive();
-    this.mobileAttackButton.on(
-      "pointerdown",
-      function (pointer, localX, localY, event) {
-        this.player.attacking = !this.player.attacking;
-        event.stopPropagation();
-      },
-      this
-    );
-
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    this.mobileAttackButton.setScrollFactor(0);
-    this.mobileAttackButton.setVisible(isMobile);
+    this.createAnimationKeys();
 
     this.frogs = [];
     for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
       this.frogs.push(new Frog(this, x, y, Assets.Frog));
-    }
-
-    if (!this.anims.exists(Animations.FrogMove)) {
-      this.anims.create({
-        key: Animations.FrogMove,
-        frames: this.anims.generateFrameNumbers(Assets.Frog, {
-          start: 0,
-          end: 1,
-        }),
-        frameRate: 5,
-        repeat: -1,
-      });
-    }
-
-    if (!this.anims.exists(Animations.FrogIdle)) {
-      this.anims.create({
-        key: Animations.FrogIdle,
-        frames: [{ key: Assets.Frog, frame: 0 }],
-        frameRate: 10,
-      });
-    }
-
-    if (!this.anims.exists(Animations.Explosion)) {
-      this.anims.create({
-        key: Animations.Explosion,
-        frames: this.anims.generateFrameNumbers(Animations.Explosion, {
-          start: 0,
-          end: 5,
-        }),
-        frameRate: 10,
-        repeat: 0,
-      });
     }
 
     this.generateFunction = () => {
@@ -146,15 +55,7 @@ export default class GameScene extends Phaser.Scene {
       this.terrain.setDepth(0);
       this.physics.world.enable(this.terrain);
 
-      this.playerTerrainCollider = this.physics.add.collider(
-        this.player,
-        this.terrain.layer
-      );
-
-      this.frogTerrainCollider = this.physics.add.collider(
-        this.frogs,
-        this.terrain.layer
-      );
+      this.addCollisions();
 
       this.physics.world.setBounds(
         0,
@@ -184,50 +85,9 @@ export default class GameScene extends Phaser.Scene {
     this.projectileGroup = new ProjectileGroup(this);
     this.enemyProjectiles = new EnemyProjectileGroup(this);
 
-    this.playerJewelOverlap = this.physics.add.overlap(
-      this.player,
-      this.jewels,
-      this.collectObject,
-      null,
-      this
-    );
-
     this.directionToClosestEntity = null;
     this.graphics = this.add.graphics();
     this.debugRectangle = new Phaser.Geom.Rectangle(0, 0, 16, 16);
-
-    this.attackAction = () => {
-      if (this.directionToClosestEntity) {
-        // Fire the projectile towards the closest entity
-        this.projectileGroup.fireProjectile(
-          this.player.x,
-          this.player.y,
-          this.directionToClosestEntity
-        );
-      } else {
-        // If there are no nearby entities, keep the current behavior
-        let direction;
-        switch (this.player.facing) {
-          case "up":
-            direction = { x: 0, y: -1 };
-            break;
-          case "down":
-            direction = { x: 0, y: 1 };
-            break;
-          case "left":
-            direction = { x: -1, y: 0 };
-            break;
-          case "right":
-            direction = { x: 1, y: 0 };
-            break;
-        }
-        this.projectileGroup.fireProjectile(
-          this.player.x,
-          this.player.y,
-          direction
-        );
-      }
-    };
 
     this.frogs.forEach(frog => {
       frog.on(
@@ -244,71 +104,13 @@ export default class GameScene extends Phaser.Scene {
       );
     });
 
-    this.physics.add.overlap(
-      this.enemyProjectiles,
-      this.player,
-      playerHit,
-      null,
-      this
-    );
-
-    this.physics.add.overlap(
-      this.projectileGroup,
-      this.frogs,
-      hitFrog,
-      null,
-      this
-    );
-
-    function playerHit(player, projectile) {
-      // choose an amount of damage between the projectile's min_attack and max_attack
-      let projectileDamage = Phaser.Math.Between(
-        projectile.min_attack,
-        projectile.max_attack
-      );
-
-      // Play explosion animation
-      // ...
-
-      // Destroy the projectile
-      projectile.destroy();
-
-      // Player takes damage
-      player.takeDamage(projectileDamage);
-
-      // Create damage text with red color
-      let damageText = new DamageValue(
-        this,
-        player.x,
-        player.y - 10,
-        `${projectileDamage}`,
-        { color: "red" }
-      );
-    }
-
-    function hitFrog(frog, projectile) {
-      if (projectile.active) {
-        projectile.disable();
-
-        let randomDamage = Phaser.Math.Between(
-          this.player.min_attack,
-          this.player.max_attack
-        );
-
-        frog.takeDamage(randomDamage);
-
-        let damageText = new DamageValue(
-          this,
-          frog.x,
-          frog.y - 10,
-          `${randomDamage}`
-        );
-      }
-    }
+    this.addOverlaps();
 
     this.frogs.forEach(frog => {
       frog.on(Events.FrogDestroyed, this.handleFrogFried, this);
     });
+
+    this.mobileDeviceSetup();
 
     const uiScene = this.scene.get(Scenes.UI);
 
@@ -321,17 +123,6 @@ export default class GameScene extends Phaser.Scene {
 
     // Collision Boxes for Debugging
     // this.physics.world.createDebugGraphic();
-
-    // this.generateFunction();
-  }
-
-  handleHealthChanged(playerHealth) {
-    // Emit a 'playerhealthchanged' event from the scene
-    this.events.emit(Events.PlayerHealthChanged, playerHealth);
-  }
-
-  handleFrogFried(frog) {
-    this.events.emit(Events.PlayerFrogsFried, frog);
   }
 
   update() {
@@ -423,6 +214,164 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
+  addOverlaps() {
+    this.physics.add.overlap(
+      this.player,
+      this.jewels,
+      this.collectObject,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.enemyProjectiles,
+      this.player,
+      this.playerHit,
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.projectileGroup,
+      this.frogs,
+      this.hitFrog,
+      null,
+      this
+    );
+  }
+
+  addCollisions() {
+    this.playerTerrainCollider = this.physics.add.collider(
+      this.player,
+      this.terrain.layer
+    );
+
+    this.frogTerrainCollider = this.physics.add.collider(
+      this.frogs,
+      this.terrain.layer
+    );
+  }
+
+  attackAction() {
+    if (this.directionToClosestEntity) {
+      // Fire the projectile towards the closest entity
+      this.projectileGroup.fireProjectile(
+        this.player.x,
+        this.player.y,
+        this.directionToClosestEntity
+      );
+    } else {
+      // If there are no nearby entities, keep the current behavior
+      let direction;
+      switch (this.player.facing) {
+        case "up":
+          direction = { x: 0, y: -1 };
+          break;
+        case "down":
+          direction = { x: 0, y: 1 };
+          break;
+        case "left":
+          direction = { x: -1, y: 0 };
+          break;
+        case "right":
+          direction = { x: 1, y: 0 };
+          break;
+      }
+      this.projectileGroup.fireProjectile(
+        this.player.x,
+        this.player.y,
+        direction
+      );
+    }
+  }
+
+  hitFrog(frog, projectile) {
+    if (projectile.active) {
+      projectile.disable();
+
+      let randomDamage = Phaser.Math.Between(
+        this.player.min_attack,
+        this.player.max_attack
+      );
+
+      frog.takeDamage(randomDamage);
+
+      let damageText = new DamageValue(
+        this,
+        frog.x,
+        frog.y - 10,
+        `${randomDamage}`
+      );
+    }
+  }
+
+  playerHit(player, projectile) {
+    // choose an amount of damage between the projectile's min_attack and max_attack
+    let projectileDamage = Phaser.Math.Between(
+      projectile.min_attack,
+      projectile.max_attack
+    );
+
+    // Play explosion animation
+    // ...
+
+    // Destroy the projectile
+    projectile.destroy();
+
+    // Player takes damage
+    player.takeDamage(projectileDamage);
+
+    // Create damage text with red color
+    let damageText = new DamageValue(
+      this,
+      player.x,
+      player.y - 10,
+      `${projectileDamage}`,
+      { color: "red" }
+    );
+  }
+
+  handleHealthChanged(playerHealth) {
+    // Emit a 'playerhealthchanged' event from the scene
+    this.events.emit(Events.PlayerHealthChanged, playerHealth);
+  }
+
+  handleFrogFried(frog) {
+    this.events.emit(Events.PlayerFrogsFried, frog);
+  }
+
+  createAnimationKeys() {
+    this.anims.create({
+      key: Animations.FrogMove,
+      frames: this.anims.generateFrameNumbers(Assets.Frog, {
+        start: 0,
+        end: 1,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+    AnimationKeys.push(Animations.FrogMove);
+
+    this.anims.create({
+      key: Animations.FrogIdle,
+      frames: [{ key: Assets.Frog, frame: 0 }],
+      frameRate: 10,
+    });
+
+    AnimationKeys.push(Animations.FrogIdle);
+
+    this.anims.create({
+      key: Animations.Explosion,
+      frames: this.anims.generateFrameNumbers(Assets.Explosion, {
+        start: 0,
+        end: 5,
+      }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    AnimationKeys.push(Animations.Explosion);
+  }
+
   collectObject(player, jewel) {
     if (data.gameActive) {
       jewel.destroy();
@@ -434,7 +383,7 @@ export default class GameScene extends Phaser.Scene {
       );
       this.player.takeDamage(-10);
 
-      if (this.player.collectedJewels >= 20) {
+      if (this.player.collectedJewels >= 1) {
         this.gameOver();
       }
     }
@@ -454,5 +403,31 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.scene.get(Scenes.UI).showGameOver();
+  }
+
+  mobileDeviceSetup() {
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+
+    this.mobileAttackButton = this.add.rectangle(
+      centerX - 128,
+      centerY + 58,
+      40,
+      40,
+      Colors.White
+    );
+    this.mobileAttackButton.setInteractive();
+    this.mobileAttackButton.on(
+      "pointerdown",
+      function (pointer, localX, localY, event) {
+        this.player.attacking = !this.player.attacking;
+        event.stopPropagation();
+      },
+      this
+    );
+
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    this.mobileAttackButton.setScrollFactor(0);
+    this.mobileAttackButton.setVisible(isMobile);
   }
 }

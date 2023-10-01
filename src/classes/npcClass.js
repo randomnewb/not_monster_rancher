@@ -25,6 +25,10 @@ export default class NPC extends Entity {
       },
       [scene, this]
     );
+
+    this.attackTransitionRange = 32;
+    this.detectionRange = 64;
+    this.disengagementRange = 80;
   }
 
   update() {

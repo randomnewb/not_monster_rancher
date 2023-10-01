@@ -1,4 +1,4 @@
-import { Scenes, Assets, Events } from "../utils/constants.js";
+import { Scenes, Assets, Events, AnimationKeys } from "../utils/constants.js";
 import data from "../data/data.js";
 
 export default class UIScene extends Phaser.Scene {
@@ -156,6 +156,12 @@ export default class UIScene extends Phaser.Scene {
     this.add.rectangle(0, 0, 1280 * 2, 720 * 2, 0x000);
     const mainMenuScene = this.scene.get(Scenes.MainMenu);
     mainMenuScene.scene.restart();
+
+    AnimationKeys.forEach(key => {
+      if (this.anims.exists(key)) {
+        this.anims.remove(key);
+      }
+    });
 
     this.scene.stop(Scenes.Game);
     this.scene.stop(Scenes.UI);

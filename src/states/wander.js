@@ -34,7 +34,7 @@ export default class WanderState extends State {
     );
 
     // Check if the player is within 3 tiles distance
-    if (distance <= 48) {
+    if (distance <= npc.detectionRange) {
       npc.stateMachine.transition(States.Detect);
       npc.wanderCounter = 0; // Reset counter
     }

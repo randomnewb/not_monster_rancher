@@ -44,6 +44,8 @@ export const Animations = {
   Explosion: "explosion",
 };
 
+export const AnimationKeys = [];
+
 export const Colors = {
   Red: 0xbe4a2f,
   Orange: 0xd77643,

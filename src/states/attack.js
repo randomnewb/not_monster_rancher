@@ -29,7 +29,7 @@ export default class AttackState extends State {
     );
 
     // Check if the player is more than 80 units away
-    if (distance > 80) {
+    if (distance > npc.disengagementRange) {
       npc.stateMachine.transition(States.Idle);
 
       // Create the question mark sprite above the npc's head
