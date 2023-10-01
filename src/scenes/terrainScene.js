@@ -1,4 +1,4 @@
-import { Scenes, Assets } from "../utils/constants.js";
+import { Scenes, Assets, Colors } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
@@ -63,14 +63,29 @@ export default class Terrain extends Phaser.GameObjects.Group {
     randomNumber();
 
     const grassTileColors = [
-      0x8fce00, 0x80b900, 0x72a400, 0x649000, 0x557b00, 0xbf9000, 0xab8100,
+      Colors.Brown,
+      Colors.DarkRed,
+      Colors.Gold,
+      Colors.LightGreen,
+      Colors.DarkGreen,
+      Colors.ForestGreen,
     ];
 
     const obstructionTileColors = [
-      0x38761d, 0x326a1a, 0x2c5e17, 0x275214, 0x214611,
+      Colors.DarkRed,
+      Colors.DarkBrown,
+      Colors.LightGreen,
+      Colors.DarkGreen,
+      Colors.ForestGreen,
     ];
 
-    const stoneTileColors = [0x5b5b5b, 0x515151, 0x484848, 0x3f3f3f, 0x363636];
+    const stoneTileColors = [
+      Colors.LightGrey,
+      Colors.Grey,
+      Colors.DarkGrey,
+      Colors.Navy,
+      Colors.RoyalBlue,
+    ];
 
     dataLayer.forEach(row => {
       row.forEach(tile => {

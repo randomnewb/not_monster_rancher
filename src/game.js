@@ -1,3 +1,4 @@
+import { Colors } from "./utils/constants.js";
 import Phaser from "phaser";
 import GameScene from "./scenes/gameScene.js";
 import UIScene from "./scenes/uiScene.js";
@@ -8,7 +9,7 @@ import NewGameMenuScene from "./scenes/newGameMenuScene.js";
 import InputTextPlugin from "phaser3-rex-plugins/plugins/inputtext-plugin.js";
 
 const config = {
-  backgroundColor: 0x212121,
+  backgroundColor: Colors.Black,
   type: Phaser.AUTO,
   parent: "root",
   dom: {
