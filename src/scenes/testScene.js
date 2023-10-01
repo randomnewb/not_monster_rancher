@@ -1,4 +1,11 @@
-import { Scenes, Assets, Colors, Events } from "../utils/constants.js";
+import {
+  Scenes,
+  Assets,
+  Colors,
+  Events,
+  Animations,
+} from "../utils/constants.js";
+
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
@@ -92,9 +99,9 @@ export default class GameScene extends Phaser.Scene {
       this.frogs.push(new Frog(this, x, y, Assets.Frog));
     }
 
-    if (!this.anims.exists("frog_move")) {
+    if (!this.anims.exists(Animations.FrogMove)) {
       this.anims.create({
-        key: "frog_move",
+        key: Animations.FrogMove,
         frames: this.anims.generateFrameNumbers(Assets.Frog, {
           start: 0,
           end: 1,
@@ -104,18 +111,18 @@ export default class GameScene extends Phaser.Scene {
       });
     }
 
-    if (!this.anims.exists("frog_idle")) {
+    if (!this.anims.exists(Animations.FrogIdle)) {
       this.anims.create({
-        key: "frog_idle",
+        key: Animations.FrogIdle,
         frames: [{ key: Assets.Frog, frame: 0 }],
         frameRate: 10,
       });
     }
 
-    if (!this.anims.exists(Assets.Explosion)) {
+    if (!this.anims.exists(Animations.Explosion)) {
       this.anims.create({
-        key: "explosion",
-        frames: this.anims.generateFrameNumbers(Assets.Explosion, {
+        key: Animations.Explosion,
+        frames: this.anims.generateFrameNumbers(Animations.Explosion, {
           start: 0,
           end: 5,
         }),

@@ -1,4 +1,10 @@
-import { Assets, States, Colors, Events } from "../utils/constants.js";
+import {
+  Assets,
+  States,
+  Colors,
+  Events,
+  Animations,
+} from "../utils/constants.js";
 
 import NPC from "./npcClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -90,7 +96,11 @@ export default class Frog extends NPC {
     // Check if the scene is defined
     if (this.scene) {
       // Create an explosion sprite at the frog's position
-      let explosion = this.scene.add.sprite(this.x, this.y, Assets.Explosion);
+      let explosion = this.scene.add.sprite(
+        this.x,
+        this.y,
+        Animations.Explosion
+      );
 
       // Play the explosion animation
       explosion.play("explosion");
@@ -162,7 +172,7 @@ export default class Frog extends NPC {
     this.healthBar.setPosition(this.x, this.y + 10);
 
     if (this.isMoving) {
-      this.anims.play("frog_move", true);
+      this.anims.play(Animations.FrogMove, true);
 
       // Flip the animation based on the direction of movement
       if (this.body.velocity.x > 0) {
@@ -173,7 +183,7 @@ export default class Frog extends NPC {
         this.flipX = false;
       }
     } else {
-      this.anims.play("frog_idle", true);
+      this.anims.play(Animations.FrogIdle, true);
     }
 
     // implemented inside update() method

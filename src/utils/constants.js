@@ -38,6 +38,12 @@ export const Events = {
   FireProjectile: "fireProjectile",
 };
 
+export const Animations = {
+  FrogMove: "frog_move",
+  FrogIdle: "frog_idle",
+  Explosion: "explosion",
+};
+
 export const Colors = {
   Red: 0xbe4a2f,
   Orange: 0xd77643,
