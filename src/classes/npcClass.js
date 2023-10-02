@@ -109,12 +109,12 @@ export default class NPC extends Entity {
 
       // use math.random and an 50% chance to drop a jewel
 
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.25) {
         // Instantiate a jewel at the closest non-obstruction tile's center
         new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, [
-          Colors.CardinalRed,
-          Colors.Yellow,
-          Colors.LightBlue,
+          Colors.LightGreen,
+          Colors.ForestGreen,
+          Colors.DarkGreen,
         ]);
       }
     }
