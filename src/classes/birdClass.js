@@ -8,9 +8,16 @@ import {
 
 import NPC from "./npcClass.js";
 
-export default class Frog extends NPC {
+export default class Bird extends NPC {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
+
+    this.max_health = Phaser.Math.Between(2, 4);
+    this.speed = Phaser.Math.Between(25, 50);
+    this.wanderTime = Phaser.Math.Between(5, 10) * 60;
+    this.attackTransitionRange = 48;
+    this.detectionRange = 80;
+    this.disengagementRange = 100;
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -20,15 +27,16 @@ export default class Frog extends NPC {
 
     this.isMoving = false;
 
-    const frogColors = [
-      Colors.LightGreen,
-      Colors.DarkGreen,
-      Colors.ForestGreen,
-      Colors.DarkBlue,
+    const birdColors = [
+      Colors.LightGrey,
+      Colors.SkyBlue,
+      Colors.Beige,
+      Colors.Tan,
+      Colors.LightBrown,
     ];
 
     this.originalTint =
-      frogColors[Math.floor(Math.random() * frogColors.length)];
+      birdColors[Math.floor(Math.random() * birdColors.length)];
 
     this.setTint(this.originalTint);
   }
@@ -44,7 +52,7 @@ export default class Frog extends NPC {
     this.healthBar.setPosition(this.x, this.y + 10);
 
     if (this.isMoving) {
-      this.anims.play(Animations.FrogMove, true);
+      this.anims.play(Animations.BirdMove, true);
 
       if (this.body.velocity.x > 0) {
         this.flipX = true;
@@ -52,7 +60,7 @@ export default class Frog extends NPC {
         this.flipX = false;
       }
     } else {
-      this.anims.play(Animations.FrogIdle, true);
+      this.anims.play(Animations.BirdIdle, true);
     }
   }
 }

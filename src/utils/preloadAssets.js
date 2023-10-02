@@ -16,6 +16,11 @@ export default function preloadAssets() {
     frameHeight: 16,
   });
 
+  this.load.spritesheet(Assets.Bird, "./assets/bird1.png", {
+    frameWidth: 16,
+    frameHeight: 16,
+  });
+
   this.load.spritesheet(Assets.EnemyAttack1, "./assets/enemy_attack1.png", {
     frameWidth: 16,
     frameHeight: 16,

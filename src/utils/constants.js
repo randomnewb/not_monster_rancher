@@ -9,6 +9,7 @@ export const Assets = {
   FoliageTiles: "foliageTiles",
   Characters: "characters",
   Frog: "frog",
+  Bird: "bird",
   EnemyAttack1: "enemy_attack1",
   Jewel: "jewel",
   Projectiles: "projectiles",
@@ -41,6 +42,8 @@ export const Events = {
 export const Animations = {
   FrogMove: "frog_move",
   FrogIdle: "frog_idle",
+  BirdMove: "bird_move",
+  BirdIdle: "bird_idle",
   Explosion: "explosion",
 };
 

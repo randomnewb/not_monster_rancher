@@ -1,3 +1,5 @@
+- [ ] bug: probably need to destroy all monsters when game is over or disable them when player dies
+
 - [x] move input from playerClass into gameScene
 
 - implementing constants/enums

@@ -15,6 +15,7 @@ import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
 import Player from "../classes/playerClass.js";
 import Frog from "../classes/frogClass.js";
+import Bird from "../classes/birdClass.js";
 import DamageValue from "../classes/damageValueClass.js";
 import { ProjectileGroup } from "../scripts/projectileGroup.js";
 import { EnemyProjectileGroup } from "../scripts/enemyProjectileGroup.js";
@@ -38,12 +39,19 @@ export default class GameScene extends Phaser.Scene {
     for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
-      let frog = new Frog(this, x, y, Assets.Frog);
-      frog.setDepth(1);
-      frog.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
-      this.monsters.push(frog);
-    }
 
+      if (Phaser.Math.Between(0, 1) === 0) {
+        let frog = new Frog(this, x, y, Assets.Frog);
+        frog.setDepth(1);
+        frog.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
+        this.monsters.push(frog);
+      } else {
+        let bird = new Bird(this, x, y, Assets.Bird);
+        bird.setDepth(1);
+        bird.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
+        this.monsters.push(bird);
+      }
+    }
     this.generateFunction = () => {
       if (this.terrain) {
         this.physics.world.removeCollider(this.playerTerrainCollider);
@@ -242,8 +250,14 @@ export default class GameScene extends Phaser.Scene {
       this.terrain.layer
     );
 
+    // Filter out Bird instances
+    this.collidableMonsters = this.monsters.filter(
+      monster => !(monster instanceof Bird)
+    );
+    // Add colliders to non-Bird monsters
+
     this.monsterTerrainCollider = this.physics.add.collider(
-      this.monsters,
+      this.collidableMonsters,
       this.terrain.layer
     );
   }
@@ -355,6 +369,26 @@ export default class GameScene extends Phaser.Scene {
     });
 
     AnimationKeys.push(Animations.FrogIdle);
+
+    this.anims.create({
+      key: Animations.BirdMove,
+      frames: this.anims.generateFrameNumbers(Assets.Bird, {
+        start: 1,
+        end: 3,
+      }),
+      frameRate: 5,
+      repeat: -1,
+    });
+
+    AnimationKeys.push(Animations.BirdMove);
+
+    this.anims.create({
+      key: Animations.BirdIdle,
+      frames: [{ key: Assets.Bird, frame: 0 }],
+      frameRate: 10,
+    });
+
+    AnimationKeys.push(Animations.BirdIdle);
 
     this.anims.create({
       key: Animations.Explosion,
