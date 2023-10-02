@@ -70,7 +70,11 @@ export default class UIScene extends Phaser.Scene {
       this.updateJewelText,
       this
     );
-    gameScene.events.on(Events.PlayerFrogsFried, this.updateFrogsText, this);
+    gameScene.events.on(
+      Events.PlayerMonstersDefeated,
+      this.updateMonstersDefeatedText,
+      this
+    );
 
     let playerHealth = data.playerMaxHealth; // replace this with the actual player's health
 
@@ -100,12 +104,12 @@ export default class UIScene extends Phaser.Scene {
       }
     );
 
-    this.frogsFried = 0;
+    this.monstersDefeated = 0;
 
-    this.playerFrogsFried = this.add.text(
+    this.playerMonstersDefeated = this.add.text(
       this.gameWidth / 2 + 120, // x position - center of the screen
       this.gameHeight - 50, // y position - bottom of the screen with some padding
-      `Frogs Fried: ${this.frogsFried}`, // text to display
+      `Monsters Defeated: ${this.monstersDefeated}`, // text to display
       {
         fontSize: "32px",
         fill: "#fff",
@@ -142,9 +146,11 @@ export default class UIScene extends Phaser.Scene {
     this.playerJewelsText.setText(`Jewels: ${newJewels}`);
   }
 
-  updateFrogsText() {
-    this.frogsFried++;
-    this.playerFrogsFried.setText(`Frogs Fried: ${this.frogsFried}`);
+  updateMonstersDefeatedText() {
+    this.monstersDefeated++;
+    this.playerMonstersDefeated.setText(
+      `Monsters Defeated: ${this.monstersDefeated}`
+    );
   }
 
   showGameOver() {
@@ -154,6 +160,7 @@ export default class UIScene extends Phaser.Scene {
 
   restartGame() {
     this.add.rectangle(0, 0, 1280 * 2, 720 * 2, 0x000);
+    this.removeEventListeners();
     const mainMenuScene = this.scene.get(Scenes.MainMenu);
     mainMenuScene.scene.restart();
 
@@ -165,5 +172,24 @@ export default class UIScene extends Phaser.Scene {
 
     this.scene.stop(Scenes.Game);
     this.scene.stop(Scenes.UI);
+  }
+
+  removeEventListeners() {
+    const gameScene = this.scene.get(Scenes.Game);
+    gameScene.events.off(
+      Events.PlayerHealthChanged,
+      this.updateHealthText,
+      this
+    );
+    gameScene.events.off(
+      Events.PlayerJewelCollected,
+      this.updateJewelText,
+      this
+    );
+    gameScene.events.off(
+      Events.PlayerMonstersDefeated,
+      this.updateMonstersDefeatedText,
+      this
+    );
   }
 }

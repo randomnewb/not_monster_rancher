@@ -28,10 +28,10 @@ export const States = {
 };
 
 export const Events = {
-  FrogDestroyed: "frogDestroyed",
+  MonsterDestroyed: "monsterDestroyed",
   HealthChanged: "healthChanged",
   PlayerHealthChanged: "playerHealthChanged",
-  PlayerFrogsFried: "playerFrogsFried",
+  PlayerMonstersDefeated: "playerMonstersDefeated",
   PlayerJewelCollected: "playerJewelCollected",
   Generate: "generate",
   MapArrayReady: "mapArrayReady",

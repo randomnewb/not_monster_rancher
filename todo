@@ -1,4 +1,4 @@
-- [ ] move input from playerClass into gameScene
+- [x] move input from playerClass into gameScene
 
 - implementing constants/enums
 
@@ -11,7 +11,7 @@
 - [x] implement properties for npc like detectionRange
 
 - [x] create testScene (basically a copy of gameScene) to test out new features
-- [ ] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
+- [/] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
 - [ ] implement Tiled again for creating tilemaps with meta data (e.g. if a tile is collidable, interactable, etc.):
 
 - [ ] create phaser plugins where possible for things like (e.g. playing sound effects, loading an area from a tilemap, controls available to my scene)
@@ -28,7 +28,7 @@
 
   - [ ] separate components into own classes where possible
   - separate certain code into their own methods where possible
-  - [ ] preloading all assets can be in their own method (preloadAssets())
+  - [x] preloading all assets can be in their own method (preloadAssets())
 
 - [x] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
 - [x] frogs have a weighted chance to drop a jewel (right now 50%)

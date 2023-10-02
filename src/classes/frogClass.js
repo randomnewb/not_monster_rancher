@@ -88,7 +88,7 @@ export default class Frog extends NPC {
 
   destroy() {
     // Emit an event to the scene to let it know that this entity was destroyed
-    this.emit(Events.FrogDestroyed);
+    this.emit(Events.MonsterDestroyed, this);
 
     // Destroy the health bar
     this.healthBar.destroy();

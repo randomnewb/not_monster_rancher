@@ -24,6 +24,7 @@ export default class GameScene extends Phaser.Scene {
     super({ key: Scenes.Game, active: false });
     this.tileWidth = 16;
     this.tileHeight = 16;
+    this.isMobile = /Mobi|Android/i.test(navigator.userAgent);
   }
 
   preload() {
@@ -33,17 +34,20 @@ export default class GameScene extends Phaser.Scene {
   create() {
     this.createAnimationKeys();
 
-    this.frogs = [];
+    this.monsters = [];
     for (let i = 0; i < 100; i++) {
       let x = Phaser.Math.Between(0, 1024);
       let y = Phaser.Math.Between(0, 1024);
-      this.frogs.push(new Frog(this, x, y, Assets.Frog));
+      let frog = new Frog(this, x, y, Assets.Frog);
+      frog.setDepth(1);
+      frog.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
+      this.monsters.push(frog);
     }
 
     this.generateFunction = () => {
       if (this.terrain) {
         this.physics.world.removeCollider(this.playerTerrainCollider);
-        this.physics.world.removeCollider(this.frogTerrainCollider);
+        this.physics.world.removeCollider(this.monsterTerrainCollider);
         this.terrain.map.destroyLayer(this.terrain.layer);
       }
 
@@ -81,6 +85,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
 
+    this.keys = this.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
+    this.input.on(
+      "pointerdown",
+      pointer => this.player.handlePointerDown(pointer, this.terrain.map),
+      this
+    );
+
     this.jewels = this.physics.add.group();
     this.projectileGroup = new ProjectileGroup(this);
     this.enemyProjectiles = new EnemyProjectileGroup(this);
@@ -89,13 +100,13 @@ export default class GameScene extends Phaser.Scene {
     this.graphics = this.add.graphics();
     this.debugRectangle = new Phaser.Geom.Rectangle(0, 0, 16, 16);
 
-    this.frogs.forEach(frog => {
-      frog.on(
+    this.monsters.forEach(monster => {
+      monster.on(
         Events.FireProjectile,
-        (frog, direction, min_attack, max_attack) => {
+        (monster, direction, min_attack, max_attack) => {
           this.enemyProjectiles.fireProjectile(
-            frog.x,
-            frog.y,
+            monster.x,
+            monster.y,
             direction,
             min_attack,
             max_attack
@@ -105,10 +116,6 @@ export default class GameScene extends Phaser.Scene {
     });
 
     this.addOverlaps();
-
-    this.frogs.forEach(frog => {
-      frog.on(Events.FrogDestroyed, this.handleFrogFried, this);
-    });
 
     this.mobileDeviceSetup();
 
@@ -127,16 +134,22 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     if (data.gameActive) {
-      this.player.update();
+      this.player.update(
+        this.keys.W.isDown,
+        this.keys.A.isDown,
+        this.keys.S.isDown,
+        this.keys.D.isDown,
+        Phaser.Input.Keyboard.JustDown(this.keys.I),
+        Phaser.Input.Keyboard.JustDown(this.keys.J),
+        Phaser.Input.Keyboard.JustDown(this.keys.K),
+        Phaser.Input.Keyboard.JustDown(this.keys.L)
+      );
 
-      if (this.player.attacking) {
-        this.mobileAttackButton.setFillStyle(Colors.Gold);
-      } else {
-        this.mobileAttackButton.setFillStyle(Colors.DarkBlue);
-      }
+      this.mobileAttackButton.setFillStyle(
+        this.player.attacking ? Colors.Gold : Colors.DarkBlue
+      );
 
-      const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-      this.mobileAttackButton.setVisible(isMobile);
+      this.mobileAttackButton.setVisible(this.isMobile);
 
       if (
         this.player.attacking &&
@@ -146,57 +159,32 @@ export default class GameScene extends Phaser.Scene {
         this.attackAction();
       }
 
-      this.frogs.forEach(frog => {
-        frog.setDepth(1);
-        frog.update();
+      this.monsters.forEach(monster => {
+        monster.update();
       });
 
-      this.frogs = this.frogs.filter(frog => frog.active);
-      const nearbyEntities = this.frogs.filter(frog => {
+      this.monsters = this.monsters.filter(monster => monster.active);
+
+      let closestEntity = null;
+      let minDistance = Infinity;
+      this.monsters.forEach(monster => {
         const distance = Phaser.Math.Distance.Between(
           this.player.x,
           this.player.y,
-          frog.x,
-          frog.y
+          monster.x,
+          monster.y
         );
-        // distance between closest frog and player
-        return distance <= 5 * this.tileWidth;
+        if (distance <= 5 * this.tileWidth && distance < minDistance) {
+          closestEntity = monster;
+          minDistance = distance;
+        }
       });
 
-      // If there are nearby entities, find the closest one
-      if (nearbyEntities.length > 0) {
-        const closestEntity = nearbyEntities.reduce((closest, entity) => {
-          const distanceToCurrent = Phaser.Math.Distance.Between(
-            this.player.x,
-            this.player.y,
-            entity.x,
-            entity.y
-          );
-          const distanceToClosest = closest
-            ? Phaser.Math.Distance.Between(
-                this.player.x,
-                this.player.y,
-                closest.x,
-                closest.y
-              )
-            : Infinity;
-          return distanceToCurrent < distanceToClosest ? entity : closest;
-        }, null);
-
-        // Calculate the direction towards the closest entity
+      if (closestEntity) {
         this.directionToClosestEntity = {
           x: closestEntity.x - this.player.x,
           y: closestEntity.y - this.player.y,
         };
-
-        // draw a 16x16 at that frog's position
-        this.graphics.clear();
-        this.graphics.lineStyle(1, Colors.Gold);
-        this.debugRectangle.setPosition(
-          closestEntity.x - 8,
-          closestEntity.y - 8
-        );
-        this.graphics.strokeRectShape(this.debugRectangle);
 
         // Normalize the direction
         const magnitude = Math.sqrt(
@@ -205,13 +193,21 @@ export default class GameScene extends Phaser.Scene {
         );
         this.directionToClosestEntity.x /= magnitude;
         this.directionToClosestEntity.y /= magnitude;
+
+        // Draw a 16x16 square at the monster's position
+        this.drawDebugSquare(closestEntity);
       } else {
         this.directionToClosestEntity = null;
         this.graphics.clear();
       }
-    } else {
-      this.player.body.setVelocity(0);
     }
+  }
+
+  drawDebugSquare(entity) {
+    this.graphics.clear();
+    this.graphics.lineStyle(1, Colors.Gold);
+    this.debugRectangle.setPosition(entity.x - 8, entity.y - 8);
+    this.graphics.strokeRectShape(this.debugRectangle);
   }
 
   addOverlaps() {
@@ -233,8 +229,8 @@ export default class GameScene extends Phaser.Scene {
 
     this.physics.add.overlap(
       this.projectileGroup,
-      this.frogs,
-      this.hitFrog,
+      this.monsters,
+      this.hitMonster,
       null,
       this
     );
@@ -246,8 +242,8 @@ export default class GameScene extends Phaser.Scene {
       this.terrain.layer
     );
 
-    this.frogTerrainCollider = this.physics.add.collider(
-      this.frogs,
+    this.monsterTerrainCollider = this.physics.add.collider(
+      this.monsters,
       this.terrain.layer
     );
   }
@@ -285,7 +281,7 @@ export default class GameScene extends Phaser.Scene {
     }
   }
 
-  hitFrog(frog, projectile) {
+  hitMonster(monster, projectile) {
     if (projectile.active) {
       projectile.disable();
 
@@ -294,12 +290,12 @@ export default class GameScene extends Phaser.Scene {
         this.player.max_attack
       );
 
-      frog.takeDamage(randomDamage);
+      monster.takeDamage(randomDamage);
 
       let damageText = new DamageValue(
         this,
-        frog.x,
-        frog.y - 10,
+        monster.x,
+        monster.y - 10,
         `${randomDamage}`
       );
     }
@@ -336,8 +332,8 @@ export default class GameScene extends Phaser.Scene {
     this.events.emit(Events.PlayerHealthChanged, playerHealth);
   }
 
-  handleFrogFried(frog) {
-    this.events.emit(Events.PlayerFrogsFried, frog);
+  handleMonsterDefeated(monster) {
+    this.events.emit(Events.PlayerFrogsFried, monster);
   }
 
   createAnimationKeys() {
@@ -398,7 +394,7 @@ export default class GameScene extends Phaser.Scene {
       this.player.setActive(false);
     }
 
-    Object.values(this.scene.scene.player.keys).forEach(key => {
+    Object.values(this.keys).forEach(key => {
       this.input.keyboard.removeCapture(key.keyCode);
     });
 
@@ -426,8 +422,7 @@ export default class GameScene extends Phaser.Scene {
       this
     );
 
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
     this.mobileAttackButton.setScrollFactor(0);
-    this.mobileAttackButton.setVisible(isMobile);
+    this.mobileAttackButton.setVisible(this.isMobile);
   }
 }
