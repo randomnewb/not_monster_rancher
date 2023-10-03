@@ -16,6 +16,7 @@ export default class Bird extends NPC {
 
     this.max_health = Phaser.Math.Between(2, 4);
     this.speed = Phaser.Math.Between(25, 50);
+    this.directions = [0, 180];
     this.wanderTime = Phaser.Math.Between(5, 10) * 60;
     this.attackTransitionRange = 48;
     this.detectionRange = 80;

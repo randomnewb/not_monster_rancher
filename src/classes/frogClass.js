@@ -12,6 +12,8 @@ export default class Frog extends NPC {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
+    this.directions = [0, 90, 180, 270];
+
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);

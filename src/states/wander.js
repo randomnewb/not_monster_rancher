@@ -10,9 +10,7 @@ export default class WanderState extends State {
     // console.log(`${npc.constructor.name} entered the wander state`);
     npc.isMoving = true;
 
-    // Wander state logic
-    let directions = [0, 90, 180, 270]; // Orthogonal directions in degrees
-    let direction = Phaser.Math.RND.pick(directions) * (Math.PI / 180); // Pick a random direction and convert to radians
+    let direction = Phaser.Math.RND.pick(npc.directions) * (Math.PI / 180); // Pick a random direction and convert to radians
     let speed = npc.speed; // Adjust speed to your needs
     npc.setVelocity(Math.cos(direction) * speed, Math.sin(direction) * speed);
 

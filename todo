@@ -1,5 +1,7 @@
 - [ ] bug: probably need to destroy all monsters when game is over or disable them when player dies
 
+  - might also be a bug with the obstruction tiles/map array and a monster being on top of one of the tiles when the game restarts?
+
 - [x] move input from playerClass into gameScene
 
 - implementing constants/enums
