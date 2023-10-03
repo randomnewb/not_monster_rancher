@@ -10,18 +10,21 @@ import NPC from "./npcClass.js";
 import Jewel from "./jewelClass.js";
 import data from "../data/data.js";
 
-export default class Bird extends NPC {
+export default class Bat extends NPC {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
-    this.entityName = "Bird";
-    this.max_health = Phaser.Math.Between(2, 4);
-    this.speed = Phaser.Math.Between(25, 50);
-    this.directions = [0, 180];
-    this.wanderTime = Phaser.Math.Between(5, 10) * 60;
-    this.attackTransitionRange = 48;
-    this.detectionRange = 80;
-    this.disengagementRange = 100;
+    this.entityName = "Bat";
+    this.max_health = Phaser.Math.Between(1, 3);
+    this.min_attack = 3;
+    this.max_attack = 5;
+    this.speed = Phaser.Math.Between(40, 75);
+    this.directions = [90, 270];
+    this.wanderTime = Phaser.Math.Between(10, 20) * 60;
+    this.idleTime = Phaser.Math.Between(1, 2) * 60;
+    this.attackTransitionRange = 36;
+    this.detectionRange = 70;
+    this.disengagementRange = 90;
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -33,9 +36,9 @@ export default class Bird extends NPC {
 
     const entityColors = [
       Colors.LightGrey,
-      Colors.SkyBlue,
-      Colors.Beige,
-      Colors.Tan,
+      Colors.Navy,
+      Colors.RoyalBlue,
+      Colors.DarkBrown,
       Colors.LightBrown,
     ];
 
@@ -95,11 +98,13 @@ export default class Bird extends NPC {
 
       // use math.random and an 50% chance to drop a jewel
 
-      if (Math.random() < 0.75) {
+      if (Math.random() < 0.95) {
         // Instantiate a jewel at the closest non-obstruction tile's center
         new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, [
-          Colors.Pumpkin,
-          Colors.Yellow,
+          Colors.Grey,
+          Colors.LightGrey,
+          Colors.LightBrown,
+          Colors.DarkBlue,
         ]);
       }
     }
@@ -122,7 +127,7 @@ export default class Bird extends NPC {
     this.healthBar.setPosition(this.x, this.y + 10);
 
     if (this.isMoving) {
-      this.anims.play(Animations.BirdMove, true);
+      this.anims.play(Animations.BatMove, true);
 
       if (this.body.velocity.x > 0) {
         this.flipX = true;
@@ -130,7 +135,7 @@ export default class Bird extends NPC {
         this.flipX = false;
       }
     } else {
-      this.anims.play(Animations.BirdIdle, true);
+      this.anims.play(Animations.BatIdle, true);
     }
   }
 }

@@ -10,6 +10,7 @@ export const Assets = {
   Characters: "characters",
   Frog: "frog",
   Bird: "bird",
+  Bat: "bat",
   EnemyAttack1: "enemy_attack1",
   Jewel: "jewel",
   Projectiles: "projectiles",
@@ -37,6 +38,7 @@ export const Events = {
   Generate: "generate",
   MapArrayReady: "mapArrayReady",
   FireProjectile: "fireProjectile",
+  ClosestEntityChanged: "closestEntityChanged",
 };
 
 export const Animations = {
@@ -44,6 +46,8 @@ export const Animations = {
   FrogIdle: "frog_idle",
   BirdMove: "bird_move",
   BirdIdle: "bird_idle",
+  BatMove: "bat_move",
+  BatIdle: "bat_idle",
   Explosion: "explosion",
 };
 

@@ -75,9 +75,13 @@ export default class UIScene extends Phaser.Scene {
       this.updateMonstersDefeatedText,
       this
     );
+    gameScene.events.on(
+      Events.ClosestEntityChanged,
+      this.updateMonsterNameText,
+      this
+    );
 
     let playerHealth = data.playerMaxHealth; // replace this with the actual player's health
-
     this.playerHealthText = this.add.text(
       this.gameWidth / 2 - 220, // x position - center of the screen
       this.gameHeight - 50, // y position - bottom of the screen with some padding
@@ -91,9 +95,8 @@ export default class UIScene extends Phaser.Scene {
     );
 
     let playerJewels = 0;
-
     this.playerJewelsText = this.add.text(
-      this.gameWidth / 2 - 25, // x position - center of the screen
+      this.gameWidth / 2 - 30, // x position - center of the screen
       this.gameHeight - 50, // y position - bottom of the screen with some padding
       `Jewels: ${playerJewels}`, // text to display
       {
@@ -105,11 +108,23 @@ export default class UIScene extends Phaser.Scene {
     );
 
     this.monstersDefeated = 0;
-
     this.playerMonstersDefeated = this.add.text(
       this.gameWidth / 2 + 120, // x position - center of the screen
       this.gameHeight - 50, // y position - bottom of the screen with some padding
       `Monsters Defeated: ${this.monstersDefeated}`, // text to display
+      {
+        fontSize: "32px",
+        fill: "#fff",
+        align: "center",
+        fontFamily: "HopeGold",
+      }
+    );
+
+    this.monsterName = "";
+    this.monsterNameText = this.add.text(
+      this.gameWidth / 2 - 65, // x position - center of the screen
+      this.gameHeight - 100, // y position - bottom of the screen with some padding
+      `Monster Name: ${this.monsterName}`, // text to display
       {
         fontSize: "32px",
         fill: "#fff",
@@ -153,6 +168,10 @@ export default class UIScene extends Phaser.Scene {
     );
   }
 
+  updateMonsterNameText(newName) {
+    this.monsterNameText.setText(`Monster Name: ${newName}`);
+  }
+
   showGameOver() {
     this.gameOverText.setVisible(true);
     this.gameOverButton.setVisible(true);
@@ -189,6 +208,11 @@ export default class UIScene extends Phaser.Scene {
     gameScene.events.off(
       Events.PlayerMonstersDefeated,
       this.updateMonstersDefeatedText,
+      this
+    );
+    gameScene.events.off(
+      Events.ClosestEntityChanged,
+      this.updateMonsterNameText,
       this
     );
   }

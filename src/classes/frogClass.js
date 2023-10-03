@@ -12,6 +12,7 @@ export default class Frog extends NPC {
   constructor(scene, x, y, texture) {
     super(scene, x, y, texture);
 
+    this.entityName = "Frog";
     this.directions = [0, 90, 180, 270];
 
     this.scene = scene;
@@ -22,7 +23,7 @@ export default class Frog extends NPC {
 
     this.isMoving = false;
 
-    const frogColors = [
+    const entityColors = [
       Colors.LightGreen,
       Colors.DarkGreen,
       Colors.ForestGreen,
@@ -30,7 +31,7 @@ export default class Frog extends NPC {
     ];
 
     this.originalTint =
-      frogColors[Math.floor(Math.random() * frogColors.length)];
+      entityColors[Math.floor(Math.random() * entityColors.length)];
 
     this.setTint(this.originalTint);
   }

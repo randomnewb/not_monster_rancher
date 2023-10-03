@@ -36,7 +36,7 @@
 
 - [x] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
 - [x] frogs have a weighted chance to drop a jewel (right now 50%)
-- [ ] diablo style enemy name and health bar at bottom
+- [/] diablo style enemy name and health bar at bottom
 - [ ] captured/tamed monsters have a different color outline than enemies
 - [ ] elite monsters ('larger' or scaled up monsters)
 - customized exp algorithm
