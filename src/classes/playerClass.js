@@ -14,6 +14,7 @@ export default class Player extends Entity {
 
     this.min_attack = 1;
     this.max_attack = 3;
+    this.speed = 50;
 
     this.level = 1;
     this.experience = 0;
@@ -93,12 +94,24 @@ export default class Player extends Entity {
     this.createBounceTween();
   }
 
-  addExperiencePoints(experiencePoints) {
-    this.experience += experiencePoints;
+  addExperiencePoints(monsterLevel) {
+    let experienceGain = (monsterLevel - this.level) * 5;
+
+    // Ensure the player gains at least 1 point, but no more than 25 points
+    experienceGain = Math.max(1, Math.min(25, experienceGain));
+
+    // If the player's level is equal to or more than 5 monster levels, no experience points are gained
+    if (this.level >= monsterLevel + 5) {
+      experienceGain = 0;
+    }
+
+    this.experience += experienceGain;
 
     if (this.experience >= 100) {
       this.levelUp();
     }
+
+    console.log(`Player gained ${experienceGain} experience points!`);
   }
 
   levelUp() {
@@ -111,6 +124,8 @@ export default class Player extends Entity {
 
     this.healthBar.updateHealth(this.current_health);
     this.emit(Events.HealthChanged, this.current_health);
+
+    console.log(`Player leveled up to level ${this.level}!`);
   }
 
   handlePointerDown(pointer) {
@@ -289,12 +304,11 @@ export default class Player extends Entity {
     this.targetWorldPoint.x += this.tileWidth / 2;
     this.targetWorldPoint.y += this.tileHeight / 2;
 
-    const speed = 100; // Can be adjusted accordingly to your preference
     this.scene.physics.moveTo(
       this,
       this.targetWorldPoint.x,
       this.targetWorldPoint.y,
-      speed
+      this.speed
     );
 
     // Calculate the direction of the movement
@@ -410,7 +424,7 @@ export default class Player extends Entity {
           this,
           this.targetWorldPoint.x,
           this.targetWorldPoint.y,
-          100 // adjust speed as needed
+          this.speed
         );
       }
 

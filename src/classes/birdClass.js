@@ -15,6 +15,9 @@ export default class Bird extends NPC {
     super(scene, x, y, texture);
 
     this.entityName = "Bird";
+
+    this.level = 2;
+
     this.max_health = Phaser.Math.Between(2, 4);
     this.speed = Phaser.Math.Between(25, 50);
     this.directions = [0, 180];

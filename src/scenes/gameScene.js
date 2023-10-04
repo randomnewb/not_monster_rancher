@@ -192,7 +192,7 @@ export default class GameScene extends Phaser.Scene {
           monster.x,
           monster.y
         );
-        if (distance <= 5 * this.tileWidth && distance < minDistance) {
+        if (distance <= 3 * this.tileWidth && distance < minDistance) {
           closestEntity = monster;
           minDistance = distance;
         }
@@ -374,6 +374,8 @@ export default class GameScene extends Phaser.Scene {
 
   handleMonsterDefeated(monster) {
     this.events.emit(Events.PlayerMonstersDefeated, monster);
+    console.log("Monster Defeated");
+    this.player.addExperiencePoints(monster.level);
   }
 
   createAnimationKeys() {

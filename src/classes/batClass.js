@@ -15,6 +15,9 @@ export default class Bat extends NPC {
     super(scene, x, y, texture);
 
     this.entityName = "Bat";
+
+    this.level = 3;
+
     this.max_health = Phaser.Math.Between(1, 3);
     this.min_attack = 3;
     this.max_attack = 5;
