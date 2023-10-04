@@ -98,6 +98,8 @@ export default class GameScene extends Phaser.Scene {
 
     const randomFrame = Phaser.Math.Between(0, 15);
     this.player = new Player(this, 72, 72, Assets.Characters, randomFrame);
+    // emit an event that the player's health changed, and pass it to the player's current health
+    this.events.emit(Events.PlayerHealthChanged, this.player.current_health);
 
     this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
 
@@ -455,7 +457,7 @@ export default class GameScene extends Phaser.Scene {
         Events.PlayerJewelCollected,
         this.player.collectedJewels
       );
-      this.player.takeDamage(-5);
+      this.player.takeDamage(-1);
 
       if (this.player.collectedJewels >= 30) {
         this.gameOver();

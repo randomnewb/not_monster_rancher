@@ -8,12 +8,15 @@ export default class Player extends Entity {
   constructor(scene, x, y, key, frame) {
     super(scene, x, y, key, frame);
 
-    this.max_health = data.playerMaxHealth;
+    this.max_health = 100;
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 
     this.min_attack = 1;
     this.max_attack = 3;
+
+    this.level = 1;
+    this.experience = 0;
 
     this.invincibilityCounter = 0;
     this.invincibilityCounterMax = 45;
@@ -88,6 +91,26 @@ export default class Player extends Entity {
     this.timedEvent = null;
 
     this.createBounceTween();
+  }
+
+  addExperiencePoints(experiencePoints) {
+    this.experience += experiencePoints;
+
+    if (this.experience >= 100) {
+      this.levelUp();
+    }
+  }
+
+  levelUp() {
+    this.level++;
+    this.experience = 0;
+    this.max_health += 20;
+    this.current_health = this.max_health;
+    this.min_attack += 1;
+    this.max_attack += 1;
+
+    this.healthBar.updateHealth(this.current_health);
+    this.emit(Events.HealthChanged, this.current_health);
   }
 
   handlePointerDown(pointer) {
@@ -294,6 +317,10 @@ export default class Player extends Entity {
           this.current_health = 0;
           this.scene.gameOver();
         }
+        // Check if health is more than max and set it to max
+        if (this.current_health > this.max_health) {
+          this.current_health = this.max_health;
+        }
         this.healthBar.updateHealth(this.current_health);
         this.emit(Events.HealthChanged, this.current_health);
         // Set invincibility counter only if it's not currently running
@@ -304,6 +331,10 @@ export default class Player extends Entity {
       }
     } else {
       this.current_health -= damage;
+      // Check if health is more than max and set it to max
+      if (this.current_health > this.max_health) {
+        this.current_health = this.max_health;
+      }
       this.healthBar.updateHealth(this.current_health);
       this.emit(Events.HealthChanged, this.current_health);
     }

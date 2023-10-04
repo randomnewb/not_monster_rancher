@@ -1,3 +1,6 @@
+- [ ] terrain makes things hard to see, probably lower their transparency or dull them somehow
+- [ ] when player 'takes' positive damage, make damage text green or a different color
+
 - [ ] bug: probably need to destroy all monsters when game is over or disable them when player dies
 
   - might also be a bug with the obstruction tiles/map array and a monster being on top of one of the tiles when the game restarts?

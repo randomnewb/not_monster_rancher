@@ -81,7 +81,7 @@ export default class UIScene extends Phaser.Scene {
       this
     );
 
-    let playerHealth = data.playerMaxHealth; // replace this with the actual player's health
+    let playerHealth = 0; // replace this with the actual player's health
     this.playerHealthText = this.add.text(
       this.gameWidth / 2 - 220, // x position - center of the screen
       this.gameHeight - 50, // y position - bottom of the screen with some padding
@@ -150,9 +150,9 @@ export default class UIScene extends Phaser.Scene {
       newHealth = 0;
     }
 
-    if (newHealth >= data.playerMaxHealth) {
-      newHealth = data.playerMaxHealth;
-    }
+    // if (newHealth >= data.playerMaxHealth) {
+    //   newHealth = data.playerMaxHealth;
+    // }
 
     this.playerHealthText.setText(`Health: ${newHealth}`);
   }
