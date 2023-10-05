@@ -1,3 +1,20 @@
+- [ ] add player's level and exp to UIScene
+
+- customized exp algorithm
+  - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
+  - players get exp towards a general level and also towards specific life skills
+  - exp is calculated based on the player's life skills level and the enemy's/encounter level
+  - need to create a skill tree menu for different life skills
+    - combat, taming, mining, woodcutting, etc. and these can be broken down further
+      - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
+- add in a 'level up' animation (like ragnarok online?)
+- player stats (strength, wisdom, dexterity, luck)
+
+  - [ ] strength affects melee damage, health, possibly carry capacity
+  - [ ] wisdom affects magic damage, magic defenses/resistances, mana
+  - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
+  - [ ] luck affects drop rates
+
 - [ ] terrain makes things hard to see, probably lower their transparency or dull them somehow
 - [ ] when player 'takes' positive damage, make damage text green or a different color
 
@@ -42,20 +59,6 @@
 - [/] diablo style enemy name and health bar at bottom
 - [ ] captured/tamed monsters have a different color outline than enemies
 - [ ] elite monsters ('larger' or scaled up monsters)
-- customized exp algorithm
-  - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
-  - players get exp towards a general level and also towards specific life skills
-  - exp is calculated based on the player's life skills level and the enemy's/encounter level
-  - need to create a skill tree menu for different life skills
-    - combat, taming, mining, woodcutting, etc. and these can be broken down further
-      - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
-- add in a 'level up' animation (like ragnarok online?)
-- player stats (strength, wisdom, dexterity, luck)
-
-  - [ ] strength affects melee damage, health, possibly carry capacity
-  - [ ] wisdom affects magic damage, magic defenses/resistances, mana
-  - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
-  - [ ] luck affects drop rates
 
 - rework player death/game over
 

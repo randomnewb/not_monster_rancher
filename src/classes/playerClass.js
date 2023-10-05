@@ -111,7 +111,7 @@ export default class Player extends Entity {
       this.levelUp();
     }
 
-    console.log(`Player gained ${experienceGain} experience points!`);
+    // console.log(`Player gained ${experienceGain} experience points!`);
   }
 
   levelUp() {
@@ -121,11 +121,12 @@ export default class Player extends Entity {
     this.current_health = this.max_health;
     this.min_attack += 1;
     this.max_attack += 1;
+    this.speed += 10;
 
     this.healthBar.updateHealth(this.current_health);
     this.emit(Events.HealthChanged, this.current_health);
 
-    console.log(`Player leveled up to level ${this.level}!`);
+    // console.log(`Player leveled up to level ${this.level}!`);
   }
 
   handlePointerDown(pointer) {

@@ -35,6 +35,8 @@ export const Events = {
   PlayerHealthChanged: "playerHealthChanged",
   PlayerMonstersDefeated: "playerMonstersDefeated",
   PlayerJewelCollected: "playerJewelCollected",
+  PlayerLevelChanged: "playerLevelChanged",
+  PlayerExpChanged: "playerExpChanged",
   Generate: "generate",
   MapArrayReady: "mapArrayReady",
   FireProjectile: "fireProjectile",
