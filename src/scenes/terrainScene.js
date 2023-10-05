@@ -95,11 +95,13 @@ export default class Terrain extends Phaser.GameObjects.Group {
           tile.index === 6 ||
           tile.index === 7
         ) {
+          tile.setAlpha(0.4);
           tile.tint =
             grassTileColors[
               Math.floor(randomNumber() * grassTileColors.length)
             ];
         } else if (tile.index === 2 || tile.index === 3 || tile.index === 4) {
+          tile.setAlpha(0.4);
           tile.tint =
             stoneTileColors[
               Math.floor(randomNumber() * stoneTileColors.length)
