@@ -92,6 +92,31 @@ export default class Player extends Entity {
     this.timedEvent = null;
 
     this.createBounceTween();
+
+    this.grassTileColors = [
+      Colors.Brown,
+      Colors.DarkRed,
+      Colors.Gold,
+      Colors.LightGreen,
+      Colors.DarkGreen,
+      Colors.ForestGreen,
+    ];
+
+    // const obstructionTileColors = [
+    //   Colors.DarkRed,
+    //   Colors.DarkBrown,
+    //   Colors.LightGreen,
+    //   Colors.DarkGreen,
+    //   Colors.ForestGreen,
+    // ];
+
+    this.stoneTileColors = [
+      Colors.LightGrey,
+      Colors.Grey,
+      Colors.DarkGrey,
+      Colors.Navy,
+      Colors.RoyalBlue,
+    ];
   }
 
   addExperiencePoints(monsterLevel) {
@@ -205,6 +230,30 @@ export default class Player extends Entity {
     // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
 
+    // Check if the clicked tile is a tree
+    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+    if (tile && this.obstructionTiles.includes(tile.index)) {
+      // The clicked tile is a tree, so replace it with a random tile from 0 to 7
+      let newTileIndex = Phaser.Math.Between(0, 7);
+      let newTile = this.scene.terrain.layer.putTileAt(
+        newTileIndex,
+        tile.x,
+        tile.y
+      );
+
+      // Set the tint and alpha of the new tile
+      if ([1, 5, 6, 7].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(this.grassTileColors);
+      } else if ([2, 3, 4].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(this.stoneTileColors);
+      }
+      newTile.alpha = 0.4;
+
+      // Update the pathfinding grid
+      data.currentMapArray[tile.y][tile.x] = newTileIndex;
+      this.easystar.setGrid(data.currentMapArray);
+    }
+
     return tileXY;
   }
 
@@ -224,6 +273,30 @@ export default class Player extends Entity {
       if (this.timedEvent) {
         this.timedEvent.remove();
         this.timedEvent = null;
+      }
+
+      // Check if the target tile is a tree
+      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+      if (tile && this.obstructionTiles.includes(tile.index)) {
+        // The target tile is a tree, so replace it with a random tile from 0 to 7
+        let newTileIndex = Phaser.Math.Between(0, 7);
+        let newTile = this.scene.terrain.layer.putTileAt(
+          newTileIndex,
+          tile.x,
+          tile.y
+        );
+
+        // Set the tint and alpha of the new tile
+        if ([1, 5, 6, 7].includes(newTileIndex)) {
+          newTile.tint = Phaser.Math.RND.pick(this.grassTileColors);
+        } else if ([2, 3, 4].includes(newTileIndex)) {
+          newTile.tint = Phaser.Math.RND.pick(this.stoneTileColors);
+        }
+        newTile.alpha = 0.4;
+
+        // Update the pathfinding grid
+        data.currentMapArray[tile.y][tile.x] = newTileIndex;
+        this.easystar.setGrid(data.currentMapArray);
       }
 
       // Only initiate the pathfinding process if it's not already ongoing

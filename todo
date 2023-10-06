@@ -1,13 +1,41 @@
-- [ ] add player's level and exp to UIScene
+- [ ] add grassColorTiles, obstructionColorTiles, etc. as constants so they can be accessed/used more easily
+- [ ] refactor "tree" deforestation system so that it isn't repetitive (create a method to be called and reused)
+- [ ] rework npcs so that level is created first, and then other stats are based on level
 
-- customized exp algorithm
+  - i.e., level 2, health will be health \* level
+
+- [ ] add a spawner class (takes in an entity class), perhaps also has a physical body so can be destroyed/collided with
+      or so that other things can inherit the spawner class
+
+  - [ ] spawner class runs based on a counter/timer
+  - [ ] does not run if there are too many enemies in a zone (probably max 100 at this point)
+
+- [ ] implement the spawner in the world generation
+
+  - try to create 3 of them to start, one for each current type of enemy
+
+- [ ] make these destroyable
+
+- [ ] add in a 'level up' animation (like ragnarok online?)
+
+- [x] add player's level and exp to UIScene
+
+- Life Skills system - chop trees, mine rocks, etc.
+
+  - [ ] implement this with trees
+    - have to implement a different encounter/'damage' system, woodcutting damage
+  - [ ] implement this with rocks
+    - mining damage
+
+- [x] customized exp algorithm
+
   - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
   - players get exp towards a general level and also towards specific life skills
   - exp is calculated based on the player's life skills level and the enemy's/encounter level
   - need to create a skill tree menu for different life skills
     - combat, taming, mining, woodcutting, etc. and these can be broken down further
       - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
-- add in a 'level up' animation (like ragnarok online?)
+
 - player stats (strength, wisdom, dexterity, luck)
 
   - [ ] strength affects melee damage, health, possibly carry capacity
@@ -22,19 +50,14 @@
 
   - might also be a bug with the obstruction tiles/map array and a monster being on top of one of the tiles when the game restarts?
 
-- [x] move input from playerClass into gameScene
-
 - implementing constants/enums
 
   - [ ] direction (up, down, left, right)
 
-- [x] rename action1 to attackAction or something that explains it better
 - [/] rework states and frog npc so that state reads properties/attributes or components more from the entity
 - for example, the 'attack' alerting animation could be unique and defined in each entity
 - or movement could be defined in each entity and read in the 'wander' state
-- [x] implement properties for npc like detectionRange
 
-- [x] create testScene (basically a copy of gameScene) to test out new features
 - [/] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
 - [ ] implement Tiled again for creating tilemaps with meta data (e.g. if a tile is collidable, interactable, etc.):
 
@@ -54,8 +77,6 @@
   - separate certain code into their own methods where possible
   - [x] preloading all assets can be in their own method (preloadAssets())
 
-- [x] hide health bars on monsters until they get attacked, hide the healthbar if the monster is at full health
-- [x] frogs have a weighted chance to drop a jewel (right now 50%)
 - [/] diablo style enemy name and health bar at bottom
 - [ ] captured/tamed monsters have a different color outline than enemies
 - [ ] elite monsters ('larger' or scaled up monsters)
@@ -80,7 +101,7 @@
       - [/] working on chase/follow, attacking/fighting
       - destroyed state
         - [x] provides droppable items (for example, spawn/drop a jewel in place)
-        - [ ] provide experience points
+        - [x] provide experience points
         - [x] create a death animation
     - NPC begins its attack very quickly
       - [x] Change how quickly the NPC can engage in its attack (need a little bit of time after the flashes)
@@ -90,8 +111,7 @@
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
-- [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating,
-      the game crashes
+- [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating, the game crashes
 
   - Probably need to implement some sort of loading screen and then allow the player to move and click the screen
 
@@ -148,7 +168,6 @@
 - [/] Monsters/beasts that wander around, attack player, interact with environment, drop items
 - [/] Enemies (that wander around, attack player)
 - [ ] Character customization/select screen
-- [ ] Life Skills system - chop trees, mine rocks, etc.
 - [ ] Water tiles/swimming
 
 - Inventory system via an array or grid inventory (stretch) system
