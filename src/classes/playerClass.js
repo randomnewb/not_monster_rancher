@@ -418,6 +418,13 @@ export default class Player extends Entity {
       );
       this.scene.terrain.TileMetaData.set(newTile, newMetadata);
 
+      if ([1, 5, 6, 7].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
+      } else if ([2, 3, 4].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
+      }
+      newTile.alpha = 0.4;
+
       // Update the easystar grid
       data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
       this.easystar.setGrid(data.currentMapArray);
