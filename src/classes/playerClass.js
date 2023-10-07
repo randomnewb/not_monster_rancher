@@ -67,12 +67,6 @@ export default class Player extends Entity {
     });
     this.highlight.alpha = 0.2; // make it semi-transparent
 
-    // this.scene.input.on(
-    //   "pointerdown",
-    //   pointer => this.handlePointerDown(pointer, this.scene.terrain.map),
-    //   this
-    // );
-
     this.targetPosition = null;
     this.isPathfinding = false;
 
