@@ -154,14 +154,14 @@ export default class Player extends Entity {
         this.timedEvent = null;
       }
 
-      // Temporarily make the obstruction tile walkable
+      // Create a copy of the current map array
+      let tempMapArray = JSON.parse(JSON.stringify(data.currentMapArray));
+
+      // Temporarily change the obstruction tile that the player clicked on to a walkable tile in the copy of the map array
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
       if (tile && obstructionTiles.includes(tile.index)) {
-        let tempWalkableTiles = [...walkableTiles, tile.index];
-        this.easystar.setAcceptableTiles(tempWalkableTiles);
-      } else {
-        // If the clicked tile is not an obstruction tile, reset the acceptable tiles
-        this.easystar.setAcceptableTiles(walkableTiles);
+        tempMapArray[tile.y][tile.x] = walkableTiles[0]; // Change the tile to the first walkable tile
+        this.easystar.setGrid(tempMapArray); // Use the modified map array for the pathfinding algorithm
       }
 
       // Find a path to the clicked tile
