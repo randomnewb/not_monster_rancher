@@ -1,3 +1,5 @@
+- [ ] woodcutting system - trees should only be chopped when the player clicks the tile with the tree and gets to the tile
+- [ ] tile system should get reworked and just implement grid-based movement from one of the tutorials probably
 - [x] add grassColorTiles, obstructionColorTiles, etc. as constants so they can be accessed/used more easily
 - [x] refactor "tree" deforestation system so that it isn't repetitive (create a method to be called and reused)
 - [x] Bug: player clicking on same tile that they are already moving to creates jittering

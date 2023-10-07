@@ -3,6 +3,9 @@ import {
   Events,
   grassTileColors,
   stoneTileColors,
+  playerColors,
+  walkableTiles,
+  obstructionTiles,
 } from "../utils/constants.js";
 import data from "../data/data.js";
 import Entity from "./entityClass.js";
@@ -47,15 +50,6 @@ export default class Player extends Entity {
     // this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
 
-    const playerColors = [
-      Colors.Pumpkin,
-      Colors.Yellow,
-      Colors.LightGreen,
-      Colors.SkyBlue,
-      Colors.Purple,
-      Colors.CardinalRed,
-    ];
-
     this.originalTint =
       playerColors[Math.floor(Math.random() * playerColors.length)];
 
@@ -82,14 +76,12 @@ export default class Player extends Entity {
     this.targetPosition = null;
     this.isPathfinding = false;
 
-    this.obstructionTiles = [8, 9, 10, 11, 12, 13];
-
     this.easystar = new EasyStar.js();
     this.scene.events.on(Events.MapArrayReady, () => {
       this.easystar.setGrid(data.currentMapArray);
     });
 
-    this.easystar.setAcceptableTiles([0, 1, 2, 3, 4, 5, 6, 7]);
+    this.easystar.setAcceptableTiles(walkableTiles);
     this.easystar.setIterationsPerCalculation(1000);
     this.easystar.disableCornerCutting();
 
@@ -346,7 +338,7 @@ export default class Player extends Entity {
 
   replaceTreeWithRandomTile(tileXY) {
     let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-    if (tile && this.obstructionTiles.includes(tile.index)) {
+    if (tile && obstructionTiles.includes(tile.index)) {
       let newTileIndex = Phaser.Math.Between(0, 7);
       let newTile = this.scene.terrain.layer.putTileAt(
         newTileIndex,
