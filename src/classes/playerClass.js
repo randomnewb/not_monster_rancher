@@ -11,6 +11,7 @@ import data from "../data/data.js";
 import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
 import EasyStar from "easystarjs";
+import TileMetaData from "../utils/TileMetaData.js";
 
 export default class Player extends Entity {
   constructor(scene, x, y, key, frame) {
@@ -83,6 +84,46 @@ export default class Player extends Entity {
     this.timedEvent = null;
 
     this.createBounceTween();
+
+    // Store the last clicked tile coordinates
+    let lastTileXY = null;
+
+    // Add an event listener for the 'pointerdown' event
+    this.scene.input.on("pointerdown", pointer => {
+      // Get the tile coordinates of the clicked position
+      let tileXY = this.handlePointerDown(pointer);
+
+      // Check if handlePointerDown returned null
+      if (tileXY === null) {
+        // If it returned null, return early and don't run the logging code
+        return;
+      }
+
+      console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
+      console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
+
+      // Check if the tile coordinates are within the bounds of the map
+      if (
+        tileXY.x >= 0 &&
+        tileXY.x < this.scene.terrain.map.width &&
+        tileXY.y >= 0 &&
+        tileXY.y < this.scene.terrain.map.height
+      ) {
+        // Get the clicked tile
+        let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+
+        // Get the metadata of the clicked tile
+        let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+        // Log the tile coordinates and metadata in the console
+        console.log(
+          `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
+          metadata
+        );
+      } else {
+        console.log("Tile coordinates are outside the bounds of the map");
+      }
+    });
   }
 
   addExperiencePoints(monsterLevel) {
@@ -141,7 +182,7 @@ export default class Player extends Entity {
       this.targetTile.y === tileXY.y
     ) {
       // The player is already moving to this tile, so return early
-      return;
+      return null;
     }
 
     this.targetTile = tileXY;
@@ -360,14 +401,25 @@ export default class Player extends Entity {
         tile.y
       );
 
-      if ([1, 5, 6, 7].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
-      } else if ([2, 3, 4].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
-      }
-      newTile.alpha = 0.4;
+      // Remove the old tile from the TileMetaData map
+      this.scene.terrain.TileMetaData.delete(tile);
 
-      data.currentMapArray[tile.y][tile.x] = newTileIndex;
+      // Add the new tile to the TileMetaData map with its new metadata
+      const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+      const lifeSkillsType = "none"; // replace with actual value
+      const health = 0; // replace with actual value
+      const durability = 0; // replace with actual value
+      const newMetadata = new TileMetaData(
+        tilesetImage,
+        newTileIndex,
+        lifeSkillsType,
+        health,
+        durability
+      );
+      this.scene.terrain.TileMetaData.set(newTile, newMetadata);
+
+      // Update the easystar grid
+      data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
       this.easystar.setGrid(data.currentMapArray);
     }
   }

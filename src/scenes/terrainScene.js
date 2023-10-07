@@ -10,10 +10,13 @@ import {
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
+import TileMetaData from "../utils/TileMetaData.js";
 
 export default class Terrain extends Phaser.GameObjects.Group {
   constructor(scene) {
     super(scene);
+
+    this.TileMetaData = new Map();
 
     this.map_array = Generate.placement_array(
       0,
@@ -72,12 +75,38 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     dataLayer.forEach(row => {
       row.forEach(tile => {
-        if (
-          tile.index === 1 ||
-          tile.index === 5 ||
-          tile.index === 6 ||
-          tile.index === 7
-        ) {
+        if ([8, 9, 10, 11, 12, 13].includes(tile.index)) {
+          const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+          const lifeSkillsType = "woodcutting"; // replace with actual value
+          const health = 100; // replace with actual value
+          const durability = 100; // replace with actual value
+          const metadata = new TileMetaData(
+            tilesetImage,
+            tile.index,
+            lifeSkillsType,
+            health,
+            durability
+          );
+          this.TileMetaData.set(tile, metadata);
+
+          // Set the treeTileColors for the tile
+          tile.tint =
+            treeTileColors[Math.floor(randomNumber() * treeTileColors.length)];
+        } else if ([0, 1, 5, 6, 7].includes(tile.index)) {
+          const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+          const lifeSkillsType = "none"; // replace with actual value
+          const health = 0; // replace with actual value
+          const durability = 0; // replace with actual value
+          const metadata = new TileMetaData(
+            tilesetImage,
+            tile.index,
+            lifeSkillsType,
+            health,
+            durability
+          );
+          this.TileMetaData.set(tile, metadata);
+
+          // Set the grassTileColors for the tile
           tile.setAlpha(0.4);
           tile.tint =
             grassTileColors[
@@ -89,16 +118,6 @@ export default class Terrain extends Phaser.GameObjects.Group {
             stoneTileColors[
               Math.floor(randomNumber() * stoneTileColors.length)
             ];
-        } else if (
-          tile.index === 8 ||
-          tile.index === 9 ||
-          tile.index === 10 ||
-          tile.index === 11 ||
-          tile.index === 12 ||
-          tile.index === 13
-        ) {
-          tile.tint =
-            treeTileColors[Math.floor(randomNumber() * treeTileColors.length)];
         }
       });
     });
