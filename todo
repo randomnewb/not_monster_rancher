@@ -1,4 +1,7 @@
 - [x] Bug: When a player clicks an obstruction tile, the player will try to move towards it, but it doesn't seem that pathfinding is being utilized
+- [ ] added rocks/stones
+- [ ] need to refactor a bunch of things with constants
+- [ ] Bug: jewels can spawn into rocks
 - Life Skills system - chop trees, mine rocks, etc.
 
   - [ ] implement this with trees

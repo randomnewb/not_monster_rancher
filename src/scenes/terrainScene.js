@@ -6,6 +6,9 @@ import {
   grassTileColors,
   treeTileColors,
   stoneTileColors,
+  walkableTiles,
+  obstructionTiles,
+  rockTileColors,
 } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
@@ -18,13 +21,8 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     this.TileMetaData = new Map();
 
-    this.map_array = Generate.placement_array(
-      0,
-      1,
-      [2, 3, 4, 5, 6, 7],
-      8,
-      [9, 10, 11, 12, 13]
-    );
+    this.map_array = Generate.placement_array(walkableTiles, obstructionTiles);
+
     data.currentMapArray = this.map_array;
 
     this.map = scene.make.tilemap({
@@ -112,6 +110,23 @@ export default class Terrain extends Phaser.GameObjects.Group {
             grassTileColors[
               Math.floor(randomNumber() * grassTileColors.length)
             ];
+        } else if ([24, 25, 26, 27, 28, 29, 30, 31].includes(tile.index)) {
+          const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+          const lifeSkillsType = "mining"; // replace with actual value
+          const health = 100; // replace with actual value
+          const durability = 100; // replace with actual value
+          const metadata = new TileMetaData(
+            tilesetImage,
+            tile.index,
+            lifeSkillsType,
+            health,
+            durability
+          );
+          this.TileMetaData.set(tile, metadata);
+
+          // Set the rockTileColors for the tile
+          tile.tint =
+            rockTileColors[Math.floor(randomNumber() * rockTileColors.length)];
         } else if (tile.index === 2 || tile.index === 3 || tile.index === 4) {
           tile.setAlpha(0.4);
           tile.tint =

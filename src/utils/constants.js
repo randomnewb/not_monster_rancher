@@ -107,6 +107,15 @@ export const treeTileColors = [
   Colors.ForestGreen,
 ];
 
+export const rockTileColors = [
+  Colors.LightGrey,
+  Colors.Grey,
+  Colors.DarkGrey,
+  Colors.Beige,
+  Colors.Tan,
+  Colors.Brown,
+];
+
 export const stoneTileColors = [
   Colors.LightGrey,
   Colors.Grey,
@@ -125,5 +134,6 @@ export const playerColors = [
 ];
 
 export const walkableTiles = [0, 1, 2, 3, 4, 5, 6, 7];
-
-export const obstructionTiles = [8, 9, 10, 11, 12, 13];
+export const obstructionTiles = [
+  8, 9, 10, 11, 12, 13, 24, 25, 26, 27, 28, 29, 30, 31,
+];

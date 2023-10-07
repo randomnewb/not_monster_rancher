@@ -27,70 +27,42 @@ export default class Generate {
    *
    * Generates a 2D array of integers representing a 64x64 map
    *
-   * Given a tilesheet with these frame index values:
+   * Takes two arrays of integers representing the walkable and obstruction frame values from a tilesheet
    *
-   * 0 = empty space
-   *
-   * 1 = walkable space like grass
-   *
-   * 2 = walkable space variant like dirt/small rocks
-   *
-   * 8 = obstruction like tree
-   *
-   * 9 = obstruction variant like a different tree or large rock
-   *
-   *
-   * @param {integer} empty - Integer representing the empty space frame value (usually: 0)
-   * @param {integer} walkable - Integer representing the walkable space frame value (usually: 1)
-   * @param {integer} walkableVariant - Integer representing the walkable space variant frame value (usually: 2)
-   * @param {integer} obstruction - Integer representing the obstruction frame value (usually: 8)
-   * @param {integer} obstructionVariant - Integer representing the obstruction variant frame value (usually: 9)
+   * @param {integer} walkable - Integer representing the walkable space frame value (such as 1, 2, 3, 4, etc.)
+   * @param {integer} obstruction - Integer representing the obstruction frame value (such as 8, 9, 10, 11, etc.)
    *
    * @returns {array} - 2D array of integers representing a map
    */
 
-  static placement_array(
-    empty,
-    walkable,
-    walkableVariant,
-    obstruction,
-    obstructionVariant
-  ) {
+  static placement_array(walkable = [], obstruction = []) {
     var randomNumber = seedrandom(data.gameSeed);
     randomNumber();
-    // const empty = 0;
-    // const walkable = 1;
-    // const walkableVariant = 2;
-    // const obstruction = 8;
-    // const obstructionVariant = 9;
 
     let map = [];
+
     for (let row = 0; row < 64; row++) {
       let newRow = [];
       for (let column = 0; column < 64; column++) {
         if (randomNumber() > 0.5) {
-          newRow.push(empty);
+          newRow.push(0); // empty index is always 0
         } else {
-          newRow.push(walkable);
+          newRow.push(walkable[0]); // the first index in the walkable array will be the initial walkable value for generation
         }
       }
       map.push(newRow);
     }
 
-    if (walkableVariant) {
-      replaceWithWalkable();
-      replaceWithObstruction();
-    }
+    replaceWithWalkable();
+    replaceWithObstruction();
 
     function replaceWithWalkable() {
       for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map[row].length; column++) {
-          if (map[row][column] === walkable && randomNumber() < 0.5) {
+          if (map[row][column] === walkable[0] && randomNumber() < 0.5) {
             map[row][column] =
-              // choose one walkableVariant from the range of walkable variants in its array
-              walkableVariant[
-                Math.floor(randomNumber() * walkableVariant.length)
-              ];
+              // choose one walkable variant from the range of walkable variants in its array
+              walkable[Math.floor(randomNumber() * walkable.length)];
           }
         }
       }
@@ -99,20 +71,10 @@ export default class Generate {
     function replaceWithObstruction() {
       for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map[row].length; column++) {
-          if (
-            walkableVariant.includes(map[row][column]) &&
-            randomNumber() > 0.7
-          ) {
-            map[row][column] = obstruction;
-          } else if (
-            map[row][column] === 2 &&
-            randomNumber() >= 0.55 &&
-            randomNumber() < 0.99
-          ) {
+          if (walkable.includes(map[row][column]) && randomNumber() > 0.7) {
             map[row][column] =
-              obstructionVariant[
-                Math.floor(randomNumber() * obstructionVariant.length)
-              ];
+              // choose one obstruction from the range of obstructions in its array
+              obstruction[Math.floor(randomNumber() * obstruction.length)];
           }
         }
       }
