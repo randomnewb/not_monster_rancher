@@ -1,4 +1,9 @@
-import { Colors, Events } from "../utils/constants.js";
+import {
+  Colors,
+  Events,
+  grassTileColors,
+  stoneTileColors,
+} from "../utils/constants.js";
 import data from "../data/data.js";
 import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
@@ -92,31 +97,6 @@ export default class Player extends Entity {
     this.timedEvent = null;
 
     this.createBounceTween();
-
-    this.grassTileColors = [
-      Colors.Brown,
-      Colors.DarkRed,
-      Colors.Gold,
-      Colors.LightGreen,
-      Colors.DarkGreen,
-      Colors.ForestGreen,
-    ];
-
-    // const obstructionTileColors = [
-    //   Colors.DarkRed,
-    //   Colors.DarkBrown,
-    //   Colors.LightGreen,
-    //   Colors.DarkGreen,
-    //   Colors.ForestGreen,
-    // ];
-
-    this.stoneTileColors = [
-      Colors.LightGrey,
-      Colors.Grey,
-      Colors.DarkGrey,
-      Colors.Navy,
-      Colors.RoyalBlue,
-    ];
   }
 
   addExperiencePoints(monsterLevel) {
@@ -168,13 +148,20 @@ export default class Player extends Entity {
       worldPoint.y
     );
 
-    // Check if the tile coordinates are within the grid boundaries
+    // Check if the clicked tile is the same as the current target tile
     if (
-      tileXY.x >= 0 &&
-      tileXY.y >= 0 &&
-      tileXY.x < this.scene.terrain.map.width &&
-      tileXY.y < this.scene.terrain.map.height
+      this.targetTile &&
+      this.targetTile.x === tileXY.x &&
+      this.targetTile.y === tileXY.y
     ) {
+      // The player is already moving to this tile, so return early
+      return;
+    }
+
+    this.targetTile = tileXY;
+
+    // Check if the tile coordinates are within the grid boundaries
+    if (this.isTileWithinGrid(tileXY)) {
       // If a timed event is currently running, stop it
       if (this.timedEvent) {
         this.timedEvent.remove();
@@ -231,28 +218,7 @@ export default class Player extends Entity {
     this.updateFacingDirection(direction);
 
     // Check if the clicked tile is a tree
-    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-    if (tile && this.obstructionTiles.includes(tile.index)) {
-      // The clicked tile is a tree, so replace it with a random tile from 0 to 7
-      let newTileIndex = Phaser.Math.Between(0, 7);
-      let newTile = this.scene.terrain.layer.putTileAt(
-        newTileIndex,
-        tile.x,
-        tile.y
-      );
-
-      // Set the tint and alpha of the new tile
-      if ([1, 5, 6, 7].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(this.grassTileColors);
-      } else if ([2, 3, 4].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(this.stoneTileColors);
-      }
-      newTile.alpha = 0.4;
-
-      // Update the pathfinding grid
-      data.currentMapArray[tile.y][tile.x] = newTileIndex;
-      this.easystar.setGrid(data.currentMapArray);
-    }
+    this.replaceTreeWithRandomTile(tileXY);
 
     return tileXY;
   }
@@ -263,41 +229,15 @@ export default class Player extends Entity {
     let tileXY = this.scene.terrain.map.worldToTileXY(targetX, targetY);
 
     // Check if the tile coordinates are within the grid boundaries
-    if (
-      tileXY.x >= 0 &&
-      tileXY.y >= 0 &&
-      tileXY.x < this.scene.terrain.map.width &&
-      tileXY.y < this.scene.terrain.map.height
-    ) {
+    if (this.isTileWithinGrid(tileXY)) {
       // If a timed event is currently running, stop it
       if (this.timedEvent) {
         this.timedEvent.remove();
         this.timedEvent = null;
       }
 
-      // Check if the target tile is a tree
-      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-      if (tile && this.obstructionTiles.includes(tile.index)) {
-        // The target tile is a tree, so replace it with a random tile from 0 to 7
-        let newTileIndex = Phaser.Math.Between(0, 7);
-        let newTile = this.scene.terrain.layer.putTileAt(
-          newTileIndex,
-          tile.x,
-          tile.y
-        );
-
-        // Set the tint and alpha of the new tile
-        if ([1, 5, 6, 7].includes(newTileIndex)) {
-          newTile.tint = Phaser.Math.RND.pick(this.grassTileColors);
-        } else if ([2, 3, 4].includes(newTileIndex)) {
-          newTile.tint = Phaser.Math.RND.pick(this.stoneTileColors);
-        }
-        newTile.alpha = 0.4;
-
-        // Update the pathfinding grid
-        data.currentMapArray[tile.y][tile.x] = newTileIndex;
-        this.easystar.setGrid(data.currentMapArray);
-      }
+      // Check if the clicked tile is a tree
+      this.replaceTreeWithRandomTile(tileXY);
 
       // Only initiate the pathfinding process if it's not already ongoing
       if (!this.isPathfinding && !this.isClickToMove) {
@@ -395,49 +335,35 @@ export default class Player extends Entity {
     this.updateFacingDirection(direction);
   }
 
-  takeDamage(damage) {
-    if (damage > 0) {
-      // Only take damage if not invincible
-      if (this.invincibilityCounter <= 0) {
-        this.current_health -= damage;
-        // Check if health is less than 0 and set it to 0
-        if (this.current_health < 0) {
-          this.current_health = 0;
-          this.scene.gameOver();
-        }
-        // Check if health is more than max and set it to max
-        if (this.current_health > this.max_health) {
-          this.current_health = this.max_health;
-        }
-        this.healthBar.updateHealth(this.current_health);
-        this.emit(Events.HealthChanged, this.current_health);
-        // Set invincibility counter only if it's not currently running
-        if (this.invincibilityCounter <= 0) {
-          this.invincibilityCounter = this.invincibilityCounterMax;
-        }
-        this.setTint(Colors.White);
-      }
-    } else {
-      this.current_health -= damage;
-      // Check if health is more than max and set it to max
-      if (this.current_health > this.max_health) {
-        this.current_health = this.max_health;
-      }
-      this.healthBar.updateHealth(this.current_health);
-      this.emit(Events.HealthChanged, this.current_health);
-    }
+  isTileWithinGrid(tileXY) {
+    return (
+      tileXY.x >= 0 &&
+      tileXY.y >= 0 &&
+      tileXY.x < this.scene.terrain.map.width &&
+      tileXY.y < this.scene.terrain.map.height
+    );
   }
 
-  createBounceTween() {
-    // simple bounce animation tween
-    this.bounceTween = this.scene.tweens.add({
-      targets: this,
-      scaleY: 1.2,
-      duration: 100,
-      yoyo: true,
-      repeat: -1,
-      paused: true, // Start with the tween paused
-    });
+  replaceTreeWithRandomTile(tileXY) {
+    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+    if (tile && this.obstructionTiles.includes(tile.index)) {
+      let newTileIndex = Phaser.Math.Between(0, 7);
+      let newTile = this.scene.terrain.layer.putTileAt(
+        newTileIndex,
+        tile.x,
+        tile.y
+      );
+
+      if ([1, 5, 6, 7].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
+      } else if ([2, 3, 4].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
+      }
+      newTile.alpha = 0.4;
+
+      data.currentMapArray[tile.y][tile.x] = newTileIndex;
+      this.easystar.setGrid(data.currentMapArray);
+    }
   }
 
   update(
@@ -579,5 +505,50 @@ export default class Player extends Entity {
         this.bounceTween.pause();
       }
     }
+  }
+
+  takeDamage(damage) {
+    if (damage > 0) {
+      // Only take damage if not invincible
+      if (this.invincibilityCounter <= 0) {
+        this.current_health -= damage;
+        // Check if health is less than 0 and set it to 0
+        if (this.current_health < 0) {
+          this.current_health = 0;
+          this.scene.gameOver();
+        }
+        // Check if health is more than max and set it to max
+        if (this.current_health > this.max_health) {
+          this.current_health = this.max_health;
+        }
+        this.healthBar.updateHealth(this.current_health);
+        this.emit(Events.HealthChanged, this.current_health);
+        // Set invincibility counter only if it's not currently running
+        if (this.invincibilityCounter <= 0) {
+          this.invincibilityCounter = this.invincibilityCounterMax;
+        }
+        this.setTint(Colors.White);
+      }
+    } else {
+      this.current_health -= damage;
+      // Check if health is more than max and set it to max
+      if (this.current_health > this.max_health) {
+        this.current_health = this.max_health;
+      }
+      this.healthBar.updateHealth(this.current_health);
+      this.emit(Events.HealthChanged, this.current_health);
+    }
+  }
+
+  createBounceTween() {
+    // simple bounce animation tween
+    this.bounceTween = this.scene.tweens.add({
+      targets: this,
+      scaleY: 1.2,
+      duration: 100,
+      yoyo: true,
+      repeat: -1,
+      paused: true, // Start with the tween paused
+    });
   }
 }

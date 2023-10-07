@@ -1,5 +1,6 @@
-- [ ] add grassColorTiles, obstructionColorTiles, etc. as constants so they can be accessed/used more easily
-- [ ] refactor "tree" deforestation system so that it isn't repetitive (create a method to be called and reused)
+- [x] add grassColorTiles, obstructionColorTiles, etc. as constants so they can be accessed/used more easily
+- [x] refactor "tree" deforestation system so that it isn't repetitive (create a method to be called and reused)
+- [x] Bug: player clicking on same tile that they are already moving to creates jittering
 - [ ] rework npcs so that level is created first, and then other stats are based on level
 
   - i.e., level 2, health will be health \* level

@@ -89,3 +89,28 @@ export const Colors = {
   Beige: 0xe8b796,
   Tan: 0xc28569,
 };
+
+export const grassTileColors = [
+  Colors.Brown,
+  Colors.DarkRed,
+  Colors.Gold,
+  Colors.LightGreen,
+  Colors.DarkGreen,
+  Colors.ForestGreen,
+];
+
+export const treeTileColors = [
+  Colors.DarkRed,
+  Colors.DarkBrown,
+  Colors.LightGreen,
+  Colors.DarkGreen,
+  Colors.ForestGreen,
+];
+
+export const stoneTileColors = [
+  Colors.LightGrey,
+  Colors.Grey,
+  Colors.DarkGrey,
+  Colors.Navy,
+  Colors.RoyalBlue,
+];
