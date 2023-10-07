@@ -154,6 +154,16 @@ export default class Player extends Entity {
         this.timedEvent = null;
       }
 
+      // Temporarily make the obstruction tile walkable
+      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+      if (tile && obstructionTiles.includes(tile.index)) {
+        let tempWalkableTiles = [...walkableTiles, tile.index];
+        this.easystar.setAcceptableTiles(tempWalkableTiles);
+      } else {
+        // If the clicked tile is not an obstruction tile, reset the acceptable tiles
+        this.easystar.setAcceptableTiles(walkableTiles);
+      }
+
       // Find a path to the clicked tile
       this.easystar.findPath(
         this.playerTileX,
@@ -204,7 +214,7 @@ export default class Player extends Entity {
     this.updateFacingDirection(direction);
 
     // Check if the clicked tile is a tree
-    this.replaceTreeWithRandomTile(tileXY);
+    // this.replaceTreeWithRandomTile(tileXY);
 
     return tileXY;
   }
@@ -319,6 +329,16 @@ export default class Player extends Entity {
 
     // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
+
+    // If the next tile is the last one in the path and it's an obstruction tile, remove it
+    if (this.currentPath.length === 0) {
+      let tileXY = { x: nextTile.x, y: nextTile.y };
+      if (this.isTileWithinGrid(tileXY)) {
+        this.replaceTreeWithRandomTile(tileXY);
+      }
+      // Reset the acceptable tiles to the original walkable tiles
+      this.easystar.setAcceptableTiles(walkableTiles);
+    }
   }
 
   isTileWithinGrid(tileXY) {
