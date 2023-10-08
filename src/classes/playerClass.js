@@ -88,7 +88,7 @@ export default class Player extends Entity {
     // Store the last clicked tile coordinates
     let lastTileXY = null;
 
-    // Add an event listener for the 'pointerdown' event
+    // Debug code to log the tile coordinates and metadata of the clicked tile
     this.scene.input.on("pointerdown", pointer => {
       // Get the tile coordinates of the clicked position
       let tileXY = this.handlePointerDown(pointer);

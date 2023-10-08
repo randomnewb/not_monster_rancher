@@ -1,7 +1,13 @@
 import HealthBar from "./healthBarClass.js";
 import Jewel from "./jewelClass.js";
 import data from "../data/data.js";
-import { States, Colors, Events, Animations } from "../utils/constants.js";
+import {
+  States,
+  Colors,
+  Events,
+  Animations,
+  obstructionTiles,
+} from "../utils/constants.js";
 import Entity from "./entityClass.js";
 import StateMachine from "./stateMachineClass.js";
 import IdleState from "../states/idle.js";
@@ -38,11 +44,12 @@ export default class NPC extends Entity {
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
     this.healthBar.setVisible(false);
     this.setCollideWorldBounds();
-    this.obstructionTiles = [8, 9, 10, 11, 12, 13];
 
     this.attackTransitionRange = 32;
     this.detectionRange = 64;
     this.disengagementRange = 80;
+
+    this.obstructionTiles = obstructionTiles;
   }
 
   takeDamage(damage) {

@@ -277,12 +277,12 @@ export default class GameScene extends Phaser.Scene {
       this.terrain.layer
     );
 
-    // Filter out Bird instances
+    // Filter out Bird and Bat instances
     this.collidableMonsters = this.monsters.filter(
-      monster => !(monster instanceof Bird)
+      monster => !(monster instanceof Bird || monster instanceof Bat)
     );
-    // Add colliders to non-Bird monsters
 
+    // Add colliders to non-Bird and non-Bat monsters
     this.monsterTerrainCollider = this.physics.add.collider(
       this.collidableMonsters,
       this.terrain.layer

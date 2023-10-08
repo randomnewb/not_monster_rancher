@@ -1,7 +1,12 @@
-- [x] Bug: When a player clicks an obstruction tile, the player will try to move towards it, but it doesn't seem that pathfinding is being utilized
-- [ ] added rocks/stones
+- [x] terrain makes things hard to see, probably lower their transparency or dull them somehow
+- [ ] terrainScene and uiScene should probably be more like utils or classes
+- [ ] remove the data.playerhealth and try to implement playerhealth directly from the playerclass
+
+  - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
+
 - [ ] need to refactor a bunch of things with constants
 - [ ] Bug: jewels can spawn into rocks
+
 - Life Skills system - chop trees, mine rocks, etc.
 
   - [ ] implement this with trees
@@ -49,7 +54,6 @@
   - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
   - [ ] luck affects drop rates
 
-- [ ] terrain makes things hard to see, probably lower their transparency or dull them somehow
 - [ ] when player 'takes' positive damage, make damage text green or a different color
 
 - [ ] bug: probably need to destroy all monsters when game is over or disable them when player dies
@@ -70,12 +74,6 @@
 - [ ] create phaser plugins where possible for things like (e.g. playing sound effects, loading an area from a tilemap, controls available to my scene)
 - [ ] implement player FSM
 - [ ] continue to implement ECS: https://en.wikipedia.org/wiki/Entity_component_system
-
-- terrainScene and uiScene should probably be more like utils or classes
-
-- remove the data.playerhealth and try to implement playerhealth directly from the playerclass
-
-  - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
 
 - refactor time?
 
@@ -99,20 +97,6 @@
 - [ ] Save/Load system
 
 - [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-
-  - Requirements
-    - [x] Inherits Entity Class
-    - [/] AI Behavior via states
-      - [x] implemented idle, wander, and destroyed
-      - [/] working on chase/follow, attacking/fighting
-      - destroyed state
-        - [x] provides droppable items (for example, spawn/drop a jewel in place)
-        - [x] provide experience points
-        - [x] create a death animation
-    - NPC begins its attack very quickly
-      - [x] Change how quickly the NPC can engage in its attack (need a little bit of time after the flashes)
-    - Once NPC begins to attack, doesn't stop attacking
-      - [x] Add in a check so that if the player moves away, the NPC will switch back to idle or wander state
 
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...

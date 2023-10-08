@@ -71,7 +71,7 @@ export default class Generate {
     function replaceWithObstruction() {
       for (let row = 0; row < map.length; row++) {
         for (let column = 0; column < map[row].length; column++) {
-          if (walkable.includes(map[row][column]) && randomNumber() > 0.7) {
+          if (walkable.includes(map[row][column]) && randomNumber() > 0.8) {
             map[row][column] =
               // choose one obstruction from the range of obstructions in its array
               obstruction[Math.floor(randomNumber() * obstruction.length)];
