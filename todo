@@ -14,7 +14,6 @@
   - [ ] implement this with rocks
     - mining damage
 
-- [ ] Need to make sure Bat isn't added to the colliders list in gameScene so that they can move over obstruction tiles
 - [x] Bug: player clicking on same tile that they are already moving to creates jittering
 - [ ] rework npcs so that level is created first, and then other stats are based on level
 
