@@ -132,41 +132,6 @@ export default class Player extends Entity {
     });
   }
 
-  addExperiencePoints(monsterLevel) {
-    let experienceGain = (monsterLevel - this.level) * 5;
-
-    // Ensure the player gains at least 1 point, but no more than 25 points
-    experienceGain = Math.max(1, Math.min(25, experienceGain));
-
-    // If the player's level is equal to or more than 5 monster levels, no experience points are gained
-    if (this.level >= monsterLevel + 5) {
-      experienceGain = 0;
-    }
-
-    this.experience += experienceGain;
-
-    if (this.experience >= 100) {
-      this.levelUp();
-    }
-
-    // console.log(`Player gained ${experienceGain} experience points!`);
-  }
-
-  levelUp() {
-    this.level++;
-    this.experience = 0;
-    this.max_health += 20;
-    this.current_health = this.max_health;
-    this.min_attack += 1;
-    this.max_attack += 1;
-    this.speed += 10;
-
-    this.healthBar.updateHealth(this.current_health);
-    this.emit(Events.HealthChanged, this.current_health);
-
-    // console.log(`Player leveled up to level ${this.level}!`);
-  }
-
   handlePointerDown(pointer) {
     // Get the position of the mouse click relative to the game canvas
     let pointerX = pointer.downX;
@@ -576,6 +541,41 @@ export default class Player extends Entity {
         this.bounceTween.pause();
       }
     }
+  }
+
+  addExperiencePoints(monsterLevel) {
+    let experienceGain = (monsterLevel - this.level) * 5;
+
+    // Ensure the player gains at least 1 point, but no more than 25 points
+    experienceGain = Math.max(1, Math.min(25, experienceGain));
+
+    // If the player's level is equal to or more than 5 monster levels, no experience points are gained
+    if (this.level >= monsterLevel + 5) {
+      experienceGain = 0;
+    }
+
+    this.experience += experienceGain;
+
+    if (this.experience >= 100) {
+      this.levelUp();
+    }
+
+    // console.log(`Player gained ${experienceGain} experience points!`);
+  }
+
+  levelUp() {
+    this.level++;
+    this.experience = 0;
+    this.max_health += 20;
+    this.current_health = this.max_health;
+    this.min_attack += 1;
+    this.max_attack += 1;
+    this.speed += 10;
+
+    this.healthBar.updateHealth(this.current_health);
+    this.emit(Events.HealthChanged, this.current_health);
+
+    // console.log(`Player leveled up to level ${this.level}!`);
   }
 
   takeDamage(damage) {
