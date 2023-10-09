@@ -45,7 +45,7 @@ export default class Player extends Entity {
     this.scene = scene;
     this.scene.add.existing(this);
     this.scene.physics.add.existing(this);
-    this.body.setCircle(5, 3.4, 4);
+    this.body.setSize(8, 8);
     this.setCollideWorldBounds();
 
     // position the player on an open tile
@@ -63,6 +63,7 @@ export default class Player extends Entity {
     this.setTint(this.originalTint);
 
     this.facing = "down";
+    this.tileBeingLookedAt = null;
     this.isClickToMove = false;
 
     this.tileWidth = 16;
@@ -133,18 +134,7 @@ export default class Player extends Entity {
   }
 
   handlePointerDown(pointer) {
-    // Get the position of the mouse click relative to the game canvas
-    let pointerX = pointer.downX;
-    let pointerY = pointer.downY;
-
-    // Convert the screen coordinates to world coordinates
-    let worldPoint = this.scene.cameras.main.getWorldPoint(pointerX, pointerY);
-
-    // Convert the world coordinates to tile coordinates
-    let tileXY = this.scene.terrain.map.worldToTileXY(
-      worldPoint.x,
-      worldPoint.y
-    );
+    let { worldPoint, tileXY } = this.getTileCoordinates(pointer);
 
     // Check if the clicked tile is the same as the current target tile
     if (
@@ -200,16 +190,7 @@ export default class Player extends Entity {
     worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
 
     // Draw a rectangle at the top-left corner of the clicked tile
-    if (this.highlight) {
-      this.highlight.clear();
-    }
-
-    this.highlight.fillRect(
-      worldPoint.x,
-      worldPoint.y,
-      this.tileWidth,
-      this.tileHeight
-    );
+    this.drawRectangle(worldPoint);
 
     worldPoint.x += this.tileWidth / 2;
     worldPoint.y += this.tileHeight / 2;
@@ -294,6 +275,34 @@ export default class Player extends Entity {
       // Vertical movement
       this.facing = direction.y > 0 ? "down" : "up";
     }
+
+    // Update the tile being looked at based on the new facing direction
+    switch (this.facing) {
+      case "up":
+        this.tileBeingLookedAt = {
+          x: this.playerTileX,
+          y: this.playerTileY - 1,
+        };
+        break;
+      case "down":
+        this.tileBeingLookedAt = {
+          x: this.playerTileX,
+          y: this.playerTileY + 1,
+        };
+        break;
+      case "left":
+        this.tileBeingLookedAt = {
+          x: this.playerTileX - 1,
+          y: this.playerTileY,
+        };
+        break;
+      case "right":
+        this.tileBeingLookedAt = {
+          x: this.playerTileX + 1,
+          y: this.playerTileY,
+        };
+        break;
+    }
   }
 
   moveAlongPath(path) {
@@ -353,6 +362,38 @@ export default class Player extends Entity {
     }
   }
 
+  calculateTargetPositionAndDirection(worldPoint) {
+    worldPoint.x += this.tileWidth / 2;
+    worldPoint.y += this.tileHeight / 2;
+
+    this.targetPosition = worldPoint;
+
+    // Calculate the direction of the movement
+    let direction = this.calculateDirection(
+      this.targetPosition.x,
+      this.targetPosition.y
+    );
+
+    return direction;
+  }
+
+  getTileCoordinates(pointer) {
+    // Get the position of the mouse click relative to the game canvas
+    let pointerX = pointer.downX;
+    let pointerY = pointer.downY;
+
+    // Convert the screen coordinates to world coordinates
+    let worldPoint = this.scene.cameras.main.getWorldPoint(pointerX, pointerY);
+
+    // Convert the world coordinates to tile coordinates
+    let tileXY = this.scene.terrain.map.worldToTileXY(
+      worldPoint.x,
+      worldPoint.y
+    );
+
+    return { worldPoint, tileXY };
+  }
+
   isTileWithinGrid(tileXY) {
     return (
       tileXY.x >= 0 &&
@@ -360,46 +401,6 @@ export default class Player extends Entity {
       tileXY.x < this.scene.terrain.map.width &&
       tileXY.y < this.scene.terrain.map.height
     );
-  }
-
-  replaceTreeWithRandomTile(tileXY) {
-    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-    if (tile && obstructionTiles.includes(tile.index)) {
-      let newTileIndex = Phaser.Math.Between(0, 7);
-      let newTile = this.scene.terrain.layer.putTileAt(
-        newTileIndex,
-        tile.x,
-        tile.y
-      );
-
-      // Remove the old tile from the TileMetaData map
-      this.scene.terrain.TileMetaData.delete(tile);
-
-      // Add the new tile to the TileMetaData map with its new metadata
-      const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
-      const lifeSkillsType = "none"; // replace with actual value
-      const health = 0; // replace with actual value
-      const durability = 0; // replace with actual value
-      const newMetadata = new TileMetaData(
-        tilesetImage,
-        newTileIndex,
-        lifeSkillsType,
-        health,
-        durability
-      );
-      this.scene.terrain.TileMetaData.set(newTile, newMetadata);
-
-      if ([1, 5, 6, 7].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
-      } else if ([2, 3, 4].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
-      }
-      newTile.alpha = 0.4;
-
-      // Update the easystar grid
-      data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
-      this.easystar.setGrid(data.currentMapArray);
-    }
   }
 
   update(
@@ -412,6 +413,20 @@ export default class Player extends Entity {
     isKDown,
     isLDown
   ) {
+    // Only update the facing direction and draw the rectangle if the player has a target position
+    if (this.targetPosition) {
+      // Calculate the direction of the movement
+      let direction = this.calculateDirection(
+        this.targetPosition.x,
+        this.targetPosition.y
+      );
+
+      // Update the facing direction based on the movement direction
+      this.updateFacingDirection(direction);
+    }
+    // Draw the rectangle for the tile being looked at
+    this.drawTileBeingLookedAt();
+
     if (this.attacking && this.cooldownCounter <= 0) {
       this.cooldownCounter = this.cooldownCounterMax;
     }
@@ -540,6 +555,84 @@ export default class Player extends Entity {
       if (this.bounceTween.isPlaying()) {
         this.bounceTween.pause();
       }
+    }
+  }
+
+  replaceTreeWithRandomTile(tileXY) {
+    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+    if (tile && obstructionTiles.includes(tile.index)) {
+      let newTileIndex = Phaser.Math.Between(0, 7);
+      let newTile = this.scene.terrain.layer.putTileAt(
+        newTileIndex,
+        tile.x,
+        tile.y
+      );
+
+      // Remove the old tile from the TileMetaData map
+      this.scene.terrain.TileMetaData.delete(tile);
+
+      // Add the new tile to the TileMetaData map with its new metadata
+      const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+      const lifeSkillsType = "none"; // replace with actual value
+      const health = 0; // replace with actual value
+      const durability = 0; // replace with actual value
+      const newMetadata = new TileMetaData(
+        tilesetImage,
+        newTileIndex,
+        lifeSkillsType,
+        health,
+        durability
+      );
+      this.scene.terrain.TileMetaData.set(newTile, newMetadata);
+
+      if ([1, 5, 6, 7].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
+      } else if ([2, 3, 4].includes(newTileIndex)) {
+        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
+      }
+      newTile.alpha = 0.4;
+
+      // Update the easystar grid
+      data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
+      this.easystar.setGrid(data.currentMapArray);
+    }
+  }
+
+  drawRectangle(worldPoint) {
+    // Draw a rectangle at the top-left corner of the clicked tile
+    if (this.highlight) {
+      this.highlight.clear();
+    }
+
+    this.highlight.fillRect(
+      worldPoint.x,
+      worldPoint.y,
+      this.tileWidth,
+      this.tileHeight
+    );
+  }
+
+  drawTileBeingLookedAt() {
+    // Create a new graphics object if it doesn't exist
+    if (!this.tileBeingLookedAtGraphics) {
+      this.tileBeingLookedAtGraphics = this.scene.add.graphics({
+        lineStyle: { width: 2, color: 0x0000ff },
+      });
+    }
+
+    // Clear the previous rectangle
+    this.tileBeingLookedAtGraphics.clear();
+
+    // Draw a new rectangle at the tile being looked at
+    if (this.tileBeingLookedAt) {
+      let x = this.tileBeingLookedAt.x * this.tileWidth;
+      let y = this.tileBeingLookedAt.y * this.tileHeight;
+      this.tileBeingLookedAtGraphics.strokeRect(
+        x,
+        y,
+        this.tileWidth,
+        this.tileHeight
+      );
     }
   }
 

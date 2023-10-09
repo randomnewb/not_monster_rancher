@@ -1,3 +1,9 @@
+- [/] High Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
+
+  - Works with mouse input and not with keyboard input
+  - We will use this to determine what the player is looking and if they can woodcut/mine, etc.
+  - [ ] add another action (life skills action), ("K" on keyboard and another clickable action box on mobile)
+
 - [ ] create a util method that instantiates a random blank walking tile with meta data
 - [x] terrain makes things hard to see, probably lower their transparency or dull them somehow
 - [ ] terrainScene and uiScene should probably be more like utils or classes
@@ -95,8 +101,6 @@
       - [ ] save and return to main menu (save will come later)
 
 - [ ] Save/Load system
-
-- [ ] Low Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
 - [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
   the game crashes because it is trying to setVelocity - Seems like bug is fixed...
