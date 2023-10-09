@@ -28,6 +28,12 @@ export default class Player extends Entity {
     this.level = 1;
     this.experience = 0;
 
+    this.woodcutting_level = 1;
+    this.woodcutting_power_min = 20;
+    this.woodcutting_power_max = 30;
+    this.woodcuttingCounter = 0;
+    this.woodcuttingCounterMax = 100;
+
     this.invincibilityCounter = 0;
     this.invincibilityCounterMax = 45;
 

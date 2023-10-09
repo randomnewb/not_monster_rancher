@@ -1,3 +1,4 @@
+- [ ] create a util method that instantiates a random blank walking tile with meta data
 - [x] terrain makes things hard to see, probably lower their transparency or dull them somehow
 - [ ] terrainScene and uiScene should probably be more like utils or classes
 - [ ] remove the data.playerhealth and try to implement playerhealth directly from the playerclass
