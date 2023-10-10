@@ -1,7 +1,8 @@
 - [/] High Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
-  - Works with mouse input and not with keyboard input
+  - [x] Works with both mouse input and keyboard input
   - We will use this to determine what the player is looking and if they can woodcut/mine, etc.
+  - Currently a bug when player switches to attack state mid movement
   - [ ] add another action (life skills action), ("K" on keyboard and another clickable action box on mobile)
 
 - [ ] create a util method that instantiates a random blank walking tile with meta data
