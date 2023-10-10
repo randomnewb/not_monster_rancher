@@ -165,13 +165,15 @@ export default class GameScene extends Phaser.Scene {
       );
 
       this.mobileAttackButton.setFillStyle(
-        this.player.attacking ? Colors.Gold : Colors.DarkBlue
+        this.player.stateMachine.stateName === "attacking"
+          ? Colors.Gold
+          : Colors.DarkBlue
       );
 
       this.mobileAttackButton.setVisible(this.isMobile);
 
       if (
-        this.player.attacking &&
+        this.player.stateMachine.stateName === "attacking" &&
         this.directionToClosestEntity &&
         this.player.cooldownCounter <= 0
       ) {
@@ -320,6 +322,10 @@ export default class GameScene extends Phaser.Scene {
         direction
       );
     }
+  }
+
+  woodcuttingAction() {
+    //
   }
 
   hitMonster(monster, projectile) {
@@ -498,10 +504,15 @@ export default class GameScene extends Phaser.Scene {
       Colors.White
     );
     this.mobileAttackButton.setInteractive();
+
     this.mobileAttackButton.on(
       "pointerdown",
       function (pointer, localX, localY, event) {
-        this.player.attacking = !this.player.attacking;
+        if (this.player.stateMachine.stateName !== "attacking") {
+          this.player.stateMachine.transition("attacking");
+        } else {
+          this.player.stateMachine.transition("idle");
+        }
         event.stopPropagation();
       },
       this

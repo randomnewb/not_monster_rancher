@@ -169,7 +169,9 @@ export default class UIScene extends Phaser.Scene {
     const gameScene = this.scene.get(Scenes.Game);
 
     if (gameScene.player) {
-      this.autoAttackIndicator.setFrame(gameScene.player.attacking ? 0 : 1);
+      this.autoAttackIndicator.setFrame(
+        gameScene.player.stateMachine.stateName === "attacking" ? 0 : 1
+      );
     }
   }
 

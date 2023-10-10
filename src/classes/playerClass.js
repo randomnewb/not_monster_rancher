@@ -12,6 +12,7 @@ import Entity from "./entityClass.js";
 import HealthBar from "./healthBarClass.js";
 import EasyStar from "easystarjs";
 import TileMetaData from "../utils/TileMetaData.js";
+import StateMachine from "./stateMachineClass.js";
 
 export default class Player extends Entity {
   constructor(scene, x, y, key, frame) {
@@ -41,6 +42,7 @@ export default class Player extends Entity {
     this.cooldownCounterMax = 100;
 
     this.attacking = false;
+    this.woodcutting = false;
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -131,6 +133,66 @@ export default class Player extends Entity {
         console.log("Tile coordinates are outside the bounds of the map");
       }
     });
+
+    this.states = {
+      idle: {
+        enter: () => {
+          console.log("Player entered idle state");
+        },
+        execute: () => {
+          console.log("Player is idle");
+        },
+        exit: () => {
+          console.log("Player exited idle state");
+        },
+      },
+      attacking: {
+        enter: () => {
+          console.log("Player entered attacking state");
+        },
+        execute: () => {
+          console.log("Player is attacking");
+        },
+        exit: () => {
+          console.log("Player exited attacking state");
+        },
+      },
+      woodcutting: {
+        enter: () => {
+          console.log("Player entered woodcutting state");
+        },
+        execute: () => {
+          console.log("Player is woodcutting");
+        },
+        exit: () => {
+          console.log("Player exited woodcutting state");
+        },
+      },
+      moving: {
+        enter: () => {
+          console.log("Player entered moving state");
+        },
+        execute: () => {
+          console.log("Player is moving");
+        },
+        exit: () => {
+          console.log("Player exited moving state");
+        },
+      },
+      damaged: {
+        enter: () => {
+          console.log("Player entered damaged state");
+        },
+        execute: () => {
+          console.log("Player is damaged");
+        },
+        exit: () => {
+          console.log("Player exited damaged state");
+        },
+      },
+    };
+
+    this.stateMachine = new StateMachine("idle", this.states, [this]);
   }
 
   handlePointerDown(pointer) {
@@ -311,7 +373,7 @@ export default class Player extends Entity {
 
     // Guard clause in case no path given
     if (!path || path.length === 0) {
-      this.isClickToMove = false;
+      this.stateMachine.transition("idle");
       this.isPathfinding = false; // Reset the isPathfinding flag
       // Clear the highlight
       if (this.highlight) {
@@ -321,7 +383,7 @@ export default class Player extends Entity {
     }
 
     // Activate moving flag
-    this.isClickToMove = true;
+    this.stateMachine.transition("moving");
 
     this.currentPath = path;
 
@@ -427,9 +489,13 @@ export default class Player extends Entity {
     // Draw the rectangle for the tile being looked at
     this.drawTileBeingLookedAt();
 
-    if (this.attacking && this.cooldownCounter <= 0) {
+    if (
+      this.stateMachine.stateName === "attacking" &&
+      this.cooldownCounter <= 0
+    ) {
       this.cooldownCounter = this.cooldownCounterMax;
     }
+
     // Decrease cooldown counter if it's greater than 0
     if (this.cooldownCounter > 0) {
       this.cooldownCounter--;
@@ -452,11 +518,11 @@ export default class Player extends Entity {
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
 
-    if (!this.isClickToMove) {
+    if (this.stateMachine.stateName !== "moving") {
       this.body.setVelocity(0);
     }
 
-    if (this.isClickToMove && this.targetWorldPoint) {
+    if (this.stateMachine.stateName === "moving" && this.targetWorldPoint) {
       // Calculate the direction to the target point
       let direction = this.calculateDirection(
         this.targetWorldPoint.x,
@@ -531,10 +597,15 @@ export default class Player extends Entity {
     }
 
     if (isJDown) {
-      this.attacking = !this.attacking;
+      if (this.stateMachine.stateName !== "attacking") {
+        this.stateMachine.transition("attacking");
+      } else {
+        this.stateMachine.transition("idle");
+      }
     }
 
     if (isKDown) {
+      this.woodcutting = !this.woodcutting;
     }
 
     if (isLDown) {
