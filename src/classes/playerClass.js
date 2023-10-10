@@ -315,6 +315,26 @@ export default class Player extends Entity {
         this.easystar.calculate();
       }
     }
+
+    // Convert the tile coordinates back to world coordinates
+    let worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
+
+    // Draw a rectangle at the top-left corner of the clicked tile
+    this.drawRectangle(worldPoint);
+
+    worldPoint.x += this.tileWidth / 2;
+    worldPoint.y += this.tileHeight / 2;
+
+    this.targetPosition = worldPoint;
+
+    // Calculate the direction of the movement
+    let direction = this.calculateDirection(
+      this.targetPosition.x,
+      this.targetPosition.y
+    );
+
+    // Update the facing direction based on the movement direction
+    this.updateFacingDirection(direction);
   }
 
   calculateDirection(targetX, targetY) {
