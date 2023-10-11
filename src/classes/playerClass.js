@@ -619,6 +619,8 @@ export default class Player extends Entity {
     if (isJDown) {
       if (this.stateMachine.stateName !== "attacking") {
         this.stateMachine.transition("attacking");
+        this.isPathfinding = false; // Reset the isPathfinding flag
+        this.currentPath = []; // Clear the current path
       } else {
         this.stateMachine.transition("idle");
       }
