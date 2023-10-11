@@ -37,28 +37,7 @@ export default class GameScene extends Phaser.Scene {
     this.createAnimationKeys();
 
     this.monsters = [];
-    for (let i = 0; i < 100; i++) {
-      let x = Phaser.Math.Between(0, 1024);
-      let y = Phaser.Math.Between(0, 1024);
-
-      let monsterType = Phaser.Math.Between(0, 2);
-      if (monsterType === 0) {
-        let frog = new Frog(this, x, y, Assets.Frog);
-        frog.setDepth(1);
-        frog.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
-        this.monsters.push(frog);
-      } else if (monsterType === 1) {
-        let bird = new Bird(this, x, y, Assets.Bird);
-        bird.setDepth(1);
-        bird.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
-        this.monsters.push(bird);
-      } else {
-        let bat = new Bat(this, x, y, Assets.Bat);
-        bat.setDepth(1);
-        bat.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
-        this.monsters.push(bat);
-      }
-    }
+    this.createMonsters();
 
     this.generateFunction = () => {
       if (this.terrain) {
@@ -96,13 +75,7 @@ export default class GameScene extends Phaser.Scene {
       }
     };
 
-    const randomFrame = Phaser.Math.Between(0, 15);
-    this.player = new Player(this, 72, 72, Assets.Characters, randomFrame);
-    // emit an event that the player's health changed, and pass it to the player's current health
-    this.events.emit(Events.PlayerHealthChanged, this.player.max_health);
-    this.events.emit(Events.PlayerLevelChanged, this.player.level);
-
-    this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
+    this.createPlayer();
 
     this.keys = this.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.input.on(
@@ -153,16 +126,7 @@ export default class GameScene extends Phaser.Scene {
 
   update() {
     if (data.gameActive) {
-      this.player.update(
-        this.keys.W.isDown,
-        this.keys.A.isDown,
-        this.keys.S.isDown,
-        this.keys.D.isDown,
-        Phaser.Input.Keyboard.JustDown(this.keys.I),
-        Phaser.Input.Keyboard.JustDown(this.keys.J),
-        Phaser.Input.Keyboard.JustDown(this.keys.K),
-        Phaser.Input.Keyboard.JustDown(this.keys.L)
-      );
+      this.updatePlayer();
 
       this.mobileAttackButton.setFillStyle(
         this.player.stateMachine.stateName === "attacking"
@@ -238,6 +202,47 @@ export default class GameScene extends Phaser.Scene {
         }
       }
     }
+  }
+
+  createPlayer() {
+    const randomFrame = Phaser.Math.Between(0, 15);
+    this.player = new Player(this, 72, 72, Assets.Characters, randomFrame);
+    this.events.emit(Events.PlayerHealthChanged, this.player.max_health);
+    this.events.emit(Events.PlayerLevelChanged, this.player.level);
+    this.player.on(Events.HealthChanged, this.handleHealthChanged, this);
+  }
+
+  createMonsters() {
+    for (let i = 0; i < 100; i++) {
+      let x = Phaser.Math.Between(0, 1024);
+      let y = Phaser.Math.Between(0, 1024);
+
+      let monsterType = Phaser.Math.Between(0, 2);
+      let monster;
+      if (monsterType === 0) {
+        monster = new Frog(this, x, y, Assets.Frog);
+      } else if (monsterType === 1) {
+        monster = new Bird(this, x, y, Assets.Bird);
+      } else {
+        monster = new Bat(this, x, y, Assets.Bat);
+      }
+      monster.setDepth(1);
+      monster.on(Events.MonsterDestroyed, this.handleMonsterDefeated, this);
+      this.monsters.push(monster);
+    }
+  }
+
+  updatePlayer() {
+    this.player.update(
+      this.keys.W.isDown,
+      this.keys.A.isDown,
+      this.keys.S.isDown,
+      this.keys.D.isDown,
+      Phaser.Input.Keyboard.JustDown(this.keys.I),
+      Phaser.Input.Keyboard.JustDown(this.keys.J),
+      Phaser.Input.Keyboard.JustDown(this.keys.K),
+      Phaser.Input.Keyboard.JustDown(this.keys.L)
+    );
   }
 
   drawDebugSquare(entity) {
