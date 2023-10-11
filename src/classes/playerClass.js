@@ -628,6 +628,32 @@ export default class Player extends Entity {
 
     if (isKDown) {
       this.woodcutting = !this.woodcutting;
+
+      if (this.woodcutting) {
+        // Get the tile being looked at
+        let tile = this.scene.terrain.map.getTileAt(
+          this.tileBeingLookedAt.x,
+          this.tileBeingLookedAt.y
+        );
+
+        // Get the metadata of the tile
+        let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+        // Check if the tile is an obstruction tile
+        if (tile && obstructionTiles.includes(tile.index)) {
+          // Decrease the health of the tile
+          metadata.health -= Phaser.Math.Between(
+            this.woodcutting_power_min,
+            this.woodcutting_power_max
+          );
+
+          // Check if the health of the tile is less than or equal to 0
+          if (metadata.health <= 0) {
+            // Replace the obstruction tile with a walkable tile
+            this.replaceTreeWithRandomTile(this.tileBeingLookedAt);
+          }
+        }
+      }
     }
 
     if (isLDown) {
@@ -654,40 +680,68 @@ export default class Player extends Entity {
   replaceTreeWithRandomTile(tileXY) {
     let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
     if (tile && obstructionTiles.includes(tile.index)) {
-      let newTileIndex = Phaser.Math.Between(0, 7);
-      let newTile = this.scene.terrain.layer.putTileAt(
-        newTileIndex,
-        tile.x,
-        tile.y
-      );
+      // Get the metadata of the clicked tile
+      let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      // Remove the old tile from the TileMetaData map
-      this.scene.terrain.TileMetaData.delete(tile);
+      // Check if the tile's health is less than or equal to 0
+      if (metadata.health <= 0) {
+        // Replace the tile with a random tile
+        let newTileIndex = Phaser.Math.Between(0, 7);
+        let newTile = this.scene.terrain.layer.putTileAt(
+          newTileIndex,
+          tile.x,
+          tile.y
+        );
 
-      // Add the new tile to the TileMetaData map with its new metadata
-      const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
-      const lifeSkillsType = "none"; // replace with actual value
-      const health = 0; // replace with actual value
-      const durability = 0; // replace with actual value
-      const newMetadata = new TileMetaData(
-        tilesetImage,
-        newTileIndex,
-        lifeSkillsType,
-        health,
-        durability
-      );
-      this.scene.terrain.TileMetaData.set(newTile, newMetadata);
+        // Remove the old tile from the TileMetaData map
+        this.scene.terrain.TileMetaData.delete(tile);
 
-      if ([1, 5, 6, 7].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(grassTileColors);
-      } else if ([2, 3, 4].includes(newTileIndex)) {
-        newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
+        // Add the new tile to the TileMetaData map with its new metadata
+        const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
+        const lifeSkillsType = "none"; // replace with actual value
+        const health = 0; // replace with actual value
+        const durability = 0; // replace with actual value
+        const newMetadata = new TileMetaData(
+          tilesetImage,
+          newTileIndex,
+          lifeSkillsType,
+          health,
+          durability
+        );
+        this.scene.terrain.TileMetaData.set(newTile, newMetadata);
+
+        if ([1, 5, 6, 7].includes(newTileIndex)) {
+          newTile.tint = Phaser.Math.RND.pick(grassTileColors);
+        } else if ([2, 3, 4].includes(newTileIndex)) {
+          newTile.tint = Phaser.Math.RND.pick(stoneTileColors);
+        }
+        newTile.alpha = 0.4;
+
+        // Update the easystar grid
+        data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
+        this.easystar.setGrid(data.currentMapArray);
+      } else {
+        // Decrease the tile's health
+        this.decreaseTileHealth(tileXY);
       }
-      newTile.alpha = 0.4;
+    }
+  }
 
-      // Update the easystar grid
-      data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
-      this.easystar.setGrid(data.currentMapArray);
+  decreaseTileHealth(tileXY) {
+    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+    if (tile && obstructionTiles.includes(tile.index)) {
+      // Get the metadata of the clicked tile
+      let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+      // Decrease the tile's health by a random amount between the player's min and max woodcutting power
+      let damage = Phaser.Math.Between(
+        this.woodcutting_power_min,
+        this.woodcutting_power_max
+      );
+      metadata.health -= damage;
+
+      // Update the tile's metadata in the TileMetaData map
+      this.scene.terrain.TileMetaData.set(tile, metadata);
     }
   }
 
