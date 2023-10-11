@@ -1,3 +1,9 @@
+- Woodcutting feature has a few bugs
+
+  - [ ] player can't continually woodcut
+  - [ ] player continually moves against tree tile (trying to get onto the tile)
+    - movement should essentially pause and player should engage in woodcutting activity (make icon for this later)
+
 - [/] High Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
 
   - [x] Works with both mouse input and keyboard input
