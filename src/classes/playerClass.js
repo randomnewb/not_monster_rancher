@@ -521,6 +521,10 @@ export default class Player extends Entity {
       this.cooldownCounter--;
     }
 
+    if (this.woodcuttingCounter > 0) {
+      this.woodcuttingCounter--;
+    }
+
     // Decrease invincibility counter if it's greater than 0
     if (this.invincibilityCounter > 0) {
       this.invincibilityCounter--;
