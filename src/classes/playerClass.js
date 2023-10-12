@@ -97,42 +97,7 @@ export default class Player extends Entity {
     // Store the last clicked tile coordinates
     let lastTileXY = null;
 
-    // Debug code to log the tile coordinates and metadata of the clicked tile
-    this.scene.input.on("pointerdown", pointer => {
-      // Get the tile coordinates of the clicked position
-      let tileXY = this.handlePointerDown(pointer);
-
-      // Check if handlePointerDown returned null
-      if (tileXY === null) {
-        // If it returned null, return early and don't run the logging code
-        return;
-      }
-
-      console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
-      console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
-
-      // Check if the tile coordinates are within the bounds of the map
-      if (
-        tileXY.x >= 0 &&
-        tileXY.x < this.scene.terrain.map.width &&
-        tileXY.y >= 0 &&
-        tileXY.y < this.scene.terrain.map.height
-      ) {
-        // Get the clicked tile
-        let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-
-        // Get the metadata of the clicked tile
-        let metadata = this.scene.terrain.TileMetaData.get(tile);
-
-        // Log the tile coordinates and metadata in the console
-        console.log(
-          `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
-          metadata
-        );
-      } else {
-        console.log("Tile coordinates are outside the bounds of the map");
-      }
-    });
+    this.scene.input.on("pointerdown", this.clickedTileData.bind(this));
 
     this.states = {
       idle: {
@@ -193,6 +158,77 @@ export default class Player extends Entity {
     };
 
     this.stateMachine = new StateMachine("idle", this.states, [this]);
+  }
+
+  clickedTileData(pointer) {
+    // Get the tile coordinates of the clicked position
+    let tileXY = this.handlePointerDown(pointer);
+
+    // Check if handlePointerDown returned null
+    if (tileXY === null) {
+      // If it returned null, return early and don't run the logging code
+      return;
+    }
+
+    console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
+    console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
+
+    // Check if the tile coordinates are within the bounds of the map
+    if (
+      tileXY.x >= 0 &&
+      tileXY.x < this.scene.terrain.map.width &&
+      tileXY.y >= 0 &&
+      tileXY.y < this.scene.terrain.map.height
+    ) {
+      // Get the clicked tile
+      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+
+      // Get the metadata of the clicked tile
+      let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+      // Log the tile coordinates and metadata in the console
+      console.log(
+        `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
+        metadata
+      );
+    } else {
+      console.log("Tile coordinates are outside the bounds of the map");
+    }
+  }
+
+  keyPressedTileData() {
+    // Get the tile coordinates of the tile being looked at
+    let tileXY = this.tileBeingLookedAt;
+
+    // Check if this.tileBeingLookedAt is null
+    if (this.tileBeingLookedAt === null) {
+      // If it is, return early and don't run the rest of the code
+      return;
+    }
+
+    console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
+
+    // Check if the tile coordinates are within the bounds of the map
+    if (
+      tileXY.x >= 0 &&
+      tileXY.x < this.scene.terrain.map.width &&
+      tileXY.y >= 0 &&
+      tileXY.y < this.scene.terrain.map.height
+    ) {
+      // Get the tile being looked at
+      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+
+      // Get the metadata of the tile
+      let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+      // Log the tile coordinates and metadata in the console
+      console.log(
+        `Tile looked at: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
+        metadata
+      );
+    } else {
+      console.log("Tile coordinates are outside the bounds of the map");
+    }
   }
 
   handlePointerDown(pointer) {
@@ -634,6 +670,7 @@ export default class Player extends Entity {
       this.woodcutting = !this.woodcutting;
 
       if (this.woodcutting) {
+        this.keyPressedTileData();
         // Get the tile being looked at
         let tile = this.scene.terrain.map.getTileAt(
           this.tileBeingLookedAt.x,
