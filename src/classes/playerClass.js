@@ -329,7 +329,7 @@ export default class Player extends Entity {
       }
 
       // Check if the clicked tile is a tree
-      this.replaceTreeWithRandomTile(tileXY);
+      // this.replaceTreeWithRandomTile(tileXY);
 
       // Only initiate the pathfinding process if it's not already ongoing
       if (!this.isPathfinding && !this.isClickToMove) {
