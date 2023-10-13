@@ -95,7 +95,7 @@ export default class Player extends Entity {
     this.createBounceTween();
 
     // Store the last clicked tile coordinates
-    let lastTileXY = null;
+    this.lastClickedTile = null;
 
     this.scene.input.on("pointerdown", this.clickedTileData.bind(this));
 
@@ -246,6 +246,8 @@ export default class Player extends Entity {
 
     this.targetTile = tileXY;
 
+    this.lastClickedTile = tileXY;
+
     // Check if the tile coordinates are within the grid boundaries
     if (this.isTileWithinGrid(tileXY)) {
       // If a timed event is currently running, stop it
@@ -275,7 +277,13 @@ export default class Player extends Entity {
           } else {
             // Save the path for later
             this.path = path;
-            this.moveAlongPath(path);
+
+            // If the clicked tile is an obstruction tile, remove the last tile from the path
+            if (tile && obstructionTiles.includes(tile.index)) {
+              this.path.pop();
+            }
+
+            this.moveAlongPath(this.path);
           }
         }
       );
@@ -303,9 +311,6 @@ export default class Player extends Entity {
 
     // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
-
-    // Check if the clicked tile is a tree
-    // this.replaceTreeWithRandomTile(tileXY);
 
     return tileXY;
   }
@@ -521,6 +526,15 @@ export default class Player extends Entity {
     );
   }
 
+  isNextTo(tileXY) {
+    let playerTileXY = this.scene.terrain.map.worldToTileXY(this.x, this.y);
+    return (
+      (Math.abs(playerTileXY.x - tileXY.x) === 1 &&
+        playerTileXY.y === tileXY.y) ||
+      (Math.abs(playerTileXY.y - tileXY.y) === 1 && playerTileXY.x === tileXY.x)
+    );
+  }
+
   update(
     isWDown,
     isADown,
@@ -542,6 +556,25 @@ export default class Player extends Entity {
       // Update the facing direction based on the movement direction
       this.updateFacingDirection(direction);
     }
+
+    if (
+      this.lastClickedTile &&
+      this.isNextTo(this.lastClickedTile) &&
+      this.woodcuttingCounter <= 0
+    ) {
+      let tile = this.scene.terrain.map.getTileAt(
+        this.lastClickedTile.x,
+        this.lastClickedTile.y
+      );
+
+      // Check if the tile is an obstruction tile
+      if (tile && obstructionTiles.includes(tile.index)) {
+        this.decreaseTileHealth(this.lastClickedTile);
+        // Reset the woodcuttingCounter to woodcuttingCounterMax
+        this.woodcuttingCounter = this.woodcuttingCounterMax;
+      }
+    }
+
     // Draw the rectangle for the tile being looked at
     this.drawTileBeingLookedAt();
 
@@ -769,20 +802,28 @@ export default class Player extends Entity {
   }
 
   decreaseTileHealth(tileXY) {
-    let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-    if (tile && obstructionTiles.includes(tile.index)) {
-      // Get the metadata of the clicked tile
-      let metadata = this.scene.terrain.TileMetaData.get(tile);
+    if (this.woodcuttingCounter <= 0) {
+      let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
+      if (tile && obstructionTiles.includes(tile.index)) {
+        // Get the metadata of the clicked tile
+        let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      // Decrease the tile's health by a random amount between the player's min and max woodcutting power
-      let damage = Phaser.Math.Between(
-        this.woodcutting_power_min,
-        this.woodcutting_power_max
-      );
-      metadata.health -= damage;
+        // Decrease the tile's health by a random amount between the player's min and max woodcutting power
+        let damage = Phaser.Math.Between(
+          this.woodcutting_power_min,
+          this.woodcutting_power_max
+        );
+        metadata.health -= damage;
 
-      // Update the tile's metadata in the TileMetaData map
-      this.scene.terrain.TileMetaData.set(tile, metadata);
+        // Update the tile's metadata in the TileMetaData map
+        this.scene.terrain.TileMetaData.set(tile, metadata);
+
+        // Check if the tile's health is less than or equal to 0
+        if (metadata.health <= 0) {
+          // Call the replaceTreeWithRandomTile method
+          this.replaceTreeWithRandomTile(tileXY);
+        }
+      }
     }
   }
 
