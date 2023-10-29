@@ -7,18 +7,15 @@ export default class IdleState extends State {
   }
 
   enter(scene, npc) {
-    // console.log(`${npc.constructor.name} entered the idle state`);
     npc.setVelocity(0);
     npc.isMoving = false;
-    npc.idleTime = Phaser.Math.Between(1, 5) * 60; // Idle for 1 to 5 seconds (60 frames per second)
-    npc.idleCounter = 0; // Initialize counter
+    npc.idleTime = Phaser.Math.Between(1, 5) * 60;
+    npc.idleCounter = 0;
   }
 
   execute(scene, npc) {
-    // Increment the counter each frame
     npc.idleCounter++;
 
-    // Calculate the distance between the npc and the player
     const distance = Phaser.Math.Distance.Between(
       npc.x,
       npc.y,
@@ -26,22 +23,18 @@ export default class IdleState extends State {
       scene.player.y
     );
 
-    // Check if the player is within 3 tiles distance
     if (distance <= npc.detectionRange) {
       npc.stateMachine.transition(States.Detect);
-      npc.idleCounter = 0; // Reset counter
-    }
-    // Check if the counter has exceeded the idle time
-    else if (npc.idleCounter > npc.idleTime) {
+      npc.idleCounter = 0;
+    } else if (npc.idleCounter > npc.idleTime) {
       npc.stateMachine.transition(States.Wander);
-      npc.idleCounter = 0; // Reset counter
+      npc.idleCounter = 0;
     }
   }
 
   exit(scene, npc) {
     if (npc.idleCounter) {
-      // If there's an idle event scheduled
-      npc.idleCounter = 0; // Reset counter
+      npc.idleCounter = 0;
     }
   }
 }

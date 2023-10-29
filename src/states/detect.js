@@ -7,14 +7,12 @@ export default class DetectState extends State {
   }
 
   enter(scene, npc) {
-    // console.log(`${npc.constructor.name} entered the detect state`);
     npc.setVelocity(0);
     npc.isMoving = false;
 
-    npc.detectTime = Phaser.Math.Between(3, 5) * 60; // Detect for 1 to 5 seconds (60 frames per second)
-    npc.detectCounter = 0; // Initialize counter
+    npc.detectTime = Phaser.Math.Between(3, 5) * 60;
+    npc.detectCounter = 0;
 
-    // Create the exclamation point sprite above the npc's head
     let exclamationSprite = scene.add.sprite(
       npc.x,
       npc.y - npc.height,
@@ -24,7 +22,6 @@ export default class DetectState extends State {
 
     exclamationSprite.setTint(Colors.Pink);
 
-    // Make the sprite fade away after 2 seconds
     scene.tweens.add({
       targets: exclamationSprite,
       alpha: 0,
@@ -36,10 +33,8 @@ export default class DetectState extends State {
   }
 
   execute(scene, npc) {
-    // Increment the counter each frame
     npc.detectCounter++;
 
-    // Calculate the distance between the npc and the player
     const distance = Phaser.Math.Distance.Between(
       npc.x,
       npc.y,
@@ -47,12 +42,10 @@ export default class DetectState extends State {
       scene.player.y
     );
 
-    // Check if the player is more than 6 tiles away
     if (distance > npc.disengagementRange) {
       npc.stateMachine.transition(States.Idle);
-      npc.detectCounter = 0; // Reset counter
+      npc.detectCounter = 0;
 
-      // Create the question mark sprite above the npc's head
       let questionSprite = scene.add.sprite(
         npc.x,
         npc.y - npc.height,
@@ -60,7 +53,6 @@ export default class DetectState extends State {
         2
       );
 
-      // Make the sprite fade away after 1 second
       scene.tweens.add({
         targets: questionSprite,
         alpha: 0,
@@ -69,20 +61,16 @@ export default class DetectState extends State {
           questionSprite.destroy();
         },
       });
-    }
-
-    // Check if the counter has exceeded the detect time
-    else if (npc.detectCounter > npc.detectTime) {
+    } else if (npc.detectCounter > npc.detectTime) {
       npc.stateMachine.transition(States.Chase);
-      npc.detectCounter = 0; // Reset counter
+      npc.detectCounter = 0;
     }
   }
 
   exit(scene, npc) {
     npc.isMoving = false;
     if (npc.detectCounter) {
-      // If there's an detect event scheduled
-      npc.detectCounter = 0; // Reset counter
+      npc.detectCounter = 0;
     }
   }
 }

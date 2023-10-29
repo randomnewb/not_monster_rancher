@@ -20,7 +20,6 @@ export default class AttackState extends State {
   }
 
   execute(scene, npc) {
-    // Calculate the distance between the npc and the player
     const distance = Phaser.Math.Distance.Between(
       npc.x,
       npc.y,
@@ -28,11 +27,9 @@ export default class AttackState extends State {
       scene.player.y
     );
 
-    // Check if the player is more than 80 units away
     if (distance > npc.disengagementRange) {
       npc.stateMachine.transition(States.Idle);
 
-      // Create the question mark sprite above the npc's head
       let questionSprite = scene.add.sprite(
         npc.x,
         npc.y - npc.height,
@@ -69,11 +66,9 @@ export default class AttackState extends State {
       }
     }
 
-    // Only start cooldown counter when flashCounter is 0
     if (npc.flashCounter === 0) {
       npc.cooldownCounter--;
 
-      // Fire a projectile when cooldownCounter reaches 0
       if (npc.cooldownCounter <= 0) {
         // Calculate the direction from the NPC to the player
         let direction = Phaser.Math.Angle.BetweenPoints(npc, scene.player);
@@ -84,7 +79,6 @@ export default class AttackState extends State {
           y: Math.sin(direction),
         };
 
-        // Emit an event instead of firing the projectile directly
         npc.emit(
           Events.FireProjectile,
           npc,
@@ -93,7 +87,6 @@ export default class AttackState extends State {
           npc.max_attack
         );
 
-        // Reset cooldownCounter
         npc.cooldownCounter = npc.cooldownCounterMax;
       }
     }
@@ -101,8 +94,7 @@ export default class AttackState extends State {
 
   exit(scene, npc) {
     if (npc.cooldownCounter !== npc.cooldownCounterMax) {
-      // If there's an attack event scheduled
-      npc.cooldownCounter = npc.cooldownCounterMax; // Reset counter
+      npc.cooldownCounter = npc.cooldownCounterMax;
     }
   }
 }

@@ -25,7 +25,6 @@ export default class HealthBar extends Phaser.GameObjects.Container {
   updateHealth(health) {
     this.currentHealth = health;
 
-    // Add check for negative health
     if (this.currentHealth < 0) {
       this.currentHealth = 0;
     }

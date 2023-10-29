@@ -2,17 +2,9 @@ import { Assets, States } from "../utils/constants.js";
 import State from "./state.js";
 
 export default class DestroyedState extends State {
-  enter(scene, npc) {
-    // Destroyed state enter logic
-    // console.log(`${npc.constructor.name} entered the destroyed state`);
-    // Call the parent class's destroy method
-  }
+  enter(scene, npc) {}
 
-  execute(scene, npc) {
-    // Destroyed state execute logic
-  }
+  execute(scene, npc) {}
 
-  exit(scene, npc) {
-    // Destroyed state exit logic
-  }
+  exit(scene, npc) {}
 }

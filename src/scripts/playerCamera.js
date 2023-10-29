@@ -7,11 +7,9 @@ export default class PlayerCamera {
   }
 
   setupCamera() {
-    // Set the camera to follow the player
     this.cameras.main.startFollow(this.player);
 
-    // Zoom the camera
-    this.cameras.main.setZoom(4); // 2 is the zoom level, increase to zoom in more
+    this.cameras.main.setZoom(4);
 
     // Set up a zoom event so the UI layer isn't affected by the camera's zoom
     this.cameras.main.on("zoom", (camera, zoom) => {

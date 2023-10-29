@@ -65,16 +65,7 @@ export default class UIScene extends Phaser.Scene {
       this.updateHealthText,
       this
     );
-    // gameScene.events.on(
-    //   Events.PlayerJewelCollected,
-    //   this.updateJewelText,
-    //   this
-    // );
-    // gameScene.events.on(
-    //   Events.PlayerMonstersDefeated,
-    //   this.updateMonstersDefeatedText,
-    //   this
-    // );
+
     gameScene.events.on(
       Events.ClosestEntityChanged,
       this.updateMonsterNameText,
@@ -83,11 +74,11 @@ export default class UIScene extends Phaser.Scene {
     gameScene.events.on(Events.PlayerLevelChanged, this.updateLevelText, this);
     gameScene.events.on(Events.PlayerExpChanged, this.updateExpText, this);
 
-    let playerHealth = 0; // replace this with the actual player's health
+    let playerHealth = 0;
     this.playerHealthText = this.add.text(
-      this.gameWidth / 2 - 220, // x position - center of the screen
-      this.gameHeight - 50, // y position - bottom of the screen with some padding
-      `Health: ${playerHealth}`, // text to display
+      this.gameWidth / 2 - 220,
+      this.gameHeight - 50,
+      `Health: ${playerHealth}`,
       {
         fontSize: "32px",
         fill: "#fff",
@@ -96,24 +87,11 @@ export default class UIScene extends Phaser.Scene {
       }
     );
 
-    // let playerJewels = 0;
-    // this.playerJewelsText = this.add.text(
-    //   this.gameWidth / 2 - 30, // x position - center of the screen
-    //   this.gameHeight - 50, // y position - bottom of the screen with some padding
-    //   `Jewels: ${playerJewels}`, // text to display
-    //   {
-    //     fontSize: "32px",
-    //     fill: "#fff",
-    //     align: "center",
-    //     fontFamily: "HopeGold",
-    //   }
-    // );
-
-    let playerLevel = 0; // replace this with the actual player's level
+    let playerLevel = 0;
     this.playerLevelText = this.add.text(
-      this.gameWidth / 2 - 30, // x position - center of the screen
-      this.gameHeight - 50, // y position - bottom of the screen with some padding
-      `Level: ${playerLevel}`, // text to display
+      this.gameWidth / 2 - 30,
+      this.gameHeight - 50,
+      `Level: ${playerLevel}`,
       {
         fontSize: "32px",
         fill: "#fff",
@@ -122,11 +100,11 @@ export default class UIScene extends Phaser.Scene {
       }
     );
 
-    let playerExp = 0; // replace this with the actual player's experience
+    let playerExp = 0;
     this.playerExpText = this.add.text(
-      this.gameWidth / 2 + 120, // x position - center of the screen
-      this.gameHeight - 50, // y position - bottom of the screen with some padding
-      `Exp: ${playerExp}`, // text to display
+      this.gameWidth / 2 + 120,
+      this.gameHeight - 50,
+      `Exp: ${playerExp}`,
       {
         fontSize: "32px",
         fill: "#fff",
@@ -134,25 +112,12 @@ export default class UIScene extends Phaser.Scene {
         fontFamily: "HopeGold",
       }
     );
-
-    // this.monstersDefeated = 0;
-    // this.playerMonstersDefeated = this.add.text(
-    //   this.gameWidth / 2 + 120, // x position - center of the screen
-    //   this.gameHeight - 50, // y position - bottom of the screen with some padding
-    //   `Monsters Defeated: ${this.monstersDefeated}`, // text to display
-    //   {
-    //     fontSize: "32px",
-    //     fill: "#fff",
-    //     align: "center",
-    //     fontFamily: "HopeGold",
-    //   }
-    // );
 
     this.monsterName = "";
     this.monsterNameText = this.add.text(
-      this.gameWidth / 2 - 65, // x position - center of the screen
-      this.gameHeight - 100, // y position - bottom of the screen with some padding
-      `Monster Name: ${this.monsterName}`, // text to display
+      this.gameWidth / 2 - 65,
+      this.gameHeight - 100,
+      `Monster Name: ${this.monsterName}`,
       {
         fontSize: "32px",
         fill: "#fff",
@@ -162,7 +127,7 @@ export default class UIScene extends Phaser.Scene {
     );
 
     this.autoAttackIndicator = this.add.sprite(64, 64, "auto_attack_indicator");
-    this.autoAttackIndicator.setScale(4); // 2 is the zoom level, increase to zoom in more
+    this.autoAttackIndicator.setScale(4);
   }
 
   update() {
@@ -180,23 +145,8 @@ export default class UIScene extends Phaser.Scene {
       newHealth = 0;
     }
 
-    // if (newHealth >= data.playerMaxHealth) {
-    //   newHealth = data.playerMaxHealth;
-    // }
-
     this.playerHealthText.setText(`Health: ${newHealth}`);
   }
-
-  // updateJewelText(newJewels) {
-  //   this.playerJewelsText.setText(`Jewels: ${newJewels}`);
-  // }
-
-  // updateMonstersDefeatedText() {
-  //   this.monstersDefeated++;
-  //   this.playerMonstersDefeated.setText(
-  //     `Monsters Defeated: ${this.monstersDefeated}`
-  //   );
-  // }
 
   updateMonsterNameText(newName) {
     this.monsterNameText.setText(`Monster Name: ${newName}`);
@@ -238,16 +188,7 @@ export default class UIScene extends Phaser.Scene {
       this.updateHealthText,
       this
     );
-    // gameScene.events.off(
-    //   Events.PlayerJewelCollected,
-    //   this.updateJewelText,
-    //   this
-    // );
-    // gameScene.events.off(
-    //   Events.PlayerMonstersDefeated,
-    //   this.updateMonstersDefeatedText,
-    //   this
-    // );
+
     gameScene.events.off(
       Events.ClosestEntityChanged,
       this.updateMonsterNameText,

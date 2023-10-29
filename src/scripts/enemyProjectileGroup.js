@@ -77,10 +77,9 @@ class EnemyProjectile extends Phaser.Physics.Arcade.Sprite {
         this.setActive(false);
         this.setVisible(false);
       },
-      loop: false, // Do not repeat the timer when it completes
+      loop: false,
     });
 
-    // Store min_attack and max_attack as properties of the projectile
     this.min_attack = min_attack;
     this.max_attack = max_attack;
   }

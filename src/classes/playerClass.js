@@ -161,32 +161,25 @@ export default class Player extends Entity {
   }
 
   clickedTileData(pointer) {
-    // Get the tile coordinates of the clicked position
     let tileXY = this.handlePointerDown(pointer);
 
-    // Check if handlePointerDown returned null
     if (tileXY === null) {
-      // If it returned null, return early and don't run the logging code
       return;
     }
 
     console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
     console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
 
-    // Check if the tile coordinates are within the bounds of the map
     if (
       tileXY.x >= 0 &&
       tileXY.x < this.scene.terrain.map.width &&
       tileXY.y >= 0 &&
       tileXY.y < this.scene.terrain.map.height
     ) {
-      // Get the clicked tile
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
 
-      // Get the metadata of the clicked tile
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      // Log the tile coordinates and metadata in the console
       console.log(
         `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
         metadata
@@ -197,31 +190,24 @@ export default class Player extends Entity {
   }
 
   keyPressedTileData() {
-    // Get the tile coordinates of the tile being looked at
     let tileXY = this.tileBeingLookedAt;
 
-    // Check if this.tileBeingLookedAt is null
     if (this.tileBeingLookedAt === null) {
-      // If it is, return early and don't run the rest of the code
       return;
     }
 
     console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
 
-    // Check if the tile coordinates are within the bounds of the map
     if (
       tileXY.x >= 0 &&
       tileXY.x < this.scene.terrain.map.width &&
       tileXY.y >= 0 &&
       tileXY.y < this.scene.terrain.map.height
     ) {
-      // Get the tile being looked at
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
 
-      // Get the metadata of the tile
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      // Log the tile coordinates and metadata in the console
       console.log(
         `Tile looked at: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
         metadata
@@ -234,13 +220,11 @@ export default class Player extends Entity {
   handlePointerDown(pointer) {
     let { worldPoint, tileXY } = this.getTileCoordinates(pointer);
 
-    // Check if the clicked tile is the same as the current target tile
     if (
       this.targetTile &&
       this.targetTile.x === tileXY.x &&
       this.targetTile.y === tileXY.y
     ) {
-      // The player is already moving to this tile, so return early
       return null;
     }
 
@@ -248,15 +232,12 @@ export default class Player extends Entity {
 
     this.lastClickedTile = tileXY;
 
-    // Check if the tile coordinates are within the grid boundaries
     if (this.isTileWithinGrid(tileXY)) {
-      // If a timed event is currently running, stop it
       if (this.timedEvent) {
         this.timedEvent.remove();
         this.timedEvent = null;
       }
 
-      // Create a copy of the current map array
       let tempMapArray = JSON.parse(JSON.stringify(data.currentMapArray));
 
       // Temporarily change the obstruction tile that the player clicked on to a walkable tile in the copy of the map array
@@ -275,10 +256,8 @@ export default class Player extends Entity {
         path => {
           if (path === null) {
           } else {
-            // Save the path for later
             this.path = path;
 
-            // If the clicked tile is an obstruction tile, remove the last tile from the path
             if (tile && obstructionTiles.includes(tile.index)) {
               this.path.pop();
             }
@@ -288,14 +267,11 @@ export default class Player extends Entity {
         }
       );
 
-      // Don't forget to calculate the pathfinding!
       this.easystar.calculate();
     }
 
-    // Convert the tile coordinates back to world coordinates
     worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
 
-    // Draw a rectangle at the top-left corner of the clicked tile
     this.drawRectangle(worldPoint);
 
     worldPoint.x += this.tileWidth / 2;
@@ -303,39 +279,31 @@ export default class Player extends Entity {
 
     this.targetPosition = worldPoint;
 
-    // Calculate the direction of the movement
     let direction = this.calculateDirection(
       this.targetPosition.x,
       this.targetPosition.y
     );
 
-    // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
 
     return tileXY;
   }
 
   handleKeyboardMovement(targetX, targetY) {
-    this.currentPath = []; // Clear the current path
+    this.currentPath = [];
     // Convert the world coordinates to tile coordinates
     let tileXY = this.scene.terrain.map.worldToTileXY(targetX, targetY);
 
-    // Check if the tile coordinates are within the grid boundaries
     if (this.isTileWithinGrid(tileXY)) {
-      // If a timed event is currently running, stop it
       if (this.timedEvent) {
         this.timedEvent.remove();
         this.timedEvent = null;
       }
 
-      // Check if the clicked tile is a tree
-      // this.replaceTreeWithRandomTile(tileXY);
-
       // Only initiate the pathfinding process if it's not already ongoing
       if (!this.isPathfinding && !this.isClickToMove) {
         this.isPathfinding = true;
 
-        // Find a path to the target tile
         this.easystar.findPath(
           this.playerTileX,
           this.playerTileY,
@@ -345,22 +313,18 @@ export default class Player extends Entity {
             if (path === null) {
               this.isPathfinding = false;
             } else {
-              // Save the path for later
               this.path = path;
               this.moveAlongPath(path);
             }
           }
         );
 
-        // Don't forget to calculate the pathfinding!
         this.easystar.calculate();
       }
     }
 
-    // Convert the tile coordinates back to world coordinates
     let worldPoint = this.scene.terrain.map.tileToWorldXY(tileXY.x, tileXY.y);
 
-    // Draw a rectangle at the top-left corner of the clicked tile
     this.drawRectangle(worldPoint);
 
     worldPoint.x += this.tileWidth / 2;
@@ -368,13 +332,11 @@ export default class Player extends Entity {
 
     this.targetPosition = worldPoint;
 
-    // Calculate the direction of the movement
     let direction = this.calculateDirection(
       this.targetPosition.x,
       this.targetPosition.y
     );
 
-    // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
   }
 
@@ -392,10 +354,8 @@ export default class Player extends Entity {
 
   updateFacingDirection(direction) {
     if (Math.abs(direction.x) > Math.abs(direction.y)) {
-      // Horizontal movement
       this.facing = direction.x > 0 ? "right" : "left";
     } else {
-      // Vertical movement
       this.facing = direction.y > 0 ? "down" : "up";
     }
 
@@ -429,21 +389,19 @@ export default class Player extends Entity {
   }
 
   moveAlongPath(path) {
-    // Stop any previous movement
     this.body.setVelocity(0);
 
     // Guard clause in case no path given
     if (!path || path.length === 0) {
       this.stateMachine.transition("idle");
-      this.isPathfinding = false; // Reset the isPathfinding flag
-      // Clear the highlight
+      this.isPathfinding = false;
+
       if (this.highlight) {
         this.highlight.clear();
       }
       return;
     }
 
-    // Activate moving flag
     this.stateMachine.transition("moving");
 
     this.currentPath = path;
@@ -454,7 +412,6 @@ export default class Player extends Entity {
       nextTile.y
     );
 
-    // Adding half of the tile's width and height to place the target in the middle of the tile
     this.targetWorldPoint.x += this.tileWidth / 2;
     this.targetWorldPoint.y += this.tileHeight / 2;
 
@@ -465,22 +422,19 @@ export default class Player extends Entity {
       this.speed
     );
 
-    // Calculate the direction of the movement
     let direction = this.calculateDirection(
       this.targetWorldPoint.x,
       this.targetWorldPoint.y
     );
 
-    // Update the facing direction based on the movement direction
     this.updateFacingDirection(direction);
 
-    // If the next tile is the last one in the path and it's an obstruction tile, remove it
     if (this.currentPath.length === 0) {
       let tileXY = { x: nextTile.x, y: nextTile.y };
       if (this.isTileWithinGrid(tileXY)) {
         this.replaceTreeWithRandomTile(tileXY);
       }
-      // Reset the acceptable tiles to the original walkable tiles
+
       this.easystar.setAcceptableTiles(walkableTiles);
     }
   }
@@ -491,7 +445,6 @@ export default class Player extends Entity {
 
     this.targetPosition = worldPoint;
 
-    // Calculate the direction of the movement
     let direction = this.calculateDirection(
       this.targetPosition.x,
       this.targetPosition.y
@@ -545,15 +498,12 @@ export default class Player extends Entity {
     isKDown,
     isLDown
   ) {
-    // Only update the facing direction and draw the rectangle if the player has a target position
     if (this.targetPosition) {
-      // Calculate the direction of the movement
       let direction = this.calculateDirection(
         this.targetPosition.x,
         this.targetPosition.y
       );
 
-      // Update the facing direction based on the movement direction
       this.updateFacingDirection(direction);
     }
 
@@ -567,15 +517,12 @@ export default class Player extends Entity {
         this.lastClickedTile.y
       );
 
-      // Check if the tile is an obstruction tile
       if (tile && obstructionTiles.includes(tile.index)) {
         this.decreaseTileHealth(this.lastClickedTile);
-        // Reset the woodcuttingCounter to woodcuttingCounterMax
         this.woodcuttingCounter = this.woodcuttingCounterMax;
       }
     }
 
-    // Draw the rectangle for the tile being looked at
     this.drawTileBeingLookedAt();
 
     if (
@@ -585,7 +532,6 @@ export default class Player extends Entity {
       this.cooldownCounter = this.cooldownCounterMax;
     }
 
-    // Decrease cooldown counter if it's greater than 0
     if (this.cooldownCounter > 0) {
       this.cooldownCounter--;
     }
@@ -594,7 +540,6 @@ export default class Player extends Entity {
       this.woodcuttingCounter--;
     }
 
-    // Decrease invincibility counter if it's greater than 0
     if (this.invincibilityCounter > 0) {
       this.invincibilityCounter--;
       // Create a flashing effect by alternating the tint
@@ -604,10 +549,8 @@ export default class Player extends Entity {
         this.setTint(this.originalTint);
       }
     } else {
-      // Reset the tint to the original color
       this.setTint(this.originalTint);
     }
-    // Update player's tile coordinates
     this.playerTileX = Math.floor(this.x / this.tileWidth);
     this.playerTileY = Math.floor(this.y / this.tileHeight);
 
@@ -616,7 +559,6 @@ export default class Player extends Entity {
     }
 
     if (this.stateMachine.stateName === "moving" && this.targetWorldPoint) {
-      // Calculate the direction to the target point
       let direction = this.calculateDirection(
         this.targetWorldPoint.x,
         this.targetWorldPoint.y
@@ -656,44 +598,36 @@ export default class Player extends Entity {
       }
     }
 
-    // Calculate the pathfindings
     this.easystar.calculate();
 
     if (this.current_health > this.max_health) {
       this.current_health = this.max_health;
     }
 
-    // Vertical movement
     if (isWDown) {
-      // Calculate new target position
       let targetY = this.y - this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
     } else if (isSDown) {
-      // Calculate new target position
       let targetY = this.y + this.tileHeight;
       this.handleKeyboardMovement(this.x, targetY);
     }
 
-    // Horizontal movement
     if (isADown) {
-      // Calculate new target position
       let targetX = this.x - this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);
     } else if (isDDown) {
-      // Calculate new target position
       let targetX = this.x + this.tileWidth;
       this.handleKeyboardMovement(targetX, this.y);
     }
 
-    // Future Actions to Implement
     if (isIDown) {
     }
 
     if (isJDown) {
       if (this.stateMachine.stateName !== "attacking") {
         this.stateMachine.transition("attacking");
-        this.isPathfinding = false; // Reset the isPathfinding flag
-        this.currentPath = []; // Clear the current path
+        this.isPathfinding = false;
+        this.currentPath = [];
       } else {
         this.stateMachine.transition("idle");
       }
@@ -704,26 +638,20 @@ export default class Player extends Entity {
 
       if (this.woodcutting) {
         this.keyPressedTileData();
-        // Get the tile being looked at
         let tile = this.scene.terrain.map.getTileAt(
           this.tileBeingLookedAt.x,
           this.tileBeingLookedAt.y
         );
 
-        // Get the metadata of the tile
         let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-        // Check if the tile is an obstruction tile
         if (tile && obstructionTiles.includes(tile.index)) {
-          // Decrease the health of the tile
           metadata.health -= Phaser.Math.Between(
             this.woodcutting_power_min,
             this.woodcutting_power_max
           );
 
-          // Check if the health of the tile is less than or equal to 0
           if (metadata.health <= 0) {
-            // Replace the obstruction tile with a walkable tile
             this.replaceTreeWithRandomTile(this.tileBeingLookedAt);
           }
         }
@@ -737,14 +665,11 @@ export default class Player extends Entity {
 
     this.healthBar.setPosition(this.x, this.y + 12);
 
-    // Check if the player has velocity
     if (this.body.velocity.x !== 0 || this.body.velocity.y !== 0) {
-      // If the player is moving and the tween is not active, start the tween
       if (!this.bounceTween.isPlaying()) {
         this.bounceTween.resume();
       }
     } else {
-      // If the player is not moving and the tween is active, stop the tween
       if (this.bounceTween.isPlaying()) {
         this.bounceTween.pause();
       }
@@ -754,12 +679,9 @@ export default class Player extends Entity {
   replaceTreeWithRandomTile(tileXY) {
     let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
     if (tile && obstructionTiles.includes(tile.index)) {
-      // Get the metadata of the clicked tile
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      // Check if the tile's health is less than or equal to 0
       if (metadata.health <= 0) {
-        // Replace the tile with a random tile
         let newTileIndex = Phaser.Math.Between(0, 7);
         let newTile = this.scene.terrain.layer.putTileAt(
           newTileIndex,
@@ -767,14 +689,12 @@ export default class Player extends Entity {
           tile.y
         );
 
-        // Remove the old tile from the TileMetaData map
         this.scene.terrain.TileMetaData.delete(tile);
 
-        // Add the new tile to the TileMetaData map with its new metadata
-        const tilesetImage = "Assets.FoliageTiles"; // replace with actual value
-        const lifeSkillsType = "none"; // replace with actual value
-        const health = 0; // replace with actual value
-        const durability = 0; // replace with actual value
+        const tilesetImage = "Assets.FoliageTiles";
+        const lifeSkillsType = "none";
+        const health = 0;
+        const durability = 0;
         const newMetadata = new TileMetaData(
           tilesetImage,
           newTileIndex,
@@ -791,11 +711,9 @@ export default class Player extends Entity {
         }
         newTile.alpha = 0.4;
 
-        // Update the easystar grid
         data.currentMapArray[tile.y][tile.x] = walkableTiles[0];
         this.easystar.setGrid(data.currentMapArray);
       } else {
-        // Decrease the tile's health
         this.decreaseTileHealth(tileXY);
       }
     }
@@ -805,22 +723,17 @@ export default class Player extends Entity {
     if (this.woodcuttingCounter <= 0) {
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
       if (tile && obstructionTiles.includes(tile.index)) {
-        // Get the metadata of the clicked tile
         let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-        // Decrease the tile's health by a random amount between the player's min and max woodcutting power
         let damage = Phaser.Math.Between(
           this.woodcutting_power_min,
           this.woodcutting_power_max
         );
         metadata.health -= damage;
 
-        // Update the tile's metadata in the TileMetaData map
         this.scene.terrain.TileMetaData.set(tile, metadata);
 
-        // Check if the tile's health is less than or equal to 0
         if (metadata.health <= 0) {
-          // Call the replaceTreeWithRandomTile method
           this.replaceTreeWithRandomTile(tileXY);
         }
       }
@@ -828,7 +741,6 @@ export default class Player extends Entity {
   }
 
   drawRectangle(worldPoint) {
-    // Draw a rectangle at the top-left corner of the clicked tile
     if (this.highlight) {
       this.highlight.clear();
     }
@@ -842,17 +754,14 @@ export default class Player extends Entity {
   }
 
   drawTileBeingLookedAt() {
-    // Create a new graphics object if it doesn't exist
     if (!this.tileBeingLookedAtGraphics) {
       this.tileBeingLookedAtGraphics = this.scene.add.graphics({
         lineStyle: { width: 2, color: 0x0000ff },
       });
     }
 
-    // Clear the previous rectangle
     this.tileBeingLookedAtGraphics.clear();
 
-    // Draw a new rectangle at the tile being looked at
     if (this.tileBeingLookedAt) {
       let x = this.tileBeingLookedAt.x * this.tileWidth;
       let y = this.tileBeingLookedAt.y * this.tileHeight;
@@ -868,10 +777,8 @@ export default class Player extends Entity {
   addExperiencePoints(monsterLevel) {
     let experienceGain = (monsterLevel - this.level) * 5;
 
-    // Ensure the player gains at least 1 point, but no more than 25 points
     experienceGain = Math.max(1, Math.min(25, experienceGain));
 
-    // If the player's level is equal to or more than 5 monster levels, no experience points are gained
     if (this.level >= monsterLevel + 5) {
       experienceGain = 0;
     }
@@ -881,8 +788,6 @@ export default class Player extends Entity {
     if (this.experience >= 100) {
       this.levelUp();
     }
-
-    // console.log(`Player gained ${experienceGain} experience points!`);
   }
 
   levelUp() {
@@ -896,27 +801,21 @@ export default class Player extends Entity {
 
     this.healthBar.updateHealth(this.current_health);
     this.emit(Events.HealthChanged, this.current_health);
-
-    // console.log(`Player leveled up to level ${this.level}!`);
   }
 
   takeDamage(damage) {
     if (damage > 0) {
-      // Only take damage if not invincible
       if (this.invincibilityCounter <= 0) {
         this.current_health -= damage;
-        // Check if health is less than 0 and set it to 0
         if (this.current_health < 0) {
           this.current_health = 0;
           this.scene.gameOver();
         }
-        // Check if health is more than max and set it to max
         if (this.current_health > this.max_health) {
           this.current_health = this.max_health;
         }
         this.healthBar.updateHealth(this.current_health);
         this.emit(Events.HealthChanged, this.current_health);
-        // Set invincibility counter only if it's not currently running
         if (this.invincibilityCounter <= 0) {
           this.invincibilityCounter = this.invincibilityCounterMax;
         }
@@ -924,7 +823,6 @@ export default class Player extends Entity {
       }
     } else {
       this.current_health -= damage;
-      // Check if health is more than max and set it to max
       if (this.current_health > this.max_health) {
         this.current_health = this.max_health;
       }
@@ -934,14 +832,13 @@ export default class Player extends Entity {
   }
 
   createBounceTween() {
-    // simple bounce animation tween
     this.bounceTween = this.scene.tweens.add({
       targets: this,
       scaleY: 1.2,
       duration: 100,
       yoyo: true,
       repeat: -1,
-      paused: true, // Start with the tween paused
+      paused: true,
     });
   }
 }

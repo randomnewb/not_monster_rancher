@@ -41,13 +41,10 @@ export default class Frog extends NPC {
   }
 
   destroy() {
-    // Emit an event to the scene to let it know that this entity was destroyed
     this.emit(Events.MonsterDestroyed, this);
 
-    // Destroy the health bar
     this.healthBar.destroy();
 
-    // Check if the scene is defined
     if (this.scene) {
       let explosion = this.scene.add.sprite(
         this.x,
@@ -55,43 +52,34 @@ export default class Frog extends NPC {
         Animations.Explosion
       );
 
-      // Play the explosion animation
       explosion.play("explosion");
 
-      // Remove the explosion sprite when the animation is complete
       explosion.on("animationcomplete", () => {
         explosion.destroy();
       });
 
-      // Calculate the closest tile's center coordinates
       let tileX = Math.round(this.x / 16);
       let tileY = Math.round(this.y / 16);
 
-      // Check if the tile type at the calculated position is an obstruction
       while (
         this.obstructionTiles.includes(data.currentMapArray[tileY][tileX])
       ) {
-        // If it is an obstruction, move to the next tile
         tileX += 1;
         if (tileX > 63) {
-          tileX = 63; // Keep tileX within world bounds
-          break; // Exit the loop if we've reached the world bounds
+          tileX = 63;
+          break;
         }
         tileY += 1;
         if (tileY > 63) {
-          tileY = 63; // Keep tileY within world bounds
-          break; // Exit the loop if we've reached the world bounds
+          tileY = 63;
+          break;
         }
       }
 
-      // Adjust the coordinates to the center of the tile
       let jewelX = Math.min(tileX * 16 + 8, 1023 - 8);
       let jewelY = Math.min(tileY * 16 + 8, 1023 - 8);
 
-      // use math.random and an 50% chance to drop a jewel
-
       if (Math.random() < 0.25) {
-        // Instantiate a jewel at the closest non-obstruction tile's center
         new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, [
           Colors.LightGreen,
           Colors.ForestGreen,
@@ -100,15 +88,12 @@ export default class Frog extends NPC {
       }
     }
 
-    // transition the frog to the destroyed state
     this.stateMachine.transition(States.Destroyed);
 
-    // Call the parent class's destroy method
     super.destroy();
   }
 
   update() {
-    // Call the parent class's update method
     super.update();
 
     if (!this.active) {

@@ -5,7 +5,6 @@ export default class StateMachine {
     this.stateArgs = stateArgs;
     this.state = null;
 
-    // State initialization
     this.setState(initialState);
   }
 

@@ -7,23 +7,19 @@ export default class WanderState extends State {
   }
 
   enter(scene, npc) {
-    // console.log(`${npc.constructor.name} entered the wander state`);
     npc.isMoving = true;
 
     let direction = Phaser.Math.RND.pick(npc.directions) * (Math.PI / 180); // Pick a random direction and convert to radians
-    let speed = npc.speed; // Adjust speed to your needs
+    let speed = npc.speed;
     npc.setVelocity(Math.cos(direction) * speed, Math.sin(direction) * speed);
 
-    // Schedule a transition back to the 'idle' state after a random amount of time
-    npc.wanderTime = Phaser.Math.Between(1, 5) * 60; // Wander for 1 to 5 seconds (60 frames per second)
-    npc.wanderCounter = 0; // Initialize counter
+    npc.wanderTime = Phaser.Math.Between(1, 5) * 60;
+    npc.wanderCounter = 0;
   }
 
   execute(scene, npc) {
-    // Increment the counter each frame
     npc.wanderCounter++;
 
-    // Calculate the distance between the npc and the player
     const distance = Phaser.Math.Distance.Between(
       npc.x,
       npc.y,
@@ -31,24 +27,19 @@ export default class WanderState extends State {
       scene.player.y
     );
 
-    // Check if the player is within 3 tiles distance
     if (distance <= npc.detectionRange) {
       npc.stateMachine.transition(States.Detect);
-      npc.wanderCounter = 0; // Reset counter
-    }
-    // Check if the counter has exceeded the wander time
-    else if (npc.wanderCounter > npc.wanderTime) {
+      npc.wanderCounter = 0;
+    } else if (npc.wanderCounter > npc.wanderTime) {
       npc.stateMachine.transition(States.Idle);
-      npc.wanderCounter = 0; // Reset counter
+      npc.wanderCounter = 0;
     }
   }
 
   exit(scene, npc) {
     npc.isMoving = false;
-    // Wander state exit logic
     if (npc.wanderCounter) {
-      // If there's a wander event scheduled
-      npc.wanderCounter = 0; // Reset counter
+      npc.wanderCounter = 0;
     }
   }
 }

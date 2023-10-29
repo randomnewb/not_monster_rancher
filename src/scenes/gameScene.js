@@ -179,7 +179,6 @@ export default class GameScene extends Phaser.Scene {
         this.directionToClosestEntity.x /= magnitude;
         this.directionToClosestEntity.y /= magnitude;
 
-        // Draw a 16x16 square at the monster's position
         this.drawDebugSquare(closestEntity);
 
         if (
