@@ -238,16 +238,15 @@ export default class Player extends Entity {
         this.timedEvent = null;
       }
 
+      let originalMapArray = JSON.parse(JSON.stringify(data.currentMapArray));
       let tempMapArray = JSON.parse(JSON.stringify(data.currentMapArray));
 
-      // Temporarily change the obstruction tile that the player clicked on to a walkable tile in the copy of the map array
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
       if (tile && obstructionTiles.includes(tile.index)) {
-        tempMapArray[tile.y][tile.x] = walkableTiles[0]; // Change the tile to the first walkable tile
-        this.easystar.setGrid(tempMapArray); // Use the modified map array for the pathfinding algorithm
+        tempMapArray[tile.y][tile.x] = walkableTiles[0];
+        this.easystar.setGrid(tempMapArray);
       }
 
-      // Find a path to the clicked tile
       this.easystar.findPath(
         this.playerTileX,
         this.playerTileY,
@@ -264,6 +263,8 @@ export default class Player extends Entity {
 
             this.moveAlongPath(this.path);
           }
+
+          this.easystar.setGrid(originalMapArray);
         }
       );
 

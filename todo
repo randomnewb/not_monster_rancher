@@ -1,5 +1,3 @@
-- Bug: sometimes when moving/pathfinding, player can get stuck on an obstruction tile or teleports into one
-
 - Woodcutting feature has a few bugs
 
   - [ ] keyboard "K" woodcutting should be same or similar to clicking version (right now player can bypass woodcutting counter)
