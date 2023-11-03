@@ -522,6 +522,8 @@ export default class Player extends Entity {
       if (tile && obstructionTiles.includes(tile.index)) {
         this.decreaseTileHealth(this.lastClickedTile);
         this.woodcuttingCounter = this.woodcuttingCounterMax;
+
+        this.swingTool();
       }
     }
 

@@ -1,5 +1,6 @@
 - Woodcutting feature has a few bugs
 
+  - [ ] Woodcutting animation should be created above or below when player is chopping something above or below
   - [x] keyboard "K" woodcutting should be same or similar to clicking version (right now player can bypass woodcutting counter)
   - [x] add a woodcutting animation
   - [x] if the player clicks on an obstruction tile, then tries to click somewhere else, they cannot pathfind around obstructions anymore
