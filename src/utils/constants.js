@@ -15,6 +15,7 @@ export const Assets = {
   Jewel: "jewel",
   Projectiles: "projectiles",
   Weapons: "weapons",
+  Tools: "tools",
   Explosion: "explosion",
   Reactions: "reactions",
   AutoAttackIndicator: "auto_attack_indicator",

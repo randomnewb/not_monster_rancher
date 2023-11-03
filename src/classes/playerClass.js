@@ -6,6 +6,7 @@ import {
   playerColors,
   walkableTiles,
   obstructionTiles,
+  Assets,
 } from "../utils/constants.js";
 import data from "../data/data.js";
 import Entity from "./entityClass.js";
@@ -637,25 +638,33 @@ export default class Player extends Entity {
     if (isKDown) {
       this.woodcutting = !this.woodcutting;
 
-      if (this.woodcutting) {
+      if (this.woodcutting && this.woodcuttingCounter <= 0) {
         this.keyPressedTileData();
-        let tile = this.scene.terrain.map.getTileAt(
-          this.tileBeingLookedAt.x,
-          this.tileBeingLookedAt.y
-        );
 
-        let metadata = this.scene.terrain.TileMetaData.get(tile);
-
-        if (tile && obstructionTiles.includes(tile.index)) {
-          metadata.health -= Phaser.Math.Between(
-            this.woodcutting_power_min,
-            this.woodcutting_power_max
+        // Check if the player is looking at a tile
+        if (this.tileBeingLookedAt) {
+          let tile = this.scene.terrain.map.getTileAt(
+            this.tileBeingLookedAt.x,
+            this.tileBeingLookedAt.y
           );
 
-          if (metadata.health <= 0) {
-            this.replaceTreeWithRandomTile(this.tileBeingLookedAt);
+          this.swingTool();
+
+          let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+          if (tile && obstructionTiles.includes(tile.index)) {
+            metadata.health -= Phaser.Math.Between(
+              this.woodcutting_power_min,
+              this.woodcutting_power_max
+            );
+
+            if (metadata.health <= 0) {
+              this.replaceTreeWithRandomTile(this.tileBeingLookedAt);
+            }
           }
         }
+
+        this.woodcuttingCounter = this.woodcuttingCounterMax;
       }
     }
 
@@ -675,6 +684,28 @@ export default class Player extends Entity {
         this.bounceTween.pause();
       }
     }
+  }
+
+  swingTool() {
+    let spriteX = this.facing === "left" ? this.x - 10 : this.x + 10;
+
+    let toolSprite = this.scene.add.sprite(spriteX, this.y, Assets.Tools, 2);
+
+    let isFlipped = false;
+    if (this.facing === "left") {
+      toolSprite.setFlipX(true);
+      isFlipped = true;
+    }
+
+    let swingTween = this.scene.tweens.add({
+      targets: toolSprite,
+      angle: { from: isFlipped ? 45 : -45, to: isFlipped ? -135 : 135 },
+      duration: 500,
+      ease: "Sine.easeInOut",
+      onComplete: function () {
+        toolSprite.destroy();
+      },
+    });
   }
 
   replaceTreeWithRandomTile(tileXY) {

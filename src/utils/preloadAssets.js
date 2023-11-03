@@ -43,6 +43,11 @@ export default function preloadAssets() {
     frameHeight: 16,
   });
 
+  this.load.spritesheet(Assets.Tools, "./assets/tools.png", {
+    frameWidth: 16,
+    frameHeight: 16,
+  });
+
   this.load.spritesheet(Assets.Explosion, "./assets/explosion.png", {
     frameWidth: 16,
     frameHeight: 16,
