@@ -1,18 +1,10 @@
-- Woodcutting feature has a few bugs
+- Bug: on player defeat, returning to main menu usually causes a crash, might be because entities are trying to be accessed
 
-  - [ ] Woodcutting animation should be created above or below when player is chopping something above or below
-  - [x] keyboard "K" woodcutting should be same or similar to clicking version (right now player can bypass woodcutting counter)
-  - [x] add a woodcutting animation
-  - [x] if the player clicks on an obstruction tile, then tries to click somewhere else, they cannot pathfind around obstructions anymore
+  - [ ] might need to remove entitites first
 
-- [/] High Priority: Highlight the tile where the player is 'facing' or looking towards ala Stardew Valley while on mobile mode
-
-  - [x] Works with both mouse input and keyboard input
-  - We will use this to determine what the player is looking and if they can woodcut/mine, etc.
-  - [x] add another action (life skills action), ("K" on keyboard and another clickable action box on mobile)
+- [ ] Separate woodcutting and mining into their own delineated features
 
 - [ ] create a util method that instantiates a random blank walking tile with meta data
-- [x] terrain makes things hard to see, probably lower their transparency or dull them somehow
 - [ ] terrainScene and uiScene should probably be more like utils or classes
 - [ ] remove the data.playerhealth and try to implement playerhealth directly from the playerclass
 
@@ -48,10 +40,6 @@
 - [ ] make these destroyable
 
 - [ ] add in a 'level up' animation (like ragnarok online?)
-
-- [x] add player's level and exp to UIScene
-
-- [x] customized exp algorithm
 
   - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
   - players get exp towards a general level and also towards specific life skills
@@ -92,7 +80,6 @@
 
   - [ ] separate components into own classes where possible
   - separate certain code into their own methods where possible
-  - [x] preloading all assets can be in their own method (preloadAssets())
 
 - [/] diablo style enemy name and health bar at bottom
 - [ ] captured/tamed monsters have a different color outline than enemies

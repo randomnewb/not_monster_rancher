@@ -689,9 +689,30 @@ export default class Player extends Entity {
   }
 
   swingTool() {
-    let spriteX = this.facing === "left" ? this.x - 10 : this.x + 10;
+    // Get the tile the player is looking at
+    let tileBeingLookedAt = this.tileBeingLookedAt;
 
-    let toolSprite = this.scene.add.sprite(spriteX, this.y, Assets.Tools, 2);
+    // Determine the sprite's X and Y coordinates based on the player's position and the tile being looked at
+    let spriteX = this.x;
+    let spriteY = this.y;
+
+    if (tileBeingLookedAt) {
+      if (tileBeingLookedAt.y < this.playerTileY) {
+        // If the tile is above the player, create the sprite above the player
+        spriteY = this.y - 10;
+      } else if (tileBeingLookedAt.y > this.playerTileY) {
+        // If the tile is below the player, create the sprite below the player
+        spriteY = this.y + 10;
+      } else if (tileBeingLookedAt.x < this.playerTileX) {
+        // If the tile is to the left of the player, create the sprite to the left of the player
+        spriteX = this.x - 10;
+      } else if (tileBeingLookedAt.x > this.playerTileX) {
+        // If the tile is to the right of the player, create the sprite to the right of the player
+        spriteX = this.x + 10;
+      }
+    }
+
+    let toolSprite = this.scene.add.sprite(spriteX, spriteY, Assets.Tools, 2);
 
     let isFlipped = false;
     if (this.facing === "left") {
