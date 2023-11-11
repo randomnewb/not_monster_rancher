@@ -19,7 +19,7 @@ export default class Player extends Entity {
   constructor(scene, x, y, key, frame) {
     super(scene, x, y, key, frame);
 
-    this.max_health = 100;
+    this.max_health = 5;
     this.current_health = this.max_health;
     this.healthBar = new HealthBar(scene, x, y, this.max_health);
 

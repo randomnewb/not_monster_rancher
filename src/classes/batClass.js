@@ -51,58 +51,8 @@ export default class Bat extends NPC {
     this.setTint(this.originalTint);
   }
 
-  destroy() {
-    this.emit(Events.MonsterDestroyed, this);
-
-    this.healthBar.destroy();
-
-    if (this.scene) {
-      let explosion = this.scene.add.sprite(
-        this.x,
-        this.y,
-        Animations.Explosion
-      );
-
-      explosion.play("explosion");
-
-      explosion.on("animationcomplete", () => {
-        explosion.destroy();
-      });
-
-      let tileX = Math.round(this.x / 16);
-      let tileY = Math.round(this.y / 16);
-
-      while (
-        this.obstructionTiles.includes(data.currentMapArray[tileY][tileX])
-      ) {
-        tileX += 1;
-        if (tileX > 63) {
-          tileX = 63;
-          break;
-        }
-        tileY += 1;
-        if (tileY > 63) {
-          tileY = 63;
-          break;
-        }
-      }
-
-      let jewelX = Math.min(tileX * 16 + 8, 1023 - 8);
-      let jewelY = Math.min(tileY * 16 + 8, 1023 - 8);
-
-      if (Math.random() < 0.95) {
-        new Jewel(this.scene, jewelX, jewelY, this.scene.jewels, [
-          Colors.Grey,
-          Colors.LightGrey,
-          Colors.LightBrown,
-          Colors.DarkBlue,
-        ]);
-      }
-    }
-
-    this.stateMachine.transition(States.Destroyed);
-
-    super.destroy();
+  getJewelColors() {
+    return [Colors.DarkGrey, Colors.Black, Colors.DarkBrown];
   }
 
   update() {

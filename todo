@@ -1,7 +1,3 @@
-- Bug: on player defeat, returning to main menu usually causes a crash, might be because entities are trying to be accessed
-
-  - [ ] might need to remove entitites first
-
 - [ ] Separate woodcutting and mining into their own delineated features
 
 - [ ] create a util method that instantiates a random blank walking tile with meta data
@@ -20,7 +16,6 @@
   - [ ] implement this with rocks
     - mining damage
 
-- [x] Bug: player clicking on same tile that they are already moving to creates jittering
 - [ ] rework npcs so that level is created first, and then other stats are based on level
 
 - [ ] tile system should get reworked and just implement grid-based movement from one of the tutorials probably

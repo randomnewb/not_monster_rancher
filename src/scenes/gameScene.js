@@ -218,6 +218,7 @@ export default class GameScene extends Phaser.Scene {
 
       let monsterType = Phaser.Math.Between(0, 2);
       let monster;
+
       if (monsterType === 0) {
         monster = new Frog(this, x, y, Assets.Frog);
       } else if (monsterType === 1) {
