@@ -914,12 +914,14 @@ export default class Player extends Entity {
     this.min_attack += 1;
     this.max_attack += 1;
     this.speed += 10;
-    this.woodcutting_power_min += 5;
-    this.woodcutting_power_max += 5;
-    this.woodcuttingCounterMax -= 10;
-    this.mining_power_min += 5;
-    this.mining_power_max += 5;
-    this.miningCounterMax -= 10;
+    this.woodcutting_level += 1;
+    this.woodcutting_power_min += 10;
+    this.woodcutting_power_max += 10;
+    this.woodcuttingCounterMax -= 20;
+    this.mining_level += 1;
+    this.mining_power_min += 10;
+    this.mining_power_max += 10;
+    this.miningCounterMax -= 15;
 
     this.healthBar.updateHealth(this.current_health);
     this.emit(Events.HealthChanged, this.current_health);

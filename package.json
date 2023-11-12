@@ -1,6 +1,6 @@
 {
   "name": "random_not_rancher",
-  "version": "0.1.8a",
+  "version": "0.1.9a",
   "type": "module",
   "description": "A semi-automated, farming simulator, action RPG by RandomNewb",
   "main": "index.js",
