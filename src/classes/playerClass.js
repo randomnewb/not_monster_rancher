@@ -36,6 +36,12 @@ export default class Player extends Entity {
     this.woodcuttingCounter = 0;
     this.woodcuttingCounterMax = 100;
 
+    this.mining_level = 1;
+    this.mining_power_min = 20;
+    this.mining_power_max = 30;
+    this.miningCounter = 0;
+    this.miningCounterMax = 100;
+
     this.invincibilityCounter = 0;
     this.invincibilityCounterMax = 45;
 
@@ -44,6 +50,7 @@ export default class Player extends Entity {
 
     this.attacking = false;
     this.woodcutting = false;
+    this.mining = false;
 
     this.scene = scene;
     this.scene.add.existing(this);
@@ -57,7 +64,6 @@ export default class Player extends Entity {
       this.y = openTile.y * this.tileHeight + this.tileHeight / 2;
     });
 
-    // this.keys = this.scene.input.keyboard.addKeys("W,A,S,D,J,K,L,I");
     this.collectedJewels = 0;
 
     this.originalTint =
@@ -132,6 +138,17 @@ export default class Player extends Entity {
         },
         exit: () => {
           console.log("Player exited woodcutting state");
+        },
+      },
+      mining: {
+        enter: () => {
+          console.log("Player entered mining state");
+        },
+        execute: () => {
+          console.log("Player is mining");
+        },
+        exit: () => {
+          console.log("Player exited mining state");
         },
       },
       moving: {
@@ -434,7 +451,7 @@ export default class Player extends Entity {
     if (this.currentPath.length === 0) {
       let tileXY = { x: nextTile.x, y: nextTile.y };
       if (this.isTileWithinGrid(tileXY)) {
-        this.replaceTreeWithRandomTile(tileXY);
+        this.replaceObstructionTileWithRandomTile(tileXY);
       }
 
       this.easystar.setAcceptableTiles(walkableTiles);
@@ -512,18 +529,26 @@ export default class Player extends Entity {
     if (
       this.lastClickedTile &&
       this.isNextTo(this.lastClickedTile) &&
-      this.woodcuttingCounter <= 0
+      this.woodcuttingCounter <= 0 &&
+      this.miningCounter <= 0
     ) {
       let tile = this.scene.terrain.map.getTileAt(
         this.lastClickedTile.x,
         this.lastClickedTile.y
       );
 
-      if (tile && obstructionTiles.includes(tile.index)) {
-        this.decreaseTileHealth(this.lastClickedTile);
-        this.woodcuttingCounter = this.woodcuttingCounterMax;
+      let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-        this.swingTool();
+      if (metadata) {
+        if (metadata.lifeSkillsType === "woodcutting") {
+          this.decreaseTileHealth(this.lastClickedTile);
+          this.swingTool(metadata.lifeSkillsType);
+          this.woodcuttingCounter = this.woodcuttingCounterMax;
+        } else if (metadata.lifeSkillsType === "mining") {
+          this.decreaseTileHealth(this.lastClickedTile);
+          this.swingTool(metadata.lifeSkillsType);
+          this.miningCounter = this.miningCounterMax;
+        }
       }
     }
 
@@ -542,6 +567,10 @@ export default class Player extends Entity {
 
     if (this.woodcuttingCounter > 0) {
       this.woodcuttingCounter--;
+    }
+
+    if (this.miningCounter > 0) {
+      this.miningCounter--;
     }
 
     if (this.invincibilityCounter > 0) {
@@ -639,34 +668,48 @@ export default class Player extends Entity {
 
     if (isKDown) {
       this.woodcutting = !this.woodcutting;
+      this.mining = !this.mining;
 
-      if (this.woodcutting && this.woodcuttingCounter <= 0) {
+      if (
+        this.woodcutting &&
+        this.woodcuttingCounter <= 0 &&
+        this.mining &&
+        this.miningCounter <= 0
+      ) {
         this.keyPressedTileData();
 
-        // Check if the player is looking at a tile
         if (this.tileBeingLookedAt) {
           let tile = this.scene.terrain.map.getTileAt(
             this.tileBeingLookedAt.x,
             this.tileBeingLookedAt.y
           );
 
-          this.swingTool();
-
           let metadata = this.scene.terrain.TileMetaData.get(tile);
 
+          this.swingTool(metadata.lifeSkillsType);
+
           if (tile && obstructionTiles.includes(tile.index)) {
-            metadata.health -= Phaser.Math.Between(
-              this.woodcutting_power_min,
-              this.woodcutting_power_max
-            );
+            let metadata = this.scene.terrain.TileMetaData.get(tile);
+
+            if (metadata.lifeSkillsType === "woodcutting") {
+              this.woodcuttingCounter = this.woodcuttingCounterMax;
+              metadata.health -= Phaser.Math.Between(
+                this.woodcutting_power_min,
+                this.woodcutting_power_max
+              );
+            } else if (metadata.lifeSkillsType === "mining") {
+              this.miningCounter = this.miningCounterMax;
+              metadata.health -= Phaser.Math.Between(
+                this.mining_power_min,
+                this.mining_power_max
+              );
+            }
 
             if (metadata.health <= 0) {
-              this.replaceTreeWithRandomTile(this.tileBeingLookedAt);
+              this.replaceObstructionTileWithRandomTile(this.tileBeingLookedAt);
             }
           }
         }
-
-        this.woodcuttingCounter = this.woodcuttingCounterMax;
       }
     }
 
@@ -688,56 +731,65 @@ export default class Player extends Entity {
     }
   }
 
-  swingTool() {
-    // Get the tile the player is looking at
+  swingTool(lifeSkillsType) {
     let tileBeingLookedAt = this.tileBeingLookedAt;
 
-    // Determine the sprite's X and Y coordinates based on the player's position and the tile being looked at
     let spriteX = this.x;
     let spriteY = this.y;
 
     if (tileBeingLookedAt) {
       if (tileBeingLookedAt.y < this.playerTileY) {
-        // If the tile is above the player, create the sprite above the player
         spriteY = this.y - 10;
       } else if (tileBeingLookedAt.y > this.playerTileY) {
-        // If the tile is below the player, create the sprite below the player
         spriteY = this.y + 10;
       } else if (tileBeingLookedAt.x < this.playerTileX) {
-        // If the tile is to the left of the player, create the sprite to the left of the player
         spriteX = this.x - 10;
       } else if (tileBeingLookedAt.x > this.playerTileX) {
-        // If the tile is to the right of the player, create the sprite to the right of the player
         spriteX = this.x + 10;
       }
     }
 
-    let toolSprite = this.scene.add.sprite(spriteX, spriteY, Assets.Tools, 2);
-
-    let isFlipped = false;
-    if (this.facing === "left") {
-      toolSprite.setFlipX(true);
-      isFlipped = true;
+    let toolSprite;
+    if (lifeSkillsType === "woodcutting") {
+      toolSprite = this.scene.add.sprite(spriteX, spriteY, Assets.Tools, 2);
+    } else if (lifeSkillsType === "mining") {
+      toolSprite = this.scene.add.sprite(spriteX, spriteY, Assets.Tools, 1);
     }
 
-    let swingTween = this.scene.tweens.add({
-      targets: toolSprite,
-      angle: { from: isFlipped ? 45 : -45, to: isFlipped ? -135 : 135 },
-      duration: 500,
-      ease: "Sine.easeInOut",
-      onComplete: function () {
-        toolSprite.destroy();
-      },
-    });
+    if (toolSprite) {
+      let isFlipped = false;
+      if (this.facing === "left") {
+        toolSprite.setFlipX(true);
+        isFlipped = true;
+      }
+
+      let swingTween = this.scene.tweens.add({
+        targets: toolSprite,
+        angle: { from: isFlipped ? 45 : -45, to: isFlipped ? -135 : 135 },
+        duration: 500,
+        ease: "Sine.easeInOut",
+        onComplete: function () {
+          toolSprite.destroy();
+        },
+      });
+    }
   }
 
-  replaceTreeWithRandomTile(tileXY) {
+  replaceObstructionTileWithRandomTile(tileXY) {
     let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
     if (tile && obstructionTiles.includes(tile.index)) {
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
       if (metadata.health <= 0) {
-        let newTileIndex = Phaser.Math.Between(0, 7);
+        let newTileIndex;
+        if (metadata.lifeSkillsType === "woodcutting") {
+          newTileIndex = Phaser.Math.RND.pick([1, 5, 6, 7]);
+        } else if (metadata.lifeSkillsType === "mining") {
+          newTileIndex = Phaser.Math.RND.pick([2, 3, 4]);
+        } else {
+          newTileIndex = Phaser.Math.Between(0, 7);
+        }
+
         let newTile = this.scene.terrain.layer.putTileAt(
           newTileIndex,
           tile.x,
@@ -775,21 +827,30 @@ export default class Player extends Entity {
   }
 
   decreaseTileHealth(tileXY) {
-    if (this.woodcuttingCounter <= 0) {
+    if (this.woodcuttingCounter <= 0 && this.miningCounter <= 0) {
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
       if (tile && obstructionTiles.includes(tile.index)) {
         let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-        let damage = Phaser.Math.Between(
-          this.woodcutting_power_min,
-          this.woodcutting_power_max
-        );
+        let damage;
+        if (metadata.lifeSkillsType === "woodcutting") {
+          damage = Phaser.Math.Between(
+            this.woodcutting_power_min,
+            this.woodcutting_power_max
+          );
+        } else if (metadata.lifeSkillsType === "mining") {
+          damage = Phaser.Math.Between(
+            this.mining_power_min,
+            this.mining_power_max
+          );
+        }
+
         metadata.health -= damage;
 
         this.scene.terrain.TileMetaData.set(tile, metadata);
 
         if (metadata.health <= 0) {
-          this.replaceTreeWithRandomTile(tileXY);
+          this.replaceObstructionTileWithRandomTile(tileXY);
         }
       }
     }
@@ -853,6 +914,12 @@ export default class Player extends Entity {
     this.min_attack += 1;
     this.max_attack += 1;
     this.speed += 10;
+    this.woodcutting_power_min += 5;
+    this.woodcutting_power_max += 5;
+    this.woodcuttingCounterMax -= 10;
+    this.mining_power_min += 5;
+    this.mining_power_max += 5;
+    this.miningCounterMax -= 10;
 
     this.healthBar.updateHealth(this.current_health);
     this.emit(Events.HealthChanged, this.current_health);

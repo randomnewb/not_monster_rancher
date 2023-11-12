@@ -1,4 +1,7 @@
-- [ ] Separate woodcutting and mining into their own delineated features
+- [x] Separate woodcutting and mining into their own delineated features
+  - Seems to be working
+- [x] Detect if one of the life skills currently has a cooldown, and only allow player to use life skills if all life skills are off cooldown
+- [ ] Player should not be able to use life skill and attack at the same time
 
 - [ ] create a util method that instantiates a random blank walking tile with meta data
 - [ ] terrainScene and uiScene should probably be more like utils or classes
