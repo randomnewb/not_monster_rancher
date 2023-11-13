@@ -57,4 +57,9 @@ export default function preloadAssets() {
     frameWidth: 16,
     frameHeight: 16,
   });
+
+  this.load.spritesheet(Assets.Spawner, "./assets/tent.png", {
+    frameWidth: 16,
+    frameHeight: 16,
+  });
 }

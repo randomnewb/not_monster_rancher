@@ -1,7 +1,24 @@
-- [x] Separate woodcutting and mining into their own delineated features
-  - Seems to be working
-- [x] Detect if one of the life skills currently has a cooldown, and only allow player to use life skills if all life skills are off cooldown
+- [ ] add a spawner class (takes in an entity class), perhaps also has a physical body so can be destroyed/collided with
+      or so that other things can inherit the spawner class
+  - [ ] spawner class runs based on a counter/timer
+  - [ ] does not run if there are too many enemies in a zone (probably max 100 at this point)
+- [ ] implement the spawner in the world generation
+  - try to create 3 of them to start, one for each current type of enemy
+- [ ] make these destroyable
+
+- [ ] Player stats/character sheet menu
+
+  - Shows the different stats (str, dex, wis)
+  - Shows different life skills (mining, woodcutting, etc.)
+  - Shows level, exp, and other stats like health, speed, attack damage
+
+- [ ] Player inventory
+
+- [ ] Collectibles other than jewels
+- [ ] Monsters/beasts that drop items other than jewels
+
 - [ ] Player should not be able to use life skill and attack at the same time
+- [ ] Refactor movement and interaction code, lot of duplication between clicking and keyboard
 
 - [ ] create a util method that instantiates a random blank walking tile with meta data
 - [ ] terrainScene and uiScene should probably be more like utils or classes
@@ -9,33 +26,29 @@
 
   - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
 
+- [ ] Building mode
+
+  - Basic for now, just making walls
+
+- [ ] Crafting system
+
 - [ ] need to refactor a bunch of things with constants
 - [ ] Bug: jewels can spawn into rocks
 
-- Life Skills system - chop trees, mine rocks, etc.
+- [ ] Implement NPCs that are not monsters that the player can interact with
 
-  - [ ] implement this with trees
-    - have to implement a different encounter/'damage' system, woodcutting damage
-  - [ ] implement this with rocks
-    - mining damage
+- [ ] Equipment type of items
+
+  - Items have randomized stats
+
+- [ ] Digging skill?
+- [ ] Foraging/gathering skill
+
+- [ ] Procedurally generated structures like small houses/walls (some complete, some partially destroyed/dilapidated)
 
 - [ ] rework npcs so that level is created first, and then other stats are based on level
 
 - [ ] tile system should get reworked and just implement grid-based movement from one of the tutorials probably
-
-  - i.e., level 2, health will be health \* level
-
-- [ ] add a spawner class (takes in an entity class), perhaps also has a physical body so can be destroyed/collided with
-      or so that other things can inherit the spawner class
-
-  - [ ] spawner class runs based on a counter/timer
-  - [ ] does not run if there are too many enemies in a zone (probably max 100 at this point)
-
-- [ ] implement the spawner in the world generation
-
-  - try to create 3 of them to start, one for each current type of enemy
-
-- [ ] make these destroyable
 
 - [ ] add in a 'level up' animation (like ragnarok online?)
 
@@ -74,9 +87,8 @@
 - [ ] implement player FSM
 - [ ] continue to implement ECS: https://en.wikipedia.org/wiki/Entity_component_system
 
-- refactor time?
+- [ ] separate components into own classes where possible
 
-  - [ ] separate components into own classes where possible
   - separate certain code into their own methods where possible
 
 - [/] diablo style enemy name and health bar at bottom
@@ -93,9 +105,6 @@
       - [ ] save and return to main menu (save will come later)
 
 - [ ] Save/Load system
-
-- [/] Bug: issue with state machine and NPC, if the NPC is destroyed (it seems like when this happens in its wander state)
-  the game crashes because it is trying to setVelocity - Seems like bug is fixed...
 
 - [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating, the game crashes
 
@@ -150,13 +159,11 @@
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 
 - [ ] (OPTIONAL) Jewels drop out of player on hit
-- [ ] Collectibles other than jewels
-- [/] Monsters/beasts that wander around, attack player, interact with environment, drop items
-- [/] Enemies (that wander around, attack player)
 - [ ] Character customization/select screen
 - [ ] Water tiles/swimming
 
 - Inventory system via an array or grid inventory (stretch) system
+
   - [ ] Inventory UI
   - [ ] Inventory slots
   - [ ] Inventory items
@@ -175,6 +182,7 @@
   - [ ] Inventory item search
   - [ ] Inventory item filter
   - [ ] Inventory item highlight
+
 - Game world/map also made of a 2d array
-  - Broken into zones made of 32x32 tiles
-  - Zones have properties like biomes/types, levels, etc. which also contain certain entities
+  - [ ] Broken into zones made of 32x32 tiles
+  - [ ] Zones have properties like biomes/types, levels, etc. which also contain certain entities

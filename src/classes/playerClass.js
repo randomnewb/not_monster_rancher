@@ -82,7 +82,7 @@ export default class Player extends Entity {
     this.highlight = this.scene.add.graphics({
       fillStyle: { color: Colors.White },
     });
-    this.highlight.alpha = 0.2; // make it semi-transparent
+    this.highlight.alpha = 0.2;
 
     this.targetPosition = null;
     this.isPathfinding = false;
@@ -96,82 +96,44 @@ export default class Player extends Entity {
     this.easystar.setIterationsPerCalculation(1000);
     this.easystar.disableCornerCutting();
 
-    // Initialize the timed event
     this.timedEvent = null;
 
     this.createBounceTween();
 
-    // Store the last clicked tile coordinates
     this.lastClickedTile = null;
 
     this.scene.input.on("pointerdown", this.clickedTileData.bind(this));
 
     this.states = {
       idle: {
-        enter: () => {
-          console.log("Player entered idle state");
-        },
-        execute: () => {
-          console.log("Player is idle");
-        },
-        exit: () => {
-          console.log("Player exited idle state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
       attacking: {
-        enter: () => {
-          console.log("Player entered attacking state");
-        },
-        execute: () => {
-          console.log("Player is attacking");
-        },
-        exit: () => {
-          console.log("Player exited attacking state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
       woodcutting: {
-        enter: () => {
-          console.log("Player entered woodcutting state");
-        },
-        execute: () => {
-          console.log("Player is woodcutting");
-        },
-        exit: () => {
-          console.log("Player exited woodcutting state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
       mining: {
-        enter: () => {
-          console.log("Player entered mining state");
-        },
-        execute: () => {
-          console.log("Player is mining");
-        },
-        exit: () => {
-          console.log("Player exited mining state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
       moving: {
-        enter: () => {
-          console.log("Player entered moving state");
-        },
-        execute: () => {
-          console.log("Player is moving");
-        },
-        exit: () => {
-          console.log("Player exited moving state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
       damaged: {
-        enter: () => {
-          console.log("Player entered damaged state");
-        },
-        execute: () => {
-          console.log("Player is damaged");
-        },
-        exit: () => {
-          console.log("Player exited damaged state");
-        },
+        enter: () => {},
+        execute: () => {},
+        exit: () => {},
       },
     };
 
@@ -185,8 +147,8 @@ export default class Player extends Entity {
       return;
     }
 
-    console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
-    console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
+    // console.log(`Pointer position: x = ${pointer.x}, y = ${pointer.y}`);
+    // console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
 
     if (
       tileXY.x >= 0 &&
@@ -198,12 +160,12 @@ export default class Player extends Entity {
 
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      console.log(
-        `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
-        metadata
-      );
+      // console.log(
+      //   `Tile clicked: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
+      //   metadata
+      // );
     } else {
-      console.log("Tile coordinates are outside the bounds of the map");
+      // console.log("Tile coordinates are outside the bounds of the map");
     }
   }
 
@@ -214,7 +176,7 @@ export default class Player extends Entity {
       return;
     }
 
-    console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
+    // console.log(`Tile coordinates: x = ${tileXY.x}, y = ${tileXY.y}`);
 
     if (
       tileXY.x >= 0 &&
@@ -226,12 +188,12 @@ export default class Player extends Entity {
 
       let metadata = this.scene.terrain.TileMetaData.get(tile);
 
-      console.log(
-        `Tile looked at: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
-        metadata
-      );
+      // console.log(
+      //   `Tile looked at: x = ${tileXY.x}, y = ${tileXY.y}, metadata = `,
+      //   metadata
+      // );
     } else {
-      console.log("Tile coordinates are outside the bounds of the map");
+      // console.log("Tile coordinates are outside the bounds of the map");
     }
   }
 

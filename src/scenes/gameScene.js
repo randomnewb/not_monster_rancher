@@ -354,22 +354,15 @@ export default class GameScene extends Phaser.Scene {
   }
 
   playerHit(player, projectile) {
-    // choose an amount of damage between the projectile's min_attack and max_attack
     let projectileDamage = Phaser.Math.Between(
       projectile.min_attack,
       projectile.max_attack
     );
 
-    // Play explosion animation
-    // ...
-
-    // Destroy the projectile
     projectile.destroy();
 
-    // Player takes damage
     player.takeDamage(projectileDamage);
 
-    // Create damage text with red color
     let damageText = new DamageValue(
       this,
       player.x,
@@ -386,7 +379,6 @@ export default class GameScene extends Phaser.Scene {
 
   handleMonsterDefeated(monster) {
     this.events.emit(Events.PlayerMonstersDefeated, monster);
-    // console.log("Monster Defeated");
     this.player.addExperiencePoints(monster.level);
     this.events.emit(Events.PlayerExpChanged, this.player.experience);
     this.events.emit(Events.PlayerLevelChanged, this.player.level);
@@ -474,8 +466,11 @@ export default class GameScene extends Phaser.Scene {
         this.player.collectedJewels
       );
       this.player.takeDamage(-1);
+      this.player.addExperiencePoints(1);
+      this.events.emit(Events.PlayerExpChanged, this.player.experience);
+      this.events.emit(Events.PlayerLevelChanged, this.player.level);
 
-      if (this.player.collectedJewels >= 30) {
+      if (this.player.collectedJewels >= 100) {
         this.gameOver();
       }
     }

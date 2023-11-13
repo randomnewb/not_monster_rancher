@@ -19,6 +19,7 @@ export const Assets = {
   Explosion: "explosion",
   Reactions: "reactions",
   AutoAttackIndicator: "auto_attack_indicator",
+  Spawner: "spawner",
 };
 
 export const States = {
