@@ -1,118 +1,137 @@
-- [ ] add a spawner class (takes in an entity class), perhaps also has a physical body so can be destroyed/collided with
-      or so that other things can inherit the spawner class
-  - [ ] spawner class runs based on a counter/timer
-  - [ ] does not run if there are too many enemies in a zone (probably max 100 at this point)
-- [ ] implement the spawner in the world generation
-  - try to create 3 of them to start, one for each current type of enemy
-- [ ] make these destroyable
+# HIGH PRIORITY
 
-- [ ] Player stats/character sheet menu
+- Add spawner class (define the entity class it spawns) - it can be inherited by other classes later
 
-  - Shows the different stats (str, dex, wis)
-  - Shows different life skills (mining, woodcutting, etc.)
-  - Shows level, exp, and other stats like health, speed, attack damage
+  - [ ] Has a physics body so that it can be destroyed/collided with
+  - [ ] Runs on a counter/timer
+  - [ ] Check if there are too many enemies in a zone (Max 100 entities in enemy/entity array)
+  - [ ] Implement spawner in world generation
+  - [ ] Create one for each current type of enemy
 
-- [ ] Player inventory
+- Player Character Sheet (UI/menu)
 
-- [ ] Collectibles other than jewels
-- [ ] Monsters/beasts that drop items other than jewels
+  - [ ] Show player's stats (str, dex, wis)
+  - [ ] Shows different life skills progress (mining, woodcutting, etc.)
+  - [ ] Shows level, exp, and other stats like health, speed, attack damage
+
+- Player inventory
+
+  - [ ] Simple array to hold items to start
+  - [ ] Grid GUI later with item icons, amount, and item description
+  - [ ] Hotbar for tools or keep context-based?
+
+- Player equipment
+
+  - [ ] System for equipping tools, weapons, armor, etc.
+
+- [ ] Collectibles other than jewels such as monster drops, weapons, armors, forageables
+- [ ] Change Monster drops to items other than jewels
+- Diablo-style display at bottom
+  - [x] Currently targeted enemy name
+  - [ ] Enemy's health
+
+# BUGS
 
 - [ ] Player should not be able to use life skill and attack at the same time
-- [ ] Refactor movement and interaction code, lot of duplication between clicking and keyboard
-
-- [ ] create a util method that instantiates a random blank walking tile with meta data
-- [ ] terrainScene and uiScene should probably be more like utils or classes
-- [ ] remove the data.playerhealth and try to implement playerhealth directly from the playerclass
-
-  - in the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
-
-- [ ] Building mode
-
-  - Basic for now, just making walls
-
-- [ ] Crafting system
-
-- [ ] need to refactor a bunch of things with constants
-- [ ] Bug: jewels can spawn into rocks
-
-- [ ] Implement NPCs that are not monsters that the player can interact with
-
-- [ ] Equipment type of items
-
-  - Items have randomized stats
-
-- [ ] Digging skill?
-- [ ] Foraging/gathering skill
-
-- [ ] Procedurally generated structures like small houses/walls (some complete, some partially destroyed/dilapidated)
-
-- [ ] rework npcs so that level is created first, and then other stats are based on level
-
-- [ ] tile system should get reworked and just implement grid-based movement from one of the tutorials probably
-
-- [ ] add in a 'level up' animation (like ragnarok online?)
-
-  - players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
-  - players get exp towards a general level and also towards specific life skills
-  - exp is calculated based on the player's life skills level and the enemy's/encounter level
-  - need to create a skill tree menu for different life skills
-    - combat, taming, mining, woodcutting, etc. and these can be broken down further
-      - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
-
-- player stats (strength, wisdom, dexterity, luck)
-
-  - [ ] strength affects melee damage, health, possibly carry capacity
-  - [ ] wisdom affects magic damage, magic defenses/resistances, mana
-  - [ ] dexterity affects ranged damage, ranged defense, attack speed, movement speed
-  - [ ] luck affects drop rates
-
-- [ ] when player 'takes' positive damage, make damage text green or a different color
-
-- [ ] bug: probably need to destroy all monsters when game is over or disable them when player dies
-
-  - might also be a bug with the obstruction tiles/map array and a monster being on top of one of the tiles when the game restarts?
-
-- implementing constants/enums
-
-  - [ ] direction (up, down, left, right)
-
-- [/] rework states and frog npc so that state reads properties/attributes or components more from the entity
-- for example, the 'attack' alerting animation could be unique and defined in each entity
-- or movement could be defined in each entity and read in the 'wander' state
-
-- [/] refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
-- [ ] implement Tiled again for creating tilemaps with meta data (e.g. if a tile is collidable, interactable, etc.):
-
-- [ ] create phaser plugins where possible for things like (e.g. playing sound effects, loading an area from a tilemap, controls available to my scene)
-- [ ] implement player FSM
-- [ ] continue to implement ECS: https://en.wikipedia.org/wiki/Entity_component_system
-
-- [ ] separate components into own classes where possible
-
-  - separate certain code into their own methods where possible
-
-- [/] diablo style enemy name and health bar at bottom
-- [ ] captured/tamed monsters have a different color outline than enemies
-- [ ] elite monsters ('larger' or scaled up monsters)
-
-- rework player death/game over
-
-  - [ ] on player death, hide player active/visibility, but then allow user to just revive, teleport back to a set point (right now it is initial spawn, later on, maybe a saved point)
-  - build in an in-game options menu when player hits ESC or presses gear icon on mobile and which pauses the game
-    - this will allow players access to
-      - [ ] resume game (close menu)
-      - [ ] options (options will come later)
-      - [ ] save and return to main menu (save will come later)
-
-- [ ] Save/Load system
-
-- [ ] Bug: if the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating, the game crashes
+- [ ] Jewels can spawn into rocks (this might have been fixed)
+- [ ] When player 'takes' positive damage, make damage text green or a different color
+- [ ] Seems that monsters can spawn in the outer boundaries of map which causes them to get stuck
+- [ ] Implement behavior to have monsters move away from an obstruction if they are blocked for a long time
+- [ ] If the player uses keyboard input too quickly after starting a new game and before the map has time to finish generating, the game crashes
 
   - Probably need to implement some sort of loading screen and then allow the player to move and click the screen
+  - Or disable any input until the map is finished generating
+
+# REFACTORING
+
+- [ ] Look for places to componentize code
+- [ ] Refactor movement and interaction code, lots of duplication between clicking and keyboard
+- [ ] Create a util method that instantiates a random blank walking tile with meta data
+- [ ] terrainScene and uiScene should probably be more like utils or classes
+- [ ] remove the data.playerhealth and try to implement Player Health directly from the Player class
+- Need to refactor a bunch of things as constants
+
+  - [ ] Directions (up, down, left, right)
+
+  - This might already be done, need to double-check
+  - In the UIscene's update(), let's detect if the player exists and update the healthbar directly from the playerclass's health
+
+- Rework AI behavior
+- [ ] Attack alert animation could be unique and defined in each entity
+- [ ] Movement could be defined in each entity and read in the 'wander' state
+
+# NEXT PRIORITY
+
+- Building mode
+
+  - [ ] Just allow the player to make walls
+  - [ ] Ghost image of the wall that will be placed
+
+- [ ] Enemy capturing/taming system
+- [ ] Elite Monsters ('larger' or scaled up monsters)
+
+- [ ] Attach weapon to the player/add a swing animation with the weapon on attack
+- [ ] Add interaction with projectile sprite and obstructions (projectile is blocked/destroyed)
+- [ ] Rework graphic for current interacted entity/object
+
+- Crafting system
+
+  - [ ] Allow the player to craft one item to test
+  - [ ] Terraria-based system where the player can craft items from a list of items and a list of materials
+
+- [ ] Implement NPCs that are not monsters that the player can interact with
+- [ ] Equipment system
+
+  - Randomized stats as a stretch goal
+
+- [ ] Digging skill
+- [ ] Foraging/gathering skill
+- [ ] Procedurally generated structures like small houses/walls (complete or dilapidated)
+- [ ] Rework NPCs so that level is created first, and then other stats are based on level
+- [ ] Rework tile system, just implement grid-based movement from one of the Phaser grid tutorials
+  - Use Tiled for creating tilemaps with meta data (e.g. if a tile is collidable, interactable, drops certain items, etc.)
+- [ ] Level Up animation (like Ragnarok Online with the fading angel wings)
+- [ ] Experience Point System
+
+  - Players can only ever get a max of 10 exp from any enemy or event and a minimum of 1 exp
+  - Players get exp towards a general level and also towards specific life skills
+  - EXP is based on the player's life skills level and the enemy's/encounter level
+
+- Need to create a skill tree menu for different life skills
+
+  - combat, taming, mining, woodcutting, etc. and these can be broken down further
+    - combat -> melee, ranged, magic, etc. and types of melee like sword vs axe vs spear
+
+- Implement player stats (strength, wisdom, dexterity, luck)
+
+  - [ ] Strength affects melee damage, health, possibly carry capacity
+  - [ ] Wisdom affects magic damage, magic defenses/resistances, mana
+  - [ ] Dexterity affects ranged damage, ranged defense, attack speed, movement speed
+  - [ ] Luck affects drop rates
+
+- [ ] Implement Player FSM
+- [ ] Continue to implement ECS: https://en.wikipedia.org/wiki/Entity_component_system
+
+- Rework Player death/Game Over
+
+  - [ ] on player death, hide player active/visibility, but then allow user to just revive, teleport back to a set point (right now it is initial spawn, later on, maybe a saved point)
+
+- In-game options/Pause Menu when player hits ESC or presses gear icon on mobile with these options:
+
+  - [ ] Resume Game
+  - [ ] Options
+  - [ ] Save and Return to Main Menu
+
+- [ ] Save/Load System
+
+# OTHER
+
+- [/] Refactor update() methods (build plugins or code to listen for update event) and listen for update event to run that specific code when event is fired, chunk code
+
+- [ ] create phaser plugins where possible for things like (e.g. playing sound effects, loading an area from a tilemap, controls available to my scene)
 
 - [ ] monsters have spawning requirements (random example, frogs can mate and lay eggs in water tiles)
 - [ ] During generation, generate a barrier of walls or trees along the edges of the map
-- [/] Show an indicator of where the player will fire at next or if they can fire at all
 
 - [ ] potential issue with A\*: if original map is edited, need to make sure we update the map in data.js,
       such as if building is implemented or if obstructions are removed, the original array would need to be updated
@@ -139,23 +158,10 @@
   - [x] Make sure it follows with the camera
   - [ ] (3 different actions [action1, action2, action3], and an inventory action)
 
-- [ ] Attach weapon to the player/add a swing animation with the weapon
-- [ ] Add interaction with projectile sprite (use its 16x16 hitbox) and tree tiles
-
-- [ ] Rework tilemap system to include meta data if possible
-
-  - Collidable, interactable, destroyable, drops certain items
-
-- [ ] Implement pre-made structures in tilemap system (like a 2x2-sized tree or small structure)
-
-- [ ] Pressing ESC opens up a pause/options menu
-
 - [ ] Pixel Art: Log/sticks
 - [ ] Pixel Art: Pebbles/small stones
 - [ ] Pixel Art: General item/bag
 
-- [ ] Interactive objects have outlines around them
-- [ ] Continue implementing remaining scenes as their own classes/scripts
 - [ ] Rewrite mapping function to map based on length of map rather than hard-coded size
 
 - [ ] (OPTIONAL) Jewels drop out of player on hit
