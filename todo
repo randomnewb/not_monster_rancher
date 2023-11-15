@@ -3,10 +3,10 @@
 - Add spawner class (define the entity class it spawns) - it can be inherited by other classes later
 
   - [ ] Has a physics body so that it can be destroyed/collided with
-  - [ ] Runs on a counter/timer
-  - [ ] Check if there are too many enemies in a zone (Max 100 entities in enemy/entity array)
+  - [x] Runs on a counter/timer
+  - [x] Check if there are too many enemies in a zone (Max 100 entities in enemy/entity array)
   - [ ] Implement spawner in world generation
-  - [ ] Create one for each current type of enemy
+  - [x] Takes in a monster class
 
 - Player Character Sheet (UI/menu)
 

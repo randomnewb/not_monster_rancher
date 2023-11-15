@@ -14,6 +14,7 @@ import Generate from "../scripts/generate.js";
 import PlayerCamera from "../scripts/playerCamera.js";
 import Terrain from "./terrainScene.js";
 import Player from "../classes/playerClass.js";
+import EntitySpawner from "../classes/entitySpawner.js";
 import Frog from "../classes/frogClass.js";
 import Bird from "../classes/birdClass.js";
 import Bat from "../classes/batClass.js";
@@ -122,6 +123,17 @@ export default class GameScene extends Phaser.Scene {
 
     // Collision Boxes for Debugging
     // this.physics.world.createDebugGraphic();
+
+    this.entitySpawners = [];
+
+    const batSpawner = new EntitySpawner(
+      this,
+      4 * this.tileWidth + this.tileWidth / 2,
+      4 * this.tileWidth + this.tileWidth / 2,
+      Bat
+    );
+
+    this.entitySpawners.push(batSpawner);
   }
 
   update() {
@@ -146,6 +158,10 @@ export default class GameScene extends Phaser.Scene {
 
       this.monsters.forEach(monster => {
         monster.update();
+      });
+
+      this.entitySpawners.forEach(spawner => {
+        spawner.update();
       });
 
       this.monsters = this.monsters.filter(monster => monster.active);
