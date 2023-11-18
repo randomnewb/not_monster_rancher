@@ -29,11 +29,8 @@ export default class Generate {
     for (let y = 0; y < map.length; y++) {
       for (let x = 0; x < map[y].length; x++) {
         if (map[y][x] === 50) {
-          console.log("Found a tile with the value 50 at position:", x, y);
           const monsterTypes = [Frog, Bird, Bat];
           const monsterType = Phaser.Math.RND.pick(monsterTypes);
-
-          console.log("Before creating EntitySpawner:", scene.entitySpawners);
 
           // Create an EntitySpawner at this tile's position
           const entitySpawner = new EntitySpawner(
@@ -43,12 +40,8 @@ export default class Generate {
             monsterType
           );
 
-          console.log("Created EntitySpawner:", entitySpawner);
-
           // Add the EntitySpawner to the scene's entitySpawners array
           scene.entitySpawners.push(entitySpawner);
-
-          console.log("After creating EntitySpawner:", scene.entitySpawners);
         }
       }
     }

@@ -15,7 +15,6 @@ import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
 import TileMetaData from "../utils/TileMetaData.js";
-// import EntitySpawner from "../classes/entitySpawner.js";
 
 export default class Terrain extends Phaser.GameObjects.Group {
   constructor(scene) {
