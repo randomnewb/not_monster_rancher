@@ -9,11 +9,13 @@ import {
   rockTileColors,
   walkableTiles,
   obstructionTiles,
+  spawnerTiles,
 } from "../utils/constants.js";
 import data from "../data/data.js";
 import Generate from "../scripts/generate.js";
 import seedrandom from "seedrandom";
 import TileMetaData from "../utils/TileMetaData.js";
+// import EntitySpawner from "../classes/entitySpawner.js";
 
 export default class Terrain extends Phaser.GameObjects.Group {
   constructor(scene) {
@@ -21,7 +23,11 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
     this.TileMetaData = new Map();
 
-    this.map_array = Generate.placement_array(walkableTiles, obstructionTiles);
+    this.map_array = Generate.placement_array(
+      walkableTiles,
+      obstructionTiles,
+      spawnerTiles
+    );
 
     data.currentMapArray = this.map_array;
 

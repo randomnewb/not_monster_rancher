@@ -125,15 +125,6 @@ export default class GameScene extends Phaser.Scene {
     // this.physics.world.createDebugGraphic();
 
     this.entitySpawners = [];
-
-    const batSpawner = new EntitySpawner(
-      this,
-      4 * this.tileWidth + this.tileWidth / 2,
-      4 * this.tileWidth + this.tileWidth / 2,
-      Bat
-    );
-
-    this.entitySpawners.push(batSpawner);
   }
 
   update() {

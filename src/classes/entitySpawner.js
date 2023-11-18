@@ -29,7 +29,7 @@ export default class EntitySpawner extends Phaser.Physics.Arcade.Sprite {
   }
 
   spawnMonster() {
-    if (this.scene.monsters.length < 100) {
+    if (this.scene.monsters.length < 1000) {
       const angle = Math.random() * 2 * Math.PI;
       const distance = Math.random() * 50;
 

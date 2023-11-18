@@ -139,3 +139,4 @@ export const walkableTiles = [0, 1, 2, 3, 4, 5, 6, 7];
 export const obstructionTiles = [
   8, 9, 10, 11, 12, 13, 24, 25, 26, 27, 28, 29, 30, 31,
 ];
+export const spawnerTiles = [50];
