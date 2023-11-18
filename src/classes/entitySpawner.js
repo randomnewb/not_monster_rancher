@@ -54,7 +54,6 @@ export default class EntitySpawner extends Phaser.Physics.Arcade.Sprite {
 
       this.scene.physics.world.enable(monster);
 
-      this.scene.physics.add.collider(monster, this.scene.player);
       this.scene.physics.add.overlap(
         monster,
         this.scene.playerProjectiles,

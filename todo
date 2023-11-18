@@ -33,6 +33,9 @@
 
 # BUGS
 
+- [x] Monsters spawned by spawners can be pushed
+- [ ] Jewels can be created on top of spawner tiles
+- [ ] Monster spawners should be able to be destroyed by mining skill
 - [ ] Player should not be able to use life skill and attack at the same time
 - [ ] Jewels can spawn into rocks (this might have been fixed)
 - [ ] When player 'takes' positive damage, make damage text green or a different color
