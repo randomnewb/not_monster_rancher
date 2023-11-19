@@ -32,7 +32,8 @@ export default class Generate {
           const monsterTypes = [Frog, Bird, Bat];
           const monsterType = Phaser.Math.RND.pick(monsterTypes);
 
-          // Create an EntitySpawner at this tile's position
+          this.SpriteMetaData = new Map();
+
           const entitySpawner = new EntitySpawner(
             scene,
             x * scene.tileWidth + scene.tileWidth / 2,
@@ -40,7 +41,14 @@ export default class Generate {
             monsterType
           );
 
-          // Add the EntitySpawner to the scene's entitySpawners array
+          const metadata = {
+            health: 100,
+            durability: 100,
+            lifeSkillsType: "mining",
+            tilesetImage: "Assets.Spawner",
+          };
+          this.SpriteMetaData.set(entitySpawner, metadata);
+
           scene.entitySpawners.push(entitySpawner);
         }
       }

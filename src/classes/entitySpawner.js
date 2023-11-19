@@ -1,4 +1,4 @@
-import { Assets, Events } from "../utils/constants.js";
+import { Assets, Events, spawnerTileColors } from "../utils/constants.js";
 import Bird from "./birdClass.js";
 import Bat from "./batClass.js";
 import Frog from "./frogClass.js";
@@ -15,8 +15,12 @@ export default class EntitySpawner extends Phaser.Physics.Arcade.Sprite {
 
     this.setImmovable(true);
 
-    this.spawnCounterMax = 500;
+    this.spawnCounterMax = 1000;
     this.spawnCounter = this.spawnCounterMax;
+
+    this.setTint(
+      spawnerTileColors[Math.floor(Math.random() * spawnerTileColors.length)]
+    );
   }
 
   update() {
@@ -29,7 +33,7 @@ export default class EntitySpawner extends Phaser.Physics.Arcade.Sprite {
   }
 
   spawnMonster() {
-    if (this.scene.monsters.length < 1000) {
+    if (this.scene.monsters.length < 100) {
       const angle = Math.random() * 2 * Math.PI;
       const distance = Math.random() * 50;
 

@@ -126,6 +126,13 @@ export const stoneTileColors = [
   Colors.RoyalBlue,
 ];
 
+export const spawnerTileColors = [
+  Colors.Pink,
+  Colors.Purple,
+  Colors.Magenta,
+  Colors.LightRed,
+];
+
 export const playerColors = [
   Colors.Pumpkin,
   Colors.Yellow,
