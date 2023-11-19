@@ -2,6 +2,7 @@
 
 - Add spawner class (define the entity class it spawns) - it can be inherited by other classes later
 
+  - [ ] Perhaps easiest thing to do is to rework the spawner as a tile rather than a sprite
   - [x] Has a physics body so that it can be collided with
   - [ ] Add meta data so that it can be interacted with/destroyed
   - [x] Runs on a counter/timer
