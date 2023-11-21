@@ -6,6 +6,7 @@ import {
   playerColors,
   walkableTiles,
   obstructionTiles,
+  spawnerTiles,
   Assets,
 } from "../utils/constants.js";
 import data from "../data/data.js";
@@ -650,7 +651,10 @@ export default class Player extends Entity {
 
           this.swingTool(metadata.lifeSkillsType);
 
-          if (tile && obstructionTiles.includes(tile.index)) {
+          if (
+            (tile && obstructionTiles.includes(tile.index)) ||
+            spawnerTiles.includes(tile.index)
+          ) {
             let metadata = this.scene.terrain.TileMetaData.get(tile);
 
             if (metadata.lifeSkillsType === "woodcutting") {
@@ -791,7 +795,10 @@ export default class Player extends Entity {
   decreaseTileHealth(tileXY) {
     if (this.woodcuttingCounter <= 0 && this.miningCounter <= 0) {
       let tile = this.scene.terrain.map.getTileAt(tileXY.x, tileXY.y);
-      if (tile && obstructionTiles.includes(tile.index)) {
+      if (
+        (tile && obstructionTiles.includes(tile.index)) ||
+        spawnerTiles.includes(tile.index)
+      ) {
         let metadata = this.scene.terrain.TileMetaData.get(tile);
 
         let damage;

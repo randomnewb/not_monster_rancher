@@ -125,6 +125,22 @@ export default class Terrain extends Phaser.GameObjects.Group {
 
           tile.tint =
             rockTileColors[Math.floor(randomNumber() * rockTileColors.length)];
+        } else if (tile.index === 50) {
+          const tilesetImage = "Assets.Spawner";
+          const lifeSkillsType = "mining";
+          const health = 100;
+          const durability = 100;
+          const metadata = new TileMetaData(
+            tilesetImage,
+            tile.index,
+            lifeSkillsType,
+            health,
+            durability
+          );
+          this.TileMetaData.set(tile, metadata);
+
+          tile.tint =
+            spawnerTiles[Math.floor(randomNumber() * spawnerTiles.length)];
         } else if (tile.index === 2 || tile.index === 3 || tile.index === 4) {
           tile.setAlpha(0.4);
           tile.tint =

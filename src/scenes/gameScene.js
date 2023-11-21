@@ -71,6 +71,7 @@ export default class GameScene extends Phaser.Scene {
         [Colors.CardinalRed, Colors.Yellow, Colors.LightBlue],
         data.gameSeed
       );
+
       if (this.player) {
         this.player.setDepth(2);
       }

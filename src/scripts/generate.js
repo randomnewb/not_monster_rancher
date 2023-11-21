@@ -32,22 +32,12 @@ export default class Generate {
           const monsterTypes = [Frog, Bird, Bat];
           const monsterType = Phaser.Math.RND.pick(monsterTypes);
 
-          this.SpriteMetaData = new Map();
-
           const entitySpawner = new EntitySpawner(
             scene,
             x * scene.tileWidth + scene.tileWidth / 2,
             y * scene.tileHeight + scene.tileHeight / 2,
             monsterType
           );
-
-          const metadata = {
-            health: 100,
-            durability: 100,
-            lifeSkillsType: "mining",
-            tilesetImage: "Assets.Spawner",
-          };
-          this.SpriteMetaData.set(entitySpawner, metadata);
 
           scene.entitySpawners.push(entitySpawner);
         }
